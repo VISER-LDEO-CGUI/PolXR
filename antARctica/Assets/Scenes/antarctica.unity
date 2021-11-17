@@ -255,8 +255,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 226041445}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.13059998, y: -0.14819998, z: 0.025630943}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.14840001, y: -0.14819998, z: 0.025630943}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 1595655639}
   - {fileID: 1900017503}
@@ -442,7 +442,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1x                    1.5x                   2x
+  m_text: 1x                                 1.5x                               
+    2x
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a84f857bec7e7345843ae29404c57ce, type: 2}
   m_sharedMaterial: {fileID: 21202819797275496, guid: 6a84f857bec7e7345843ae29404c57ce,
@@ -506,7 +507,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.10750505, y: -0.0022691963, z: 0.0668514, w: 0}
+  m_margin: {x: -0.10750505, y: -0.0022691963, z: 0.03135293, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -755,8 +756,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0.29239297, y: -0.48799998, z: 1.297631}
-  - {x: 0.32780096, y: -0.48799998, z: 1.297631}
+  - {x: 0.2924895, y: -0.48799998, z: 1.298131}
+  - {x: 0.34560147, y: -0.48799998, z: 1.298131}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.2
@@ -1035,7 +1036,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "-90\xB0                   0\xB0                   90\xB0"
+  m_text: "-90\xB0                                0\xB0                              
+    90\xB0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a84f857bec7e7345843ae29404c57ce, type: 2}
   m_sharedMaterial: {fileID: 21202819797275496, guid: 6a84f857bec7e7345843ae29404c57ce,
@@ -1099,7 +1101,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.10750505, y: -0.0022691963, z: 0.06433707, w: 0}
+  m_margin: {x: -0.10750505, y: -0.0022691963, z: 0.030475847, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1753,8 +1755,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0.29239297, y: -0.44189999, z: 1.297631}
-  - {x: 0.32780096, y: -0.44189999, z: 1.297631}
+  - {x: 0.2924895, y: -0.44189999, z: 1.298131}
+  - {x: 0.34560147, y: -0.44189999, z: 1.298131}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.2
@@ -2058,22 +2060,22 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0.29240006, y: -0.48799998, z: 1.298631}
-  - {x: 0.29712018, y: -0.48799998, z: 1.298631}
-  - {x: 0.3018403, y: -0.48799998, z: 1.298631}
-  - {x: 0.30656043, y: -0.48799998, z: 1.298631}
-  - {x: 0.31128055, y: -0.48799998, z: 1.298631}
-  - {x: 0.31600064, y: -0.48799998, z: 1.298631}
-  - {x: 0.3207208, y: -0.48799998, z: 1.298631}
-  - {x: 0.32544088, y: -0.48799998, z: 1.298631}
-  - {x: 0.330161, y: -0.48799998, z: 1.298631}
-  - {x: 0.33488113, y: -0.48799998, z: 1.298631}
-  - {x: 0.33960125, y: -0.48799998, z: 1.298631}
-  - {x: 0.34432137, y: -0.48799998, z: 1.298631}
-  - {x: 0.3490415, y: -0.48799998, z: 1.298631}
-  - {x: 0.3537616, y: -0.48799998, z: 1.298631}
-  - {x: 0.35848173, y: -0.48799998, z: 1.298631}
-  - {x: 0.36320186, y: -0.48799998, z: 1.298631}
+  - {x: 0.2925001, y: -0.48799998, z: 1.299631}
+  - {x: 0.2995803, y: -0.48799998, z: 1.299631}
+  - {x: 0.30666047, y: -0.48799998, z: 1.299631}
+  - {x: 0.31374064, y: -0.48799998, z: 1.299631}
+  - {x: 0.32082084, y: -0.48799998, z: 1.299631}
+  - {x: 0.327901, y: -0.48799998, z: 1.299631}
+  - {x: 0.33498117, y: -0.48799998, z: 1.299631}
+  - {x: 0.34206137, y: -0.48799998, z: 1.299631}
+  - {x: 0.34914154, y: -0.48799998, z: 1.299631}
+  - {x: 0.35622174, y: -0.48799998, z: 1.299631}
+  - {x: 0.3633019, y: -0.48799998, z: 1.299631}
+  - {x: 0.37038207, y: -0.48799998, z: 1.299631}
+  - {x: 0.37746227, y: -0.48799998, z: 1.299631}
+  - {x: 0.38454244, y: -0.48799998, z: 1.299631}
+  - {x: 0.3916226, y: -0.48799998, z: 1.299631}
+  - {x: 0.3987028, y: -0.488, z: 1.299631}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.2
@@ -2432,6 +2434,7 @@ GameObject:
   - component: {fileID: 963194226}
   - component: {fileID: 963194231}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2504,6 +2507,29 @@ Transform:
   m_Father: {fileID: 1855133145}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf98dd1206224111a38765365e98e207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockCursorWhenFocusLocked: 1
+  setCursorInvisibleWhenFocusLocked: 0
+  maxGazeCollisionDistance: 10
+  raycastLayerMasks:
+  - serializedVersion: 2
+    m_Bits: 4294967291
+  stabilizer:
+    storedStabilitySamples: 60
+  gazeTransform: {fileID: 0}
+  minHeadVelocityThreshold: 0.5
+  maxHeadVelocityThreshold: 2
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2710,8 +2736,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1138500058}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.13059998, y: -0.19429998, z: 0.025630943}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.1484, y: -0.19429998, z: 0.025630943}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 56659204}
   - {fileID: 225107526}
@@ -2757,8 +2783,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 1
-  sliderStartDistance: -0.035788875
-  sliderEndDistance: 0.035698418
+  sliderStartDistance: -0.035788905
+  sliderEndDistance: 0.03570444
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -3573,22 +3599,22 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0.29240006, y: -0.44189999, z: 1.298631}
-  - {x: 0.29712018, y: -0.44189999, z: 1.298631}
-  - {x: 0.3018403, y: -0.44189999, z: 1.298631}
-  - {x: 0.30656043, y: -0.44189999, z: 1.298631}
-  - {x: 0.31128055, y: -0.44189999, z: 1.298631}
-  - {x: 0.31600064, y: -0.44189999, z: 1.298631}
-  - {x: 0.3207208, y: -0.44189999, z: 1.298631}
-  - {x: 0.32544088, y: -0.44189999, z: 1.298631}
-  - {x: 0.330161, y: -0.44189999, z: 1.298631}
-  - {x: 0.33488113, y: -0.44189999, z: 1.298631}
-  - {x: 0.33960125, y: -0.44189999, z: 1.298631}
-  - {x: 0.34432137, y: -0.44189999, z: 1.298631}
-  - {x: 0.3490415, y: -0.44189999, z: 1.298631}
-  - {x: 0.3537616, y: -0.44189999, z: 1.298631}
-  - {x: 0.35848173, y: -0.44189999, z: 1.298631}
-  - {x: 0.36320186, y: -0.44189999, z: 1.298631}
+  - {x: 0.29250014, y: -0.44189999, z: 1.299631}
+  - {x: 0.2995803, y: -0.44189999, z: 1.299631}
+  - {x: 0.3066605, y: -0.44189999, z: 1.299631}
+  - {x: 0.31374067, y: -0.44189999, z: 1.299631}
+  - {x: 0.32082084, y: -0.44189999, z: 1.299631}
+  - {x: 0.32790104, y: -0.44189999, z: 1.299631}
+  - {x: 0.3349812, y: -0.44189999, z: 1.299631}
+  - {x: 0.34206137, y: -0.44189999, z: 1.299631}
+  - {x: 0.34914157, y: -0.44189999, z: 1.299631}
+  - {x: 0.35622174, y: -0.44189999, z: 1.299631}
+  - {x: 0.3633019, y: -0.44189999, z: 1.299631}
+  - {x: 0.3703821, y: -0.44189999, z: 1.299631}
+  - {x: 0.37746227, y: -0.44189999, z: 1.299631}
+  - {x: 0.38454244, y: -0.44189999, z: 1.299631}
+  - {x: 0.39162263, y: -0.44189999, z: 1.299631}
+  - {x: 0.3987028, y: -0.44189999, z: 1.299631}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.2
@@ -4182,7 +4208,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1x                    1.5x                   2x
+  m_text: 1x                                 1.5x                               
+    2x
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a84f857bec7e7345843ae29404c57ce, type: 2}
   m_sharedMaterial: {fileID: 21202819797275496, guid: 6a84f857bec7e7345843ae29404c57ce,
@@ -4246,7 +4273,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.10750505, y: -0.0022691963, z: 0.0668514, w: 0}
+  m_margin: {x: -0.10750505, y: -0.0022691963, z: 0.03169053, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -6847,8 +6874,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0.29239297, y: -0.3676, z: 1.297631}
-  - {x: 0.32780096, y: -0.3676, z: 1.297631}
+  - {x: 0.2924895, y: -0.3676, z: 1.298131}
+  - {x: 0.34560147, y: -0.3676, z: 1.298131}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.2
@@ -7140,22 +7167,22 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0.29240006, y: -0.3676, z: 1.298631}
-  - {x: 0.29712018, y: -0.3676, z: 1.298631}
-  - {x: 0.3018403, y: -0.3676, z: 1.298631}
-  - {x: 0.30656043, y: -0.3676, z: 1.298631}
-  - {x: 0.31128055, y: -0.3676, z: 1.298631}
-  - {x: 0.31600064, y: -0.3676, z: 1.298631}
-  - {x: 0.3207208, y: -0.3676, z: 1.298631}
-  - {x: 0.32544088, y: -0.3676, z: 1.298631}
-  - {x: 0.330161, y: -0.3676, z: 1.298631}
-  - {x: 0.33488113, y: -0.3676, z: 1.298631}
-  - {x: 0.33960125, y: -0.3676, z: 1.298631}
-  - {x: 0.34432137, y: -0.3676, z: 1.298631}
-  - {x: 0.3490415, y: -0.3676, z: 1.298631}
-  - {x: 0.3537616, y: -0.3676, z: 1.298631}
-  - {x: 0.35848173, y: -0.3676, z: 1.298631}
-  - {x: 0.36320186, y: -0.3676, z: 1.298631}
+  - {x: 0.29250014, y: -0.3676, z: 1.299631}
+  - {x: 0.2995803, y: -0.3676, z: 1.299631}
+  - {x: 0.3066605, y: -0.3676, z: 1.299631}
+  - {x: 0.31374067, y: -0.3676, z: 1.299631}
+  - {x: 0.32082084, y: -0.3676, z: 1.299631}
+  - {x: 0.32790104, y: -0.3676, z: 1.299631}
+  - {x: 0.3349812, y: -0.3676, z: 1.299631}
+  - {x: 0.34206137, y: -0.3676, z: 1.299631}
+  - {x: 0.34914157, y: -0.3676, z: 1.299631}
+  - {x: 0.35622174, y: -0.3676, z: 1.299631}
+  - {x: 0.3633019, y: -0.3676, z: 1.299631}
+  - {x: 0.3703821, y: -0.3676, z: 1.299631}
+  - {x: 0.37746227, y: -0.3676, z: 1.299631}
+  - {x: 0.38454244, y: -0.3676, z: 1.299631}
+  - {x: 0.39162263, y: -0.3676, z: 1.299631}
+  - {x: 0.3987028, y: -0.3676, z: 1.299631}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.2
@@ -8053,8 +8080,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 1
-  sliderStartDistance: -0.035788875
-  sliderEndDistance: 0.035698418
+  sliderStartDistance: -0.035788905
+  sliderEndDistance: 0.03569846
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -8144,8 +8171,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7508367012290142223}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.13059998, y: -0.073899984, z: 0.025630943}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.14840001, y: -0.073899984, z: 0.025630943}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 7508367012411347836}
   - {fileID: 7508367012929501892}
