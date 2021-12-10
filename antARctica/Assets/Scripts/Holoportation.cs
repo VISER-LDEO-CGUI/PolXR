@@ -9,7 +9,7 @@ public class Holoportation : MonoBehaviour
 
     void Start()
     {
-        Antarctica.transform.position = new Vector3(-10.7f, 15f, 135f);
+        Antarctica.transform.position = new Vector3(-10.7f, 0f, 150f);
     }
 
 }

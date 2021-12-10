@@ -9,27 +9,37 @@ public class UIControl : MonoBehaviour
     public Text txt;
     public GameObject MarkObj;
     public bool SaveFile = false;
+    private float yOrigin;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        yOrigin = 1.75f / 5.5f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //txt.text = MarkObj.transform.localPosition.ToString();
-        float radarx = MarkObj.transform.localPosition.x * MarkObj.transform.parent.gameObject.transform.localScale.x * 10000;
-        Debug.Log(radarx);
-        //Debug.Log(MarkObj.transform.parent.gameObject.transform.localScale.x);
+        float radarx = (MarkObj.transform.localPosition.x + 0.5f) * MarkObj.transform.parent.gameObject.transform.localScale.x * 10000;
+        float radary = (MarkObj.transform.localPosition.y - yOrigin) * MarkObj.transform.parent.gameObject.transform.localScale.y * 100;
+        string newText = MarkObj.transform.parent.name + ": " + radarx.ToString() + ", " + radary.ToString();
+        if (MarkObj.transform.parent.name != "Antarctica")
+            txt.text = newText;
 
         // Reference https://forum.unity.com/threads/how-to-write-a-file.8864/
         if (SaveFile)
         {
-            var sr = File.CreateText("temp.txt");
-            sr.WriteLine(txt.text);
-            sr.Close();
+            if (File.Exists("Assets/temp.txt"))
+            {
+                List<string> tempList = new List<string> { newText };
+                File.AppendAllLines("Assets/temp.txt", tempList);
+            }
+            else
+            {
+                var sr = File.CreateText("Assets/temp.txt");
+                sr.WriteLine(txt.text);
+                sr.Close();
+            }
             SaveFile = false;
         }
     }

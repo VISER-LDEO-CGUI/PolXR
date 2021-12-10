@@ -9,7 +9,6 @@ public class RadarDimensions : MonoBehaviour
 {
     // Radar collider & scale factor
     public GameObject RadarCuboid;
-    private BoxCollider CurrentCollider;
     public float scale;
 
     // Sliders
@@ -44,7 +43,6 @@ public class RadarDimensions : MonoBehaviour
 
     void Awake()
     {
-        CurrentCollider = RadarCuboid.GetComponent<BoxCollider>();
 
         // Set original scale values & coefficients
         scaleX = RadarCuboid.transform.localScale.x;
@@ -54,8 +52,8 @@ public class RadarDimensions : MonoBehaviour
         hozScaleValue = 1;
 
         // Set original dimension values
-        OriginalHeight = CurrentCollider.bounds.size.y * scale;
-        OriginalWidth = CurrentCollider.bounds.size.x * scale;
+        OriginalHeight = scaleY * scale;
+        OriginalWidth = scaleX * scale;
         VerticalTMP = VerticalText.GetComponent<TextMeshPro>(); // going to need a database for this/some spreadsheet with the values
         VerticalTMP.text = string.Format(
             "Original:   {0} m \n" +
@@ -83,9 +81,13 @@ public class RadarDimensions : MonoBehaviour
         RotationSlider.SliderValue = RadarCuboid.transform.rotation.y / 180; // this doesn't work at all
         */
 
+        // Set original scale values & coefficients
+        float updatedScaleX = RadarCuboid.transform.localScale.x;
+        float updatedScaleY = RadarCuboid.transform.localScale.y;
+
         // Get current dimensions of the radar image
-        ScaledHeight = CurrentCollider.bounds.size.y * scale;
-        ScaledWidth = CurrentCollider.bounds.size.x * scale;
+        ScaledHeight = updatedScaleY * scale;
+        ScaledWidth = updatedScaleX * scale;
 
         // Calculate strain
         StrainHeight = Math.Abs(OriginalHeight - ScaledHeight);
@@ -123,7 +125,7 @@ public class RadarDimensions : MonoBehaviour
 
     public void OnRotateSliderUpdated(SliderEventData eventData)
     {
-        float rotate = 180 * eventData.NewValue;
+        float rotate = (float)(359.9 * eventData.NewValue);
         RadarCuboid.transform.localRotation = Quaternion.Euler(0, rotate, 0);
     }
 

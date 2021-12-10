@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CSVPlotter : MonoBehaviour
@@ -24,17 +25,25 @@ public class CSVPlotter : MonoBehaviour
 
     // The prefab for the data points to be instantiated
     public GameObject PointPrefab;
-    public GameObject Parent;
+    public Transform Parent;
+
+    private Vector3 parentPos;
+
+    // The particle codes take reference from https://answers.unity.com/questions/1153069/how-to-set-particles.html & https://www.it610.com/article/1288857878597279744.htm
+    public ParticleSystem CSVPlotting;
+    private ParticleSystem.Particle[] CSVPoints;
+    public bool UseParticle = false;
 
     // Use this for initialization
     void Start()
     {
+        parentPos = Parent.position;
 
         // Set pointlist to results of function Reader with argument inputfile
         pointList = CSVReader.Read(inputfile);
 
         //Log to console
-        Debug.Log(pointList);
+        //Debug.Log(pointList);
 
         // Declare list of strings, fill with keys (column names)
         List<string> columnList = new List<string>(pointList[1].Keys);
@@ -56,23 +65,50 @@ public class CSVPlotter : MonoBehaviour
         Debug.Log("Y column name is " + yName);
         Debug.Log("Z column name is " + zName);
 
-        //Loop through Pointlist
-        for (var i = 0; i < pointList.Count; i++)
+        if (UseParticle)
         {
-            // Get value in poinList at ith "row", in "column" Name
-            float x = System.Convert.ToSingle(pointList[i][xName]);
-            float y = System.Convert.ToSingle(pointList[i][yName]);
-            float z = System.Convert.ToSingle(pointList[i][zName]);
+            CSVPoints = new ParticleSystem.Particle[pointList.Count];
+            var main = CSVPlotting.main;
+            main.startLifetime = 86400f;
+            main.startSpeed = 0f;
+            main.maxParticles = pointList.Count;
+            CSVPlotting.Emit(pointList.Count);
+            CSVPlotting.GetParticles(CSVPoints);
 
-            //instantiate the prefab with coordinates defined above
-            //GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor), Quaternion.identity, Parent.transform);
-            //tempSphere.transform.localPosition = new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor);
-            GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x * scaleFactor, y, z * scaleFactor), Quaternion.identity, Parent.transform);
-            tempSphere.transform.localPosition = new Vector3(x * scaleFactor, y, z * scaleFactor);
-            //Debug.Log(string.Format("Coord: {0}, {1}, {2}", tempSphere.transform.localPosition.x, tempSphere.transform.localPosition.y, tempSphere.transform.localPosition.z));
+            int i = -1;
 
+            Parallel.ForEach(pointList, point =>
+            {
+                // Get value in poinList at ith "row", in "column" Name
+                float x = System.Convert.ToSingle(point[xName]);
+                float y = System.Convert.ToSingle(point[yName]);
+                float z = System.Convert.ToSingle(point[zName]);
+
+                i += 1;
+
+                //instantiate the prefab with coordinates defined above
+                CSVPoints[i].position = new Vector3(x * scaleFactor, y, z * scaleFactor) + parentPos;
+            }
+            );
+
+            CSVPlotting.SetParticles(CSVPoints, CSVPoints.Length);
         }
+        else
+        {
+            //Loop through Pointlist
+            for (var i = 0; i < pointList.Count; i++)
+            {
+                // Get value in poinList at ith "row", in "column" Name
+                float x = System.Convert.ToSingle(pointList[i][xName]);
+                float y = System.Convert.ToSingle(pointList[i][yName]);
+                float z = System.Convert.ToSingle(pointList[i][zName]);
 
+                //instantiate the prefab with coordinates defined above
+                //GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor), Quaternion.identity, Parent.transform);
+                //tempSphere.transform.localPosition = new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor);
+                GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x * scaleFactor, y, z * scaleFactor) + Parent.position, Quaternion.identity, Parent);
+                //Debug.Log(string.Format("Coord: {0}, {1}, {2}", tempSphere.transform.localPosition.x, tempSphere.transform.localPosition.y, tempSphere.transform.localPosition.z));
+            }
+        }
     }
-
 }

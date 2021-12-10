@@ -10,6 +10,7 @@ public class Mark : MonoBehaviour, IMixedRealityPointerHandler
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
         MarkObj.SetActive(true);
+        MarkObj.transform.rotation = this.transform.rotation;
         MarkObj.transform.SetParent(this.transform);
         MarkObj.transform.position = eventData.Pointer.Result.Details.Point;
     }
