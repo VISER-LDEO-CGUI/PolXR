@@ -80,18 +80,23 @@ public class CSVPlotter : MonoBehaviour
             Parallel.ForEach(pointList, point =>
             {
                 // Get value in poinList at ith "row", in "column" Name
-                float x = System.Convert.ToSingle(point[xName]);
+                float x = System.Convert.ToSingle(point[xName]) * scaleFactor;
                 float y = System.Convert.ToSingle(point[yName]);
-                float z = System.Convert.ToSingle(point[zName]);
+                float z = System.Convert.ToSingle(point[zName]) * scaleFactor;
 
-                i += 1;
 
-                //instantiate the prefab with coordinates defined above
-                CSVPoints[i].position = new Vector3(x * scaleFactor, y, z * scaleFactor) + parentPos;
+                if (x > -9000 & y > -9000 & z > -9000)
+                {
+                    // Instantiate the prefab with coordinates defined above
+                    // If want to edit color, edit the second line
+                    i += 1;
+                    CSVPoints[i].position = new Vector3(x, y, z);// + parentPos;
+                    CSVPoints[i].startColor = new Color(0.0f, (y + 2.0f) / 10, 1.0f, 1.0f);
+                }
             }
             );
 
-            CSVPlotting.SetParticles(CSVPoints, CSVPoints.Length);
+            CSVPlotting.SetParticles(CSVPoints, i);
         }
         else
         {
@@ -99,15 +104,18 @@ public class CSVPlotter : MonoBehaviour
             for (var i = 0; i < pointList.Count; i++)
             {
                 // Get value in poinList at ith "row", in "column" Name
-                float x = System.Convert.ToSingle(pointList[i][xName]);
+                float x = System.Convert.ToSingle(pointList[i][xName]) * scaleFactor;
                 float y = System.Convert.ToSingle(pointList[i][yName]);
-                float z = System.Convert.ToSingle(pointList[i][zName]);
+                float z = System.Convert.ToSingle(pointList[i][zName]) * scaleFactor;
 
-                //instantiate the prefab with coordinates defined above
-                //GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor), Quaternion.identity, Parent.transform);
-                //tempSphere.transform.localPosition = new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor);
-                GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x * scaleFactor, y, z * scaleFactor) + Parent.position, Quaternion.identity, Parent);
-                //Debug.Log(string.Format("Coord: {0}, {1}, {2}", tempSphere.transform.localPosition.x, tempSphere.transform.localPosition.y, tempSphere.transform.localPosition.z));
+                if (x > -9000 & y > -9000 & z > -9000)
+                {
+                    //instantiate the prefab with coordinates defined above
+                    //GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor), Quaternion.identity, Parent.transform);
+                    //tempSphere.transform.localPosition = new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor);
+                    GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x, y, z) + Parent.position, Quaternion.identity, Parent);
+                    //Debug.Log(string.Format("Coord: {0}, {1}, {2}", tempSphere.transform.localPosition.x, tempSphere.transform.localPosition.y, tempSphere.transform.localPosition.z));
+                }
             }
         }
     }
