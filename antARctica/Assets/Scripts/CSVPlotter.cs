@@ -28,16 +28,26 @@ public class CSVPlotter : MonoBehaviour
     public Transform Parent;
 
     private Vector3 parentPos;
+    private Vector3 parentScale;
+    private Vector3 relativePos;
 
     // The particle codes take reference from https://answers.unity.com/questions/1153069/how-to-set-particles.html & https://www.it610.com/article/1288857878597279744.htm
     public ParticleSystem CSVPlotting;
     private ParticleSystem.Particle[] CSVPoints;
     public bool UseParticle = false;
+    public float ColorMid = -0.2f;
+    public float ColorRange = 10.0f;
 
     // Use this for initialization
     void Start()
     {
         parentPos = Parent.position;
+        parentScale = Parent.localScale;
+        relativePos = new Vector3();
+        Vector3 distance = this.transform.position - parentPos;
+        relativePos.x = Vector3.Dot(distance, Parent.right.normalized);
+        relativePos.y = Vector3.Dot(distance, Parent.up.normalized);
+        relativePos.z = Vector3.Dot(distance, Parent.forward.normalized);
 
         // Set pointlist to results of function Reader with argument inputfile
         pointList = CSVReader.Read(inputfile);
@@ -49,10 +59,9 @@ public class CSVPlotter : MonoBehaviour
         List<string> columnList = new List<string>(pointList[1].Keys);
 
         // Print number of keys (using .count)
-        Debug.Log("There are " + columnList.Count + " columns in CSV");
-
         // Print number of objects overall - - - - - - - - - - - - - - - - - - i added this
-        Debug.Log("There are " + pointList.Count + " items in CSV");
+        //Debug.Log("There are " + columnList.Count + " columns in CSV");
+        //Debug.Log("There are " + pointList.Count + " items in CSV");
 
         //foreach (string key in columnList)
             //Debug.Log("Column name is " + key);
@@ -61,14 +70,15 @@ public class CSVPlotter : MonoBehaviour
         xName = columnList[columnX];
         yName = columnList[columnY];
         zName = columnList[columnZ];
-        Debug.Log("X column name is " + xName);
-        Debug.Log("Y column name is " + yName);
-        Debug.Log("Z column name is " + zName);
+        //Debug.Log("X column name is " + xName);
+        //Debug.Log("Y column name is " + yName);
+        //Debug.Log("Z column name is " + zName);
 
         if (UseParticle)
         {
             CSVPoints = new ParticleSystem.Particle[pointList.Count];
             var main = CSVPlotting.main;
+            Color mainColor = main.startColor.color;
             main.startLifetime = 86400f;
             main.startSpeed = 0f;
             main.maxParticles = pointList.Count;
@@ -90,13 +100,14 @@ public class CSVPlotter : MonoBehaviour
                     // Instantiate the prefab with coordinates defined above
                     // If want to edit color, edit the second line
                     i += 1;
-                    CSVPoints[i].position = new Vector3(x, y, z);// + parentPos;
-                    CSVPoints[i].startColor = new Color(0.0f, (y + 2.0f) / 10, 1.0f, 1.0f);
+                    CSVPoints[i].position = new Vector3(x, y, z);
+                    CSVPoints[i].startColor = new Color(mainColor.r, (y - ColorMid) / ColorRange, mainColor.b, 1.0f);
                 }
             }
             );
 
             CSVPlotting.SetParticles(CSVPoints, i);
+            Debug.Log(i.ToString() + " particles set.");
         }
         else
         {
@@ -117,6 +128,25 @@ public class CSVPlotter : MonoBehaviour
                     //Debug.Log(string.Format("Coord: {0}, {1}, {2}", tempSphere.transform.localPosition.x, tempSphere.transform.localPosition.y, tempSphere.transform.localPosition.z));
                 }
             }
+        }
+    }
+
+    void Update()
+    {
+        Vector3 curRotation = Parent.rotation.eulerAngles;
+        Vector3 curScale = Parent.localScale;
+        Vector3 relativeScale = new Vector3(curScale.x / parentScale.x, curScale.y / parentScale.y, curScale.z / parentScale.z);
+        Vector3 curRelativePos = Quaternion.Euler(curRotation.x, curRotation.y, curRotation.z) * new Vector3(relativePos.x * relativeScale.x, relativePos.y * relativeScale.y, relativePos.z * relativeScale.z);
+
+        this.transform.rotation = Parent.rotation;
+        this.transform.position = Parent.position + curRelativePos;
+        if (UseParticle)
+        {
+            CSVPlotting.transform.localScale = relativeScale;
+        }
+        else
+        {
+            this.transform.localScale = relativeScale;
         }
     }
 }

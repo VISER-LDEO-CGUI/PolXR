@@ -20,11 +20,15 @@ public class UIControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float radarx = (MarkObj.transform.localPosition.x + 0.5f) * MarkObj.transform.parent.gameObject.transform.localScale.x * 10000;
-        float radary = (MarkObj.transform.localPosition.y - yOrigin) * MarkObj.transform.parent.gameObject.transform.localScale.y * 100;
-        string newText = MarkObj.transform.parent.name + ": " + radarx.ToString() + ", " + radary.ToString();
+        float maxX = MarkObj.transform.parent.gameObject.transform.localScale.x * 10000;
+        float maxY = MarkObj.transform.parent.gameObject.transform.localScale.y * 100;
+        float radarX = (MarkObj.transform.localPosition.x + 0.5f) * maxX;
+        float radarY = (MarkObj.transform.localPosition.y - yOrigin) * maxY;
+        string newText = MarkObj.transform.parent.name + ": (" + radarX.ToString() + ", " + radarY.ToString() + ")\nX: " + maxX.ToString() + ", Y: " + maxY.ToString();
         if (MarkObj.transform.parent.name != "Antarctica")
             txt.text = newText;
+        else
+            newText = "No selected points.";
 
         // Reference https://forum.unity.com/threads/how-to-write-a-file.8864/
         if (SaveFile)
@@ -42,5 +46,10 @@ public class UIControl : MonoBehaviour
             }
             SaveFile = false;
         }
+    }
+
+    public void WriteCoordinates()
+    {
+        SaveFile = true;
     }
 }

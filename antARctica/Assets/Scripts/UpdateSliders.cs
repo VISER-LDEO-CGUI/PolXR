@@ -13,11 +13,13 @@ public class UpdateSliders : MonoBehaviour
 
     private Vector3 originalScale;
     private Vector3 originalRotation;
+    private Vector3 originalPosition;
 
     void Start()
     {
         originalScale = radarImage.localScale;
         originalRotation = radarImage.rotation.eulerAngles;
+        originalPosition = radarImage.position;
     }
 
     // Update is called once per frame
@@ -27,5 +29,12 @@ public class UpdateSliders : MonoBehaviour
         horizontalSlider.SliderValue = currentScale.x / originalScale.x - 1;
         verticalSlider.SliderValue = currentScale.y / originalScale.y - 1;
         rotationSlider.SliderValue = (float)((radarImage.rotation.eulerAngles.y - originalRotation.y) / 359.9);
+    }
+
+    public void ResetRadar()
+    {
+        radarImage.position = originalPosition;
+        radarImage.rotation = Quaternion.Euler(originalRotation);
+        radarImage.localScale = originalScale;
     }
 }
