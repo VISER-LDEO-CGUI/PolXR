@@ -11,7 +11,8 @@ public class ShowImage : MonoBehaviour
     void Start()
     {
         //content = ...
-        this.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
+        transform.GetChild(0).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
+        transform.GetChild(1).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
     }
 
     // Update is called once per frame
