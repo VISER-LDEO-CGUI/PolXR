@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CSVPlotter : MonoBehaviour
 {
+    //private IEnumerator load;
+
     // Name of the input file, no extension
     public string inputfile;
 
@@ -32,15 +34,17 @@ public class CSVPlotter : MonoBehaviour
     private Vector3 relativePos;
 
     // The particle codes take reference from https://answers.unity.com/questions/1153069/how-to-set-particles.html & https://www.it610.com/article/1288857878597279744.htm
-    public ParticleSystem CSVPlotting;
+    public ParticleSystem CSVPlottingParticleSys;
     private ParticleSystem.Particle[] CSVPoints;
     public bool UseParticle = false;
     public float ColorMid = -0.2f;
     public float ColorRange = 10.0f;
+    private Color mainColor;
 
     // Use this for initialization
     void Start()
     {
+        // Used for Update() function to rotate/scale particles with radar image (parent)
         parentPos = Parent.position;
         parentScale = Parent.localScale;
         relativePos = new Vector3();
@@ -74,17 +78,20 @@ public class CSVPlotter : MonoBehaviour
         //Debug.Log("Y column name is " + yName);
         //Debug.Log("Z column name is " + zName);
 
+
         if (UseParticle)
         {
             CSVPoints = new ParticleSystem.Particle[pointList.Count];
-            var main = CSVPlotting.main;
-            Color mainColor = main.startColor.color;
+            var main = CSVPlottingParticleSys.main;
+            mainColor = main.startColor.color;
             main.startLifetime = 86400f;
             main.startSpeed = 0f;
             main.maxParticles = pointList.Count;
-            CSVPlotting.Emit(pointList.Count);
-            CSVPlotting.GetParticles(CSVPoints);
-
+            CSVPlottingParticleSys.Emit(pointList.Count);
+            CSVPlottingParticleSys.GetParticles(CSVPoints);
+        }
+        StartCoroutine(Load());
+            /*
             int i = -1;
 
             Parallel.ForEach(pointList, point =>
@@ -94,7 +101,7 @@ public class CSVPlotter : MonoBehaviour
                 float y = System.Convert.ToSingle(point[yName]);
                 float z = System.Convert.ToSingle(point[zName]) * scaleFactor;
 
-
+                // Eliminates outliers, if any data points lower than -9000, not counted
                 if (x > -9000 & y > -9000 & z > -9000)
                 {
                     // Instantiate the prefab with coordinates defined above
@@ -106,7 +113,7 @@ public class CSVPlotter : MonoBehaviour
             }
             );
 
-            CSVPlotting.SetParticles(CSVPoints, i);
+            CSVPlottingParticleSys.SetParticles(CSVPoints, i);
             Debug.Log(i.ToString() + " particles set.");
         }
         else
@@ -129,10 +136,77 @@ public class CSVPlotter : MonoBehaviour
                 }
             }
         }
+        */
+    }
+
+    IEnumerator Load()
+    {
+        if (UseParticle)
+        {
+            /*
+            CSVPoints = new ParticleSystem.Particle[pointList.Count];
+            var main = CSVPlottingParticleSys.main;
+            Color mainColor = main.startColor.color;
+            main.startLifetime = 86400f;
+            main.startSpeed = 0f;
+            main.maxParticles = pointList.Count;
+            CSVPlottingParticleSys.Emit(pointList.Count);
+            CSVPlottingParticleSys.GetParticles(CSVPoints);
+            */
+            //int i = -1;
+
+            //Parallel.ForEach(pointList, point =>
+            for (var i = 0; i < pointList.Count; i++)
+            {
+                // Get value in poinList at ith "row", in "column" Name
+                float x = System.Convert.ToSingle(pointList[i][xName]) * scaleFactor;
+                float y = System.Convert.ToSingle(pointList[i][yName]);
+                float z = System.Convert.ToSingle(pointList[i][zName]) * scaleFactor;
+
+                // Eliminates outliers, if any data points lower than -9000, not counted
+                if (x > -9000 & y > -9000 & z > -9000)
+                {
+                    // Instantiate the prefab with coordinates defined above
+                    // If want to edit color, edit the second line
+                    //i += 1;
+                    CSVPoints[i].position = new Vector3(x, y, z);
+                    CSVPoints[i].startColor = new Color(mainColor.r, (y - ColorMid) / ColorRange, mainColor.b, 1.0f);
+                }
+                CSVPlottingParticleSys.SetParticles(CSVPoints, i);
+                yield return null;
+            }
+            //);
+
+            //CSVPlottingParticleSys.SetParticles(CSVPoints, pointList.Count);
+            Debug.Log(pointList.Count.ToString() + " particles set.");
+        }
+        else
+        {
+            //Loop through Pointlist
+            for (var i = 0; i < pointList.Count; i++)
+            {
+                // Get value in poinList at ith "row", in "column" Name
+                float x = System.Convert.ToSingle(pointList[i][xName]) * scaleFactor;
+                float y = System.Convert.ToSingle(pointList[i][yName]);
+                float z = System.Convert.ToSingle(pointList[i][zName]) * scaleFactor;
+
+                if (x > -9000 & y > -9000 & z > -9000)
+                {
+                    //instantiate the prefab with coordinates defined above
+                    //GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor), Quaternion.identity, Parent.transform);
+                    //tempSphere.transform.localPosition = new Vector3(x * scaleFactor, y * scaleFactor, z * scaleFactor);
+                    GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x, y, z) + Parent.position, Quaternion.identity, Parent);
+                    //Debug.Log(string.Format("Coord: {0}, {1}, {2}", tempSphere.transform.localPosition.x, tempSphere.transform.localPosition.y, tempSphere.transform.localPosition.z));
+                }
+                yield return null;
+            }
+        }
     }
 
     void Update()
     {
+        // Rotate and scale particle coordinates with radar image being rotated 
+        
         Vector3 curRotation = Parent.rotation.eulerAngles;
         Vector3 curScale = Parent.localScale;
         Vector3 relativeScale = new Vector3(curScale.x / parentScale.x, curScale.y / parentScale.y, curScale.z / parentScale.z);
@@ -142,7 +216,7 @@ public class CSVPlotter : MonoBehaviour
         this.transform.position = Parent.position + curRelativePos;
         if (UseParticle)
         {
-            CSVPlotting.transform.localScale = relativeScale;
+            CSVPlottingParticleSys.transform.localScale = relativeScale;
         }
         else
         {
