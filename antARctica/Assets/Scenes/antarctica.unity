@@ -384,7 +384,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &87449904
 Transform:
   m_ObjectHideFlags: 0
@@ -403,7 +403,7 @@ Transform:
   - {fileID: 246261832}
   - {fileID: 569275810}
   m_Father: {fileID: 469521222}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &140567120
 GameObject:
@@ -1717,6 +1717,36 @@ MonoBehaviour:
   endPoint:
     position: {x: 0, y: 0.056, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!1 &288208384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 288208385}
+  m_Layer: 0
+  m_Name: We're gonna plot some stuff
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &288208385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288208384}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 469521222}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &293428487
 GameObject:
   m_ObjectHideFlags: 0
@@ -1962,6 +1992,7 @@ GameObject:
   m_Component:
   - component: {fileID: 469521222}
   - component: {fileID: 469521223}
+  - component: {fileID: 469521224}
   m_Layer: 0
   m_Name: Antarctica
   m_TagString: Untagged
@@ -1980,6 +2011,7 @@ Transform:
   m_LocalPosition: {x: -10.7, y: 0, z: 150}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 288208385}
   - {fileID: 1927331230}
   - {fileID: 994109504}
   - {fileID: 87449904}
@@ -2000,6 +2032,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Antarctica: {fileID: 469521221}
+--- !u!114 &469521224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469521221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec91c1872a6e372419bd97b7ea528b82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scaleFactor: 1
+  PointPrefab: {fileID: 3507410869625075406, guid: 8febc8609e1bf4849b6de72f52729f65,
+    type: 3}
+  Parent: {fileID: 288208385}
 --- !u!1 &526829971
 GameObject:
   m_ObjectHideFlags: 0
@@ -4699,7 +4747,7 @@ Transform:
   m_Children:
   - {fileID: 435243722}
   m_Father: {fileID: 469521222}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &994109505
 MonoBehaviour:
@@ -32323,7 +32371,7 @@ Transform:
   m_Children:
   - {fileID: 1059275440}
   m_Father: {fileID: 469521222}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1927331231
 MonoBehaviour:
@@ -34968,7 +35016,7 @@ PrefabInstance:
     - target: {fileID: 2249673742242929144, guid: 4a336c5f27269bf4ca64bf1623a23006,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2249673742242929144, guid: 4a336c5f27269bf4ca64bf1623a23006,
         type: 3}
