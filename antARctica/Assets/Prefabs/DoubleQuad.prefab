@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f64b4826b9bdf4fb357753becfac2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  content: {fileID: 0}
+  fileRoot: Radar Images/
 --- !u!1 &8189317366026580382
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,50 +5,38 @@ using UnityEngine;
 
 public class CSVReadPlot : MonoBehaviour
 {
+    // The scale factors for the coordinates.
+    public float[] scaleFactor = { 1, 1, 1 };
+    public int[] columnNumbers = { 2, 5, 3 };
+    public string fileRoot = "Assets/Resources/SplitByLine_All_Lines_DICE_SurfElev/";
 
-    public float scaleFactor = 1;
-
-    // The prefab for the data points to be instantiated
-    public GameObject PointPrefab;
+    // The prefab for the data points to be instantiated.
+    public ParticleSystem PSLine;
+    public Color PSColor;
+    public float ColorMid = -0.2f;
+    public float ColorRange = 10.0f;
     public Transform Parent;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("running");
-        string[] files = System.IO.Directory.GetFiles("Assets/Resources/SplitByLine_All_Lines_DICE_SurfElev/");
-        Debug.Log(files.Length);
-        //Parallel.ForEach(files, file =>
-        for(int j = 0; j < files.Length; j++)
+        // Set the default attributes for the particle system.
+        var main = PSLine.main;
+        main.startLifetime = 86400f;
+        main.startSpeed = 0f;
+
+        // Get the file names.
+        string[] files = System.IO.Directory.GetFiles(fileRoot);
+
+        foreach(var file in files)
         {
-            //data = System.IO.File.ReadAllText("Assets/Resources/All_Lines_DICE_SurfElev.csv").Split("\n"[0]);
-            //data = System.IO.File.ReadAllText("Assets/Resources/SplitByLine_All_Lines_DICE_SurfElev/L870.csv").Split("\n"[0]);
-
-            if (files[j][files[j].Length-1] == 'v')
+            if (file[file.Length - 1] == 'v')
             {
-                Debug.Log(files[j]);
+                // Create lines and parent objects if needed.
+                ParticleSystem newLine = Instantiate(PSLine, Parent);
+                newLine.name = file.Substring(fileRoot.Length);
 
-                string[] data = System.IO.File.ReadAllText(files[j]).Split("\n"[0]);
-
-                //GameObject newLine = new GameObject(file);
-                //newLine.transform.parent = Parent;
-
-                Debug.Log(data.Length);
-                for (int i = 1; i < data.Length; i++)
-                {
-                    Debug.Log(i);
-                    string[] coords = data[i].Split(","[0]);
-
-                    float x = float.Parse(coords[2]) * scaleFactor;
-                    float y = float.Parse(coords[5]);
-                    float z = float.Parse(coords[3]) * scaleFactor;
-
-                    if (x > -9000 & y > -9000 & z > -9000)
-                    {
-                        GameObject tempSphere = Instantiate(PointPrefab, new Vector3(x, y, z) + Parent.position, Quaternion.identity);
-                    }
-                }
-                Debug.Log("end");
+                SetParticles(newLine, file);
             }
         }
     }
@@ -59,9 +47,34 @@ public class CSVReadPlot : MonoBehaviour
 
     }
 
-    // try add component if not too slow
-    // x is 2
-    // y is 5
-    // z is 3
+    private void SetParticles(ParticleSystem line, string file)
+    {
+        string[] data = System.IO.File.ReadAllText(file).Split("\n"[0]);
 
+        ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[data.Length - 1];
+        var main = line.main;
+        main.maxParticles = data.Length - 1;
+        line.Emit(data.Length - 1);
+        line.GetParticles(CSVPoints);
+        int inRange = 0;
+
+        // Set the particle position and the color.
+        for (int i = 1; i < data.Length - 1; i++)
+        {
+            string[] coords = data[i].Split(","[0]);
+
+            float x = float.Parse(coords[columnNumbers[0]]) * scaleFactor[0];
+            float y = float.Parse(coords[columnNumbers[1]]) * scaleFactor[1];
+            float z = float.Parse(coords[columnNumbers[2]]) * scaleFactor[2];
+
+            if (x > -9000 & y > -9000 & z > -9000)
+            {
+                CSVPoints[inRange].position = new Vector3(x, y, z);
+                CSVPoints[inRange].startColor = new Color(PSColor.r, (y - ColorMid) / ColorRange, PSColor.b, 1.0f);
+                inRange += 1;
+            }
+        }
+
+        line.SetParticles(CSVPoints, inRange);
+    }
 }
