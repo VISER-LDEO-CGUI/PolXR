@@ -33,6 +33,12 @@
         "com.unity.textmeshpro": "2.1.4"
       }
     },
+    "com.microsoft.windows.mixedreality.dotnetwinrt": {
+      "version": "file:MixedReality/com.microsoft.windows.mixedreality.dotnetwinrt-0.5.2009.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.2.16",
       "depth": 0,
