@@ -26,6 +26,7 @@ public class CSVReadPlot : MonoBehaviour
         main.startSpeed = 0f;
 
         // Get the file names.
+        // Need to fix the file path problem.
         string[] files = System.IO.Directory.GetFiles(fileRoot);
 
         foreach(var file in files)
@@ -49,8 +50,10 @@ public class CSVReadPlot : MonoBehaviour
 
     private void SetParticles(ParticleSystem line, string file)
     {
+        // Need to fix the file path problem.
         string[] data = System.IO.File.ReadAllText(file).Split("\n"[0]);
 
+        // Setting the default behavior of the particle system.
         ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[data.Length - 1];
         var main = line.main;
         main.maxParticles = data.Length - 1;
@@ -61,12 +64,13 @@ public class CSVReadPlot : MonoBehaviour
         // Set the particle position and the color.
         for (int i = 1; i < data.Length - 1; i++)
         {
+            // Get and compute the coordinates.
             string[] coords = data[i].Split(","[0]);
-
             float x = float.Parse(coords[columnNumbers[0]]) * scaleFactor[0];
             float y = float.Parse(coords[columnNumbers[1]]) * scaleFactor[1];
             float z = float.Parse(coords[columnNumbers[2]]) * scaleFactor[2];
 
+            // Set individual particles.
             if (x > -9000 & y > -9000 & z > -9000)
             {
                 CSVPoints[inRange].position = new Vector3(x, y, z);

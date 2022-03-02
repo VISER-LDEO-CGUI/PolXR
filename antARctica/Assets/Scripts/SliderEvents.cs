@@ -7,9 +7,10 @@ using System;
 
 public class SliderEvents : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Initially set to an empty object to avoid null reference.
     public Transform radarImage;
 
+    // The three sliders.
     public PinchSlider horizontalSlider;
     public PinchSlider verticalSlider;
     public PinchSlider rotationSlider;
@@ -38,16 +39,16 @@ public class SliderEvents : MonoBehaviour
     private float ScaledWidth;
     private float StrainHeight;
     private float StrainWidth;
+
     // Text objects
-    public GameObject VerticalText;
-    private TextMeshPro VerticalTMP;
-    public GameObject HorizontalText;
-    private TextMeshPro HorizontalTMP;
-    public GameObject RotationDegreeText;
-    private TextMeshPro RotationDegreeTMP;
+    public TextMeshPro Title;
+    public TextMeshPro VerticalTMP;
+    public TextMeshPro HorizontalTMP;
+    public TextMeshPro RotationDegreeTMP;
 
     void Start()
     {
+        // Deactivate the menu before selection
         this.gameObject.SetActive(false);
     }
 
@@ -78,7 +79,8 @@ public class SliderEvents : MonoBehaviour
             "Current:    {1} m \n" +
             "Strain:     {2}",
             OriginalHeight.ToString(), ScaledHeight.ToString(), StrainHeight.ToString());
-        HorizontalTMP = HorizontalText.GetComponent<TextMeshPro>(); // going to need a database for this/some spreadsheet with the values
+        
+        // going to need a database for this/some spreadsheet with the values
         HorizontalTMP.text = string.Format(
             "Original:   {0} m \n" +
             "Current:    {1} m \n" +
@@ -94,16 +96,18 @@ public class SliderEvents : MonoBehaviour
     {
         if (radarImage != newRadar)
         {
-            if (radarImage != null)
-            {
-                radarImage.position = originalPosition;
-                radarImage.rotation = Quaternion.Euler(originalRotation);
-                radarImage.localScale = originalScale;
-            }
+            // This reset may not be needed depending on the design.
+            if (radarImage != null && radarImage.name != "Empty")
+                ResetButton();
+
+            // Switch to new radar and reset the values.
             radarImage = newRadar;
             originalScale = radarImage.localScale;
             originalRotation = radarImage.rotation.eulerAngles;
             originalPosition = radarImage.position;
+
+            // Set the title of the menu to the current radar.
+            Title.text = radarImage.name;
 
             // Set original scale values & coefficients
             scaleX = radarImage.localScale.x;
@@ -115,23 +119,15 @@ public class SliderEvents : MonoBehaviour
             // Set original dimension values
             OriginalHeight = scaleY * scale;
             OriginalWidth = scaleX * scale;
-            VerticalTMP = VerticalText.GetComponent<TextMeshPro>(); // going to need a database for this/some spreadsheet with the values
-            VerticalTMP.text = string.Format(
-                "Original:   {0} m \n" +
-                "Current:    {1} m \n" +
-                "Strain:     {2}",
-                OriginalHeight.ToString(), OriginalHeight.ToString(), 0);
-            HorizontalTMP = HorizontalText.GetComponent<TextMeshPro>(); // going to need a database for this/some spreadsheet with the values
-            HorizontalTMP.text = string.Format(
-                "Original:   {0} m \n" +
-                "Current:    {1} m \n" +
-                "Strain:     {2}",
-                OriginalWidth.ToString(), OriginalWidth.ToString(), 0);
-
-            // Instantiate and set rotation
-            RotationDegreeTMP = RotationDegreeText.GetComponent<TextMeshPro>();
-            RotationDegreeTMP.text = radarImage.rotation.y.ToString();
         }
+    }
+
+    // The reset button
+    public void ResetButton ()
+    {
+        radarImage.position = originalPosition;
+        radarImage.rotation = Quaternion.Euler(originalRotation);
+        radarImage.localScale = originalScale;
     }
 
     // The three slider update interface.

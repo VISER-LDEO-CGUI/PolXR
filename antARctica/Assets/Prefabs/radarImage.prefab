@@ -1,51 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &358400788542787664
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8685578060710257255}
-  - component: {fileID: 3667813766909457015}
-  m_Layer: 0
-  m_Name: DoubleQuad
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8685578060710257255
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 358400788542787664}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 2787175359907550699}
-  - {fileID: 4572646506477123702}
-  m_Father: {fileID: 6993896609560826257}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3667813766909457015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 358400788542787664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05f64b4826b9bdf4fb357753becfac2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fileRoot: Radar Images/
 --- !u!1 &1200494247742988094
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,12 +25,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1200494247742988094}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 8685578060710257255}
-  m_RootOrder: 1
+  m_Father: {fileID: 6993896609560826257}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &7070182649254660700
 MeshFilter:
@@ -150,12 +104,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4435707681279537518}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 8685578060710257255}
-  m_RootOrder: 0
+  m_Father: {fileID: 6993896609560826257}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9071405276199701518
 MeshFilter:
@@ -220,7 +174,7 @@ GameObject:
   - component: {fileID: 6993896609560826256}
   - component: {fileID: 4443364394840786298}
   m_Layer: 0
-  m_Name: L870_badcrop
+  m_Name: radarImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,7 +191,8 @@ Transform:
   m_LocalPosition: {x: 10.7986, y: -1.75, z: -131.0324}
   m_LocalScale: {x: 36.1388, y: 5.5, z: 0.001}
   m_Children:
-  - {fileID: 8685578060710257255}
+  - {fileID: 4572646506477123702}
+  - {fileID: 2787175359907550699}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -392,3 +347,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Menu: {fileID: 0}
   MarkObj: {fileID: 0}
+  fileRoot: Radar Images/
+  defaultText: {fileID: 2800000, guid: 16ea4c5ae85966f4799d2bc4a6bf157b, type: 3}

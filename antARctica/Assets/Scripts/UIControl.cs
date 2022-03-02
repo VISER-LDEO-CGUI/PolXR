@@ -6,6 +6,7 @@ using System.IO;
 
 public class UIControl : MonoBehaviour
 {
+    // This script is only made for debugging and demo, need to be merged into menu or other UI elements in the future!
     public Text txt;
     public GameObject MarkObj;
     public bool SaveFile = false;
