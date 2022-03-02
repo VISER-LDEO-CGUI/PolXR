@@ -6,7 +6,8 @@ using UnityEngine;
 public class UpdateSliders : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Transform radarImage;
+    private Transform radarImage;
+
     public PinchSlider horizontalSlider;
     public PinchSlider verticalSlider;
     public PinchSlider rotationSlider;
@@ -15,20 +16,47 @@ public class UpdateSliders : MonoBehaviour
     private Vector3 originalRotation;
     private Vector3 originalPosition;
 
+    // The scale of the self object.
+    private Vector3 Original_Scale;
+
     void Start()
     {
-        originalScale = radarImage.localScale;
-        originalRotation = radarImage.rotation.eulerAngles;
-        originalPosition = radarImage.position;
+        // Record the starting scale.
+        Original_Scale = this.transform.lossyScale;
+
+        radarImage = this.transform.parent;
+        StartRadar();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 currentScale = radarImage.localScale;
-        horizontalSlider.SliderValue = currentScale.x / originalScale.x - 1;
-        verticalSlider.SliderValue = currentScale.y / originalScale.y - 1;
-        rotationSlider.SliderValue = (float)((radarImage.rotation.eulerAngles.y - originalRotation.y) / 359.9);
+        if (radarImage != this.transform.parent && this.transform.parent.name != "Antarctica")
+        {
+            ResetRadar();
+            radarImage = this.transform.parent;
+            StartRadar();
+        }
+        if (radarImage.name != "Antarctica")
+        {
+            Vector3 currentScale = radarImage.localScale;
+            horizontalSlider.SliderValue = currentScale.x / originalScale.x - 1;
+            verticalSlider.SliderValue = currentScale.y / originalScale.y - 1;
+            rotationSlider.SliderValue = (float)((radarImage.rotation.eulerAngles.y - originalRotation.y) / 359.9);
+        }
+
+        // Adjust the scale according to new parent.
+        Vector3 Global_Scale = this.transform.parent.transform.localScale;
+        this.transform.localScale = new Vector3(Original_Scale.x / Global_Scale.x, Original_Scale.y / Global_Scale.y, Original_Scale.z / Global_Scale.z);
+        // Compute and restore the global position and rotation here
+        // ...
+    }
+
+    public void StartRadar()
+    {
+        originalScale = radarImage.localScale;
+        originalRotation = radarImage.rotation.eulerAngles;
+        originalPosition = radarImage.position;
     }
 
     public void ResetRadar()
@@ -36,5 +64,30 @@ public class UpdateSliders : MonoBehaviour
         radarImage.position = originalPosition;
         radarImage.rotation = Quaternion.Euler(originalRotation);
         radarImage.localScale = originalScale;
+    }
+
+    public void OnVerticalSliderUpdated(SliderEventData eventData)
+    {
+        if (radarImage.name != "Antarctica")
+        {
+            radarImage.GetComponent<RadarDimensions>().OnVerticalSliderUpdated(eventData.NewValue);
+        }
+    }
+
+    public void OnHorizontalSliderUpdated(SliderEventData eventData)
+    {
+        if (radarImage.name != "Antarctica")
+        {
+            //radarImage.GetComponent<RadarDimensions>().OnHorizontalSliderUpdated(eventData.NewValue);
+            radarImage.GetComponent<RadarDimensions>().OnVerticalSliderUpdated(eventData.NewValue);
+        }
+    }
+
+    public void OnRotateSliderUpdated(SliderEventData eventData)
+    {
+        if (radarImage.name != "Antarctica")
+        {
+            radarImage.GetComponent<RadarDimensions>().OnRotateSliderUpdated(eventData.NewValue);
+        }
     }
 }

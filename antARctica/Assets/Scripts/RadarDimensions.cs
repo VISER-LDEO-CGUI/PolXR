@@ -12,9 +12,9 @@ public class RadarDimensions : MonoBehaviour
     public float scale;
 
     // Sliders
-    public PinchSlider VertSlider;
-    public PinchSlider HozSlider;
-    public PinchSlider RotationSlider;
+    //public PinchSlider VertSlider;
+    //public PinchSlider HozSlider;
+    //public PinchSlider RotationSlider;
 
     // Transform.scale values
     private float scaleX;
@@ -111,22 +111,21 @@ public class RadarDimensions : MonoBehaviour
 
     }
 
-    public void OnVerticalSliderUpdated(SliderEventData eventData)
+    public void OnVerticalSliderUpdated(float newValue)
     {
-        vertScaleValue = 1 + eventData.NewValue;
+        vertScaleValue = 1 + newValue;// eventData.NewValue;
         RadarCuboid.transform.localScale = new Vector3(scaleX * hozScaleValue, scaleY * vertScaleValue, scaleZ);
     }
 
-    public void OnHorizontalSliderUpdated(SliderEventData eventData)
+    public void OnHorizontalSliderUpdated(float newValue)
     {
-        hozScaleValue = 1 + eventData.NewValue;
+        hozScaleValue = 1 + newValue;
         RadarCuboid.transform.localScale = new Vector3(scaleX * hozScaleValue, scaleY * vertScaleValue, scaleZ);
     }
 
-    public void OnRotateSliderUpdated(SliderEventData eventData)
+    public void OnRotateSliderUpdated(float newValue)
     {
-        float rotate = (float)(359.9 * eventData.NewValue);
+        float rotate = (float)(359.9 * newValue);
         RadarCuboid.transform.localRotation = Quaternion.Euler(0, rotate, 0);
     }
-
 }

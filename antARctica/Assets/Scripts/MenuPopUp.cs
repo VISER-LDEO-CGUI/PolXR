@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuPopUp : MonoBehaviour
+public class MenuPopUp : MonoBehaviour, IMixedRealityPointerHandler
 {
     public GameObject Menu;
 
@@ -22,10 +22,8 @@ public class MenuPopUp : MonoBehaviour
 
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
-        Menu.SetActive(true);
-        Menu.transform.rotation = this.transform.rotation;
         Menu.transform.SetParent(this.transform);
-        Menu.transform.position = eventData.Pointer.Result.Details.Point;
+        //Menu.transform.position = eventData.Pointer.Result.Details.Point + new Vector3(10, 10, 10);
     }
 
     public void OnPointerDragged(MixedRealityPointerEventData eventData)
