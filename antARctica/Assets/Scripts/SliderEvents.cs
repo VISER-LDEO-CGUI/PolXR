@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class UpdateSliders : MonoBehaviour
+public class SliderEvents : MonoBehaviour
 {
     // Start is called before the first frame update
     public Transform radarImage;

@@ -24,7 +24,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
         // The menu
-        Menu.transform.GetComponent<UpdateSliders>().ResetRadar(this.transform);
+        Menu.transform.GetComponent<SliderEvents>().ResetRadar(this.transform);
         Menu.transform.position = Vector3.Lerp(eventData.Pointer.Result.Details.Point, Camera.main.transform.position, 0.9f);
         Menu.SetActive(true);
 
