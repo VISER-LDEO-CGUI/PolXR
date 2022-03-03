@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class CSVReadPlot : MonoBehaviour
     // The scale factors for the coordinates.
     public float[] scaleFactor = { 1, 1, 1 };
     public int[] columnNumbers = { 2, 5, 3 };
-    public string fileRoot = "Assets/Resources/SplitByLine_All_Lines_DICE_SurfElev/";
+    public string fileRoot = "SplitByLine_All_Lines_DICE_SurfElev";
 
     // The prefab for the data points to be instantiated.
     public ParticleSystem PSLine;
@@ -25,20 +26,14 @@ public class CSVReadPlot : MonoBehaviour
         main.startLifetime = 86400f;
         main.startSpeed = 0f;
 
-        // Get the file names.
-        // Need to fix the file path problem.
-        string[] files = System.IO.Directory.GetFiles(fileRoot);
+        // Load all the files within the directory.
+        // Need to test the file path problem.
+        TextAsset[] files = Array.ConvertAll(Resources.LoadAll(fileRoot, typeof(TextAsset)), asset => (TextAsset)asset);
 
-        foreach(var file in files)
+        foreach (TextAsset file in files)
         {
-            if (file[file.Length - 1] == 'v')
-            {
-                // Create lines and parent objects if needed.
-                ParticleSystem newLine = Instantiate(PSLine, Parent);
-                newLine.name = file.Substring(fileRoot.Length);
-
-                SetParticles(newLine, file);
-            }
+            ParticleSystem newLine = Instantiate(PSLine, Parent);
+            SetParticles(newLine, file);
         }
     }
 
@@ -48,10 +43,11 @@ public class CSVReadPlot : MonoBehaviour
 
     }
 
-    private void SetParticles(ParticleSystem line, string file)
+    private void SetParticles(ParticleSystem line, TextAsset file)
     {
-        // Need to fix the file path problem.
-        string[] data = System.IO.File.ReadAllText(file).Split("\n"[0]);
+        // Split the input test by line and set the name of the line.
+        string[] data = file.text.Split("\n"[0]);
+        line.name = data[1].Split(","[0])[0];
 
         // Setting the default behavior of the particle system.
         ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[data.Length - 1];
@@ -62,6 +58,7 @@ public class CSVReadPlot : MonoBehaviour
         int inRange = 0;
 
         // Set the particle position and the color.
+        // Ignore the first line which is the name of the columns.
         for (int i = 1; i < data.Length - 1; i++)
         {
             // Get and compute the coordinates.

@@ -10,7 +10,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     public GameObject MarkObj;
 
     // The file root under the "Resources" folder.
-    public string fileRoot = "Radar Images/";
+    public string fileRoot = "Radar Images";
     public Texture defaultText;
 
     // Start is called before the first frame update
@@ -18,9 +18,9 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     {
         // Get and set the texture of the radar image object.
         // Need to fix the file path to relative path, or find another way to locate the pictures.
-        if (System.IO.File.Exists("Assets/Resources/" + fileRoot + this.transform.name + ".png"))
+        Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
+        if (content != null)
         {
-            Texture content = Resources.Load<Texture2D>(fileRoot + this.transform.name);
             transform.GetChild(0).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
             transform.GetChild(1).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
         }
