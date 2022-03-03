@@ -4,11 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using System.IO;
 
-public class SliderEvents : MonoBehaviour
+public class MenuEvents : MonoBehaviour
 {
     // Initially set to an empty object to avoid null reference.
     public Transform radarImage;
+
+    // The data needed for smoothing the menu movement.
+    private Vector3 targetPosition;
+    private Quaternion targetRotation;
+    private Vector3 targetScale;
 
     // The three sliders.
     public PinchSlider horizontalSlider;
@@ -32,7 +38,7 @@ public class SliderEvents : MonoBehaviour
     private float vertScaleValue;
     private float hozScaleValue;
 
-    // Dimension calculations
+    // Dimension calculations.
     private float OriginalHeight;
     private float OriginalWidth;
     private float ScaledHeight;
@@ -45,16 +51,28 @@ public class SliderEvents : MonoBehaviour
     public TextMeshPro VerticalTMP;
     public TextMeshPro HorizontalTMP;
     public TextMeshPro RotationDegreeTMP;
+    public TextMeshPro MarkTMP;
+
+    // The information needed for updating the selected point coordinates.
+    public GameObject MarkObj;
+    public string SelectionDialog = "Assets/dialog.txt";
+    private float yOrigin = 1.75f / 5.5f;
 
     void Start()
     {
-        // Deactivate the menu before selection
+        // Deactivate the menu before any selection happens.
         this.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        // The animation for menu.
+        this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, 0.5f);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, targetRotation, 0.5f);
+        this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetScale, 0.5f);
+        if (this.transform.localScale.x < 0.1f) this.gameObject.SetActive(false);
+
         // Update the slider value accordingly.
         Vector3 currentScale = radarImage.localScale;
         horizontalSlider.SliderValue = currentScale.x / originalScale.x - 1;
@@ -89,11 +107,29 @@ public class SliderEvents : MonoBehaviour
 
         // Set rotation text
         RotationDegreeTMP.text = string.Format("ROTATION:      {0}°", radarImage.localEulerAngles.y.ToString());
+
+        // Update the selected point coordinates
+        float maxX = MarkObj.transform.parent.gameObject.transform.localScale.x * 10000;
+        float maxY = MarkObj.transform.parent.gameObject.transform.localScale.y * 100;
+        float radarX = (MarkObj.transform.localPosition.x + 0.5f) * maxX;
+        float radarY = (MarkObj.transform.localPosition.y - yOrigin) * maxY;
+
+        if (MarkObj.transform.parent.name != "Antarctica")
+            MarkTMP.text = string.Format(
+                "{0}: ({1}, {2})\n" +
+                "X: {3}, Y: {4}",
+                MarkObj.transform.parent.name, radarX.ToString(), radarY.ToString(), maxX.ToString(), maxY.ToString());
+        else
+            MarkTMP.text = "No selected points.";
     }
 
     // Reset the original radar image transform and re-assign the new radar image.
-    public void ResetRadar(Transform newRadar)
+    public void ResetRadar(Transform newRadar, Vector3 newPosition)
     {
+        // Adjust the new position and rotation.
+        targetPosition = newPosition;
+        targetRotation = Camera.main.transform.rotation;
+
         if (radarImage != newRadar)
         {
             // This reset may not be needed depending on the design.
@@ -122,12 +158,42 @@ public class SliderEvents : MonoBehaviour
         }
     }
 
-    // The reset button
+    // The reset button for the radarImage transform.
     public void ResetButton ()
     {
         radarImage.position = originalPosition;
         radarImage.rotation = Quaternion.Euler(originalRotation);
         radarImage.localScale = originalScale;
+    }
+
+    // The write button for writting the coordinates into a file.
+    // Reference https://forum.unity.com/threads/how-to-write-a-file.8864/
+    // Be aware of the file path issue! And try to keep a history...
+    public void WriteButton()
+    {
+        if (File.Exists(SelectionDialog))
+        {
+            List<string> tempList = new List<string> { MarkTMP.text };
+            File.AppendAllLines(SelectionDialog, tempList);
+        }
+        else
+        {
+            var sr = File.CreateText(SelectionDialog);
+            sr.WriteLine(MarkTMP.text);
+            sr.Close();
+        }
+    }
+
+    // The close button, make the menu disappear and deactivated.
+    public void CloseButton(bool shutDown)
+    {
+        if (shutDown) targetScale = new Vector3(0.0f, 0.0f, 0.0f);
+        else
+        {
+            targetScale = new Vector3(1.0f, 1.0f, 1.0f);
+            this.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            this.gameObject.SetActive(true);
+        }
     }
 
     // The three slider update interface.

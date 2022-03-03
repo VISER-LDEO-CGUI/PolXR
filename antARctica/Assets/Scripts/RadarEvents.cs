@@ -41,9 +41,9 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
         // The menu
-        Menu.transform.GetComponent<SliderEvents>().ResetRadar(this.transform);
-        Menu.transform.position = Vector3.Lerp(eventData.Pointer.Result.Details.Point, Camera.main.transform.position, 0.9f);
-        Menu.SetActive(true);
+        Vector3 newPosition = Vector3.Lerp(eventData.Pointer.Result.Details.Point, Camera.main.transform.position, 0.9f);
+        Menu.transform.GetComponent<MenuEvents>().ResetRadar(this.transform, newPosition);
+        Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
 
         // The mark
         MarkObj.SetActive(true);
