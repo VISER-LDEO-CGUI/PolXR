@@ -10,8 +10,12 @@ public class MenuEvents : MonoBehaviour
 {
     // Initially set to an empty object to avoid null reference.
     public Transform radarImage;
+    public Transform RadarImagesContainer;
+    private Transform CSVPicks;
     public Transform CSVPicksContainer;
-    private Transform CSVPicks;  
+    public Transform SurfaceDEM;
+    public Transform BaseDEM;
+    //public Transform AntarcticaBoundingBox;
 
     // The data needed for smoothing the menu movement.
     private Vector3 targetPosition;
@@ -19,15 +23,23 @@ public class MenuEvents : MonoBehaviour
     private bool updatePosition = false;
     public bool moveMenu = false;
 
-    // The four sliders.
+    // The sliders.
     public PinchSlider horizontalSlider;
     public PinchSlider verticalSlider;
     public PinchSlider rotationSlider;
     public PinchSlider transparencySlider;
+    public PinchSlider verticalExaggerationSlider;
 
-    // Toggle Buttons
+    // Radar Menu Toggle Buttons
     public Interactable RadarToggle;
     public Interactable CSVPicksToggle;
+
+    // Main Menu Toggle Buttons
+    public Interactable AllRadarToggle;
+    public Interactable AllCSVPicksToggle;
+    public Interactable SurfaceDEMToggle;
+    public Interactable BaseDEMToggle;
+    public Interactable BoundingBoxToggle;
 
     // The initial scale, rotation and position of the radar image.
     public Vector3 originalScale;
@@ -69,11 +81,17 @@ public class MenuEvents : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Toggling Objects 
-        if (RadarToggle.IsToggled) radarImage.gameObject.SetActive(true);
-        else radarImage.gameObject.SetActive(false);
+        // Radar Menu Toggling Objects 
+        radarImage.gameObject.SetActive(RadarToggle.IsToggled);
         if (CSVPicksToggle.IsToggled) CSVPicks.gameObject.transform.localScale = new Vector3(1, 1, 1);
         else CSVPicks.gameObject.transform.localScale = new Vector3(0, 0, 0);
+
+        // Main Menu Toggling Objects 
+        RadarImagesContainer.gameObject.SetActive(AllRadarToggle.IsToggled);
+        SurfaceDEM.gameObject.SetActive(SurfaceDEMToggle.IsToggled);
+        BaseDEM.gameObject.SetActive(BaseDEMToggle.IsToggled);
+        AllLinesOn(AllCSVPicksToggle.IsToggled);
+        //AntarcticaBoundingBox.gameObject.SetActive(BoundingBoxToggle.IsToggled);
 
         // The animation for menu.
         if (moveMenu)
@@ -142,6 +160,9 @@ public class MenuEvents : MonoBehaviour
     // Reset the original radar image transform and re-assign the new radar image.
     public void ResetRadar(Transform newRadar, Vector3 newPosition, float newAlpha)
     {
+        this.transform.Find("RadarMenu").gameObject.SetActive(true);
+        this.transform.Find("MainMenu").gameObject.SetActive(false);
+
         targetPosition = newPosition;
 
         if (radarImage != newRadar)
@@ -214,6 +235,12 @@ public class MenuEvents : MonoBehaviour
         }
     }
 
+    public void HomeButton(bool home)
+    {
+        this.transform.Find("RadarMenu").gameObject.SetActive(!home);
+        this.transform.Find("MainMenu").gameObject.SetActive(home);
+    }
+
     // The four slider update interface.
     public void OnVerticalSliderUpdated(SliderEventData eventData)
     {
@@ -239,12 +266,20 @@ public class MenuEvents : MonoBehaviour
             radarImage.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
     }
 
-    /*
-    // Toggle buttons
-    public void RadarToggler()
+    // Main Menu Vertical Exaggeration Slider
+    public void OnVerticalExaggerationSliderUpdated(SliderEventData eventData)
     {
-        if(RadarToggle.IsEnabled) radarImage.gameObject.SetActive(true);
-        else radarImage.gameObject.SetActive(false);
+        SurfaceDEM.localScale = new Vector3(1, 0.5f + eventData.NewValue, 1);
+        BaseDEM.localScale = new Vector3(1, 0.5f + eventData.NewValue, 1);
     }
-    */
+
+    // Main Menu Toggling CSV lines
+    public void AllLinesOn(bool input)
+    {
+        Vector3 targetScale = input ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
+        int children = CSVPicksContainer.childCount;
+        for (int i = 0; i < children; ++i)
+            CSVPicksContainer.GetChild(i).localScale = targetScale;
+    }
+
 }
