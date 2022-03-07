@@ -10,6 +10,8 @@ public class MenuEvents : MonoBehaviour
 {
     // Initially set to an empty object to avoid null reference.
     public Transform radarImage;
+    public Transform CSVPicksContainer;
+    private Transform CSVPicks;  
 
     // The data needed for smoothing the menu movement.
     private Vector3 targetPosition;
@@ -22,6 +24,10 @@ public class MenuEvents : MonoBehaviour
     public PinchSlider verticalSlider;
     public PinchSlider rotationSlider;
     public PinchSlider transparencySlider;
+
+    // Toggle Buttons
+    public Interactable RadarToggle;
+    public Interactable CSVPicksToggle;
 
     // The initial scale, rotation and position of the radar image.
     public Vector3 originalScale;
@@ -63,6 +69,12 @@ public class MenuEvents : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Toggling Objects 
+        if (RadarToggle.IsToggled) radarImage.gameObject.SetActive(true);
+        else radarImage.gameObject.SetActive(false);
+        if (CSVPicksToggle.IsToggled) CSVPicks.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        else CSVPicks.gameObject.transform.localScale = new Vector3(0, 0, 0);
+
         // The animation for menu.
         if (moveMenu)
         {
@@ -138,11 +150,14 @@ public class MenuEvents : MonoBehaviour
             if (radarImage != null && radarImage.name != "Radar Image Placeholder")
             {
                 transparencySlider.SliderValue = newAlpha;
+                radarImage.gameObject.SetActive(true);
+                CSVPicks.gameObject.transform.localScale = new Vector3(1, 1, 1);
                 ResetButton();
             }
 
             // Switch to new radar and reset the values.
             radarImage = newRadar;
+            CSVPicks = CSVPicksContainer.Find(radarImage.name);
             originalScale = radarImage.localScale;
             originalRotation = radarImage.rotation.eulerAngles;
             originalPosition = radarImage.position;
@@ -164,6 +179,9 @@ public class MenuEvents : MonoBehaviour
         radarImage.localScale = originalScale;
         radarImage.GetComponent<RadarEvents>().SetAlpha(1);
         transparencySlider.SliderValue = 0;
+        RadarToggle.IsToggled = true;
+        CSVPicksToggle.IsToggled = true;
+
     }
 
     // The write button for writting the coordinates into a file.
@@ -196,7 +214,7 @@ public class MenuEvents : MonoBehaviour
         }
     }
 
-    // The three slider update interface.
+    // The four slider update interface.
     public void OnVerticalSliderUpdated(SliderEventData eventData)
     {
         scaleY = 0.5f + eventData.NewValue;
@@ -220,4 +238,13 @@ public class MenuEvents : MonoBehaviour
         if (radarImage != null && radarImage.name != "Radar Image Placeholder")
             radarImage.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
     }
+
+    /*
+    // Toggle buttons
+    public void RadarToggler()
+    {
+        if(RadarToggle.IsEnabled) radarImage.gameObject.SetActive(true);
+        else radarImage.gameObject.SetActive(false);
+    }
+    */
 }

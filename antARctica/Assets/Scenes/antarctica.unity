@@ -1906,7 +1906,7 @@ GameObject:
   m_Component:
   - component: {fileID: 288208385}
   m_Layer: 0
-  m_Name: We're gonna plot some stuff
+  m_Name: CSV Picks Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4394,7 +4394,7 @@ PrefabInstance:
     - target: {fileID: 6993896609560826261, guid: e060d94610d4cab4699b41ce0dbcfd10,
         type: 3}
       propertyPath: m_Name
-      value: L840_badcrop
+      value: L840
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e060d94610d4cab4699b41ce0dbcfd10, type: 3}
@@ -12759,11 +12759,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radarImage: {fileID: 743838362}
-  moveMenu: 0
+  CSVPicksContainer: {fileID: 288208385}
+  moveMenu: 1
   horizontalSlider: {fileID: 226041448}
   verticalSlider: {fileID: 7508367012290142209}
   rotationSlider: {fileID: 1138500061}
   transparencySlider: {fileID: 65786697}
+  RadarToggle: {fileID: 3895360588411025885}
+  CSVPicksToggle: {fileID: 2069589456}
   originalScale: {x: 0, y: 0, z: 0}
   scaleX: 0
   scaleY: 0
@@ -17219,7 +17222,7 @@ PrefabInstance:
     - target: {fileID: 6993896609560826261, guid: e060d94610d4cab4699b41ce0dbcfd10,
         type: 3}
       propertyPath: m_Name
-      value: L870_badcrop
+      value: L870
       objectReference: {fileID: 0}
     - target: {fileID: 6993896609560826287, guid: e060d94610d4cab4699b41ce0dbcfd10,
         type: 3}
