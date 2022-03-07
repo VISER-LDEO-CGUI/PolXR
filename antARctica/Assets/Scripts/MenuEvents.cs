@@ -13,30 +13,25 @@ public class MenuEvents : MonoBehaviour
 
     // The data needed for smoothing the menu movement.
     private Vector3 targetPosition;
-    private Quaternion targetRotation;
     private Vector3 targetScale;
+    private bool updatePosition = false;
+    public bool moveMenu = false;
 
-    // The three sliders.
+    // The four sliders.
     public PinchSlider horizontalSlider;
     public PinchSlider verticalSlider;
     public PinchSlider rotationSlider;
+    public PinchSlider transparencySlider;
 
     // The initial scale, rotation and position of the radar image.
-    private Vector3 originalScale;
+    public Vector3 originalScale;
     private Vector3 originalRotation;
     private Vector3 originalPosition;
+    public float scaleX;
+    public float scaleY;
 
     // The scale for calculating the text value
     public float scale = 1000;
-
-    // Transform.scale values
-    private float scaleX;
-    private float scaleY;
-    private float scaleZ;
-
-    // Scale coefficients
-    private float vertScaleValue;
-    private float hozScaleValue;
 
     // Dimension calculations.
     private float OriginalHeight;
@@ -51,6 +46,7 @@ public class MenuEvents : MonoBehaviour
     public TextMeshPro VerticalTMP;
     public TextMeshPro HorizontalTMP;
     public TextMeshPro RotationDegreeTMP;
+    public TextMeshPro TransparencyTMP;
     public TextMeshPro MarkTMP;
 
     // The information needed for updating the selected point coordinates.
@@ -68,15 +64,20 @@ public class MenuEvents : MonoBehaviour
     void Update()
     {
         // The animation for menu.
-        this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, 0.5f);
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, targetRotation, 0.5f);
+        if (moveMenu)
+        {
+            if (Vector3.Distance(targetPosition, this.transform.position) > 2) updatePosition = true;
+            if (updatePosition && Vector3.Distance(targetPosition, this.transform.position) < 0.01f) updatePosition = false;
+            if (updatePosition) this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, 0.5f);
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Camera.main.transform.rotation, 0.01f);
+        }
         this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetScale, 0.5f);
         if (this.transform.localScale.x < 0.1f) this.gameObject.SetActive(false);
 
         // Update the slider value accordingly.
         Vector3 currentScale = radarImage.localScale;
-        horizontalSlider.SliderValue = currentScale.x / originalScale.x - 1;
-        verticalSlider.SliderValue = currentScale.y / originalScale.y - 1;
+        horizontalSlider.SliderValue = currentScale.x / originalScale.x - 0.5f;
+        verticalSlider.SliderValue = currentScale.y / originalScale.y - 0.5f;
         rotationSlider.SliderValue = (float)((radarImage.rotation.eulerAngles.y - originalRotation.y) / 359.9);
 
         // Set original scale values & coefficients
@@ -97,7 +98,7 @@ public class MenuEvents : MonoBehaviour
             "Current:    {1} m \n" +
             "Strain:     {2}",
             OriginalHeight.ToString(), ScaledHeight.ToString(), StrainHeight.ToString());
-        
+
         // going to need a database for this/some spreadsheet with the values
         HorizontalTMP.text = string.Format(
             "Original:   {0} m \n" +
@@ -107,6 +108,9 @@ public class MenuEvents : MonoBehaviour
 
         // Set rotation text
         RotationDegreeTMP.text = string.Format("ROTATION:      {0}°", radarImage.localEulerAngles.y.ToString());
+
+        // Set rotation text
+        TransparencyTMP.text = string.Format("Transparency:      {0}%", transparencySlider.SliderValue * 100);
 
         // Update the selected point coordinates
         float maxX = MarkObj.transform.parent.gameObject.transform.localScale.x * 10000;
@@ -124,17 +128,18 @@ public class MenuEvents : MonoBehaviour
     }
 
     // Reset the original radar image transform and re-assign the new radar image.
-    public void ResetRadar(Transform newRadar, Vector3 newPosition)
+    public void ResetRadar(Transform newRadar, Vector3 newPosition, float newAlpha)
     {
-        // Adjust the new position and rotation.
         targetPosition = newPosition;
-        targetRotation = Camera.main.transform.rotation;
 
         if (radarImage != newRadar)
         {
             // This reset may not be needed depending on the design.
-            if (radarImage != null && radarImage.name != "Empty")
+            if (radarImage != null && radarImage.name != "Radar Image Placeholder")
+            {
+                transparencySlider.SliderValue = newAlpha;
                 ResetButton();
+            }
 
             // Switch to new radar and reset the values.
             radarImage = newRadar;
@@ -145,25 +150,20 @@ public class MenuEvents : MonoBehaviour
             // Set the title of the menu to the current radar.
             Title.text = radarImage.name;
 
-            // Set original scale values & coefficients
-            scaleX = radarImage.localScale.x;
-            scaleY = radarImage.localScale.y;
-            scaleZ = radarImage.localScale.z;
-            vertScaleValue = 1;
-            hozScaleValue = 1;
-
             // Set original dimension values
-            OriginalHeight = scaleY * scale;
-            OriginalWidth = scaleX * scale;
+            OriginalHeight = originalScale.y * scale;
+            OriginalWidth = originalScale.x * scale;
         }
     }
 
     // The reset button for the radarImage transform.
-    public void ResetButton ()
+    public void ResetButton()
     {
         radarImage.position = originalPosition;
         radarImage.rotation = Quaternion.Euler(originalRotation);
         radarImage.localScale = originalScale;
+        radarImage.GetComponent<RadarEvents>().SetAlpha(1);
+        transparencySlider.SliderValue = 0;
     }
 
     // The write button for writting the coordinates into a file.
@@ -191,7 +191,7 @@ public class MenuEvents : MonoBehaviour
         else
         {
             targetScale = new Vector3(1.0f, 1.0f, 1.0f);
-            this.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            if (this.transform.localScale.x < 0.1f) this.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             this.gameObject.SetActive(true);
         }
     }
@@ -199,19 +199,25 @@ public class MenuEvents : MonoBehaviour
     // The three slider update interface.
     public void OnVerticalSliderUpdated(SliderEventData eventData)
     {
-        vertScaleValue = 1 + eventData.NewValue;
-        radarImage.localScale = new Vector3(scaleX * hozScaleValue, scaleY * vertScaleValue, scaleZ);
+        scaleY = 0.5f + eventData.NewValue;
+        radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
     }
 
     public void OnHorizontalSliderUpdated(SliderEventData eventData)
     {
-        hozScaleValue = 1 + eventData.NewValue;
-        radarImage.localScale = new Vector3(scaleX * hozScaleValue, scaleY * vertScaleValue, scaleZ);
+        scaleX = 0.5f + eventData.NewValue;
+        radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
     }
 
     public void OnRotateSliderUpdated(SliderEventData eventData)
     {
         float rotate = (float)(359.9 * eventData.NewValue);
         radarImage.localRotation = Quaternion.Euler(0, rotate, 0);
+    }
+
+    public void OnTransparencySliderUpdated(SliderEventData eventData)
+    {
+        if (radarImage != null && radarImage.name != "Radar Image Placeholder")
+            radarImage.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
     }
 }
