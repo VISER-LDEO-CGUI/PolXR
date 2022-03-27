@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: New MixedRealityPointerProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
-  pointingExtent: 100
+  pointingExtent: 10000
   pointingRaycastLayerMasks:
   - serializedVersion: 2
     m_Bits: 4294967291

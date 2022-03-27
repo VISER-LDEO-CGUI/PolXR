@@ -15,7 +15,7 @@ public class MenuEvents : MonoBehaviour
     public Transform CSVPicksContainer;
     public Transform SurfaceDEM;
     public Transform BaseDEM;
-    //public Transform AntarcticaBoundingBox;
+    public ObjectManipulator AntarcticaBoundingBox;
 
     // The data needed for smoothing the menu movement.
     private Vector3 targetPosition;
@@ -91,7 +91,7 @@ public class MenuEvents : MonoBehaviour
         SurfaceDEM.gameObject.SetActive(SurfaceDEMToggle.IsToggled);
         BaseDEM.gameObject.SetActive(BaseDEMToggle.IsToggled);
         AllLinesOn(AllCSVPicksToggle.IsToggled);
-        //AntarcticaBoundingBox.gameObject.SetActive(BoundingBoxToggle.IsToggled);
+        AntarcticaBoundingBox.enabled = BoundingBoxToggle.IsToggled;
 
         // The animation for menu.
         if (moveMenu)
@@ -281,5 +281,4 @@ public class MenuEvents : MonoBehaviour
         for (int i = 0; i < children; ++i)
             CSVPicksContainer.GetChild(i).localScale = targetScale;
     }
-
 }
