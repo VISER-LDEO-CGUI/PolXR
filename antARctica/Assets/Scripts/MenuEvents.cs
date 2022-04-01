@@ -45,8 +45,6 @@ public class MenuEvents : MonoBehaviour
 
     // The initial scale, rotation and position of the radar image.
     public Vector3 originalScale;
-    private Vector3 originalRotation;
-    private Vector3 originalPosition;
     public float scaleX;
     public float scaleY;
 
@@ -113,7 +111,7 @@ public class MenuEvents : MonoBehaviour
             Vector3 currentScale = radarImage.localScale;
             horizontalSlider.SliderValue = currentScale.x / originalScale.x - 0.5f;
             verticalSlider.SliderValue = currentScale.y / originalScale.y - 0.5f;
-            float rounded_angle = (float)((radarImage.rotation.eulerAngles.y - originalRotation.y) / 359.9);
+            float rounded_angle = (float)(radarImage.rotation.eulerAngles.y / 359.9);
             rotationSlider.SliderValue = rounded_angle >= 0 ? rounded_angle : rounded_angle + 360.0f;
 
             // Set original scale values & coefficients
@@ -175,21 +173,10 @@ public class MenuEvents : MonoBehaviour
 
         if (radarImage != newRadar)
         {
-            // This reset may not be needed depending on the design.
-            if (radarImage != null && radarImage.name != "Radar Image Placeholder")
-            {
-                transparencySlider.SliderValue = newAlpha;
-                radarImage.gameObject.SetActive(true);
-                CSVPicks.gameObject.transform.localScale = new Vector3(1, 1, 1);
-                ResetButton();
-            }
-
             // Switch to new radar and reset the values.
             radarImage = newRadar;
             CSVPicks = CSVPicksContainer.Find(radarImage.name);
-            originalScale = radarImage.localScale;
-            originalRotation = radarImage.rotation.eulerAngles;
-            originalPosition = radarImage.position;
+            originalScale = radarImage.GetComponent<RadarEvents>().GetScale();
 
             // Set the title of the menu to the current radar.
             Title.text = radarImage.name;
@@ -203,13 +190,18 @@ public class MenuEvents : MonoBehaviour
     // The reset button for the radarImage transform.
     public void ResetButton()
     {
-        radarImage.position = originalPosition;
-        radarImage.rotation = Quaternion.Euler(originalRotation);
-        radarImage.localScale = originalScale;
-        radarImage.GetComponent<RadarEvents>().SetAlpha(1);
-        transparencySlider.SliderValue = 0;
-        RadarToggle.IsToggled = true;
-        CSVPicksToggle.IsToggled = true;
+        if (MainMenu)
+        {
+            foreach (Transform child in RadarImagesContainer)
+                child.GetComponent<RadarEvents>().ResetRadar();
+            CSVPicksToggle.IsToggled = true;
+        }
+        else
+        {
+            radarImage.GetComponent<RadarEvents>().ResetRadar();
+            CSVPicks.gameObject.transform.localScale = new Vector3(1, 1, 1);
+            RadarToggle.IsToggled = true;
+        }
     }
 
     // The write button for writting the coordinates into a file.

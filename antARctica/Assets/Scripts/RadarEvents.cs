@@ -22,6 +22,10 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     private float scaleZ;
     private float[] scaleRange = { 0.5f, 1.5f };
 
+    // The original position.
+    private Vector3 position;
+    private Vector3 rotation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,37 +46,34 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         scaleX = this.transform.localScale.x;
         scaleY = this.transform.localScale.y;
         scaleZ = this.transform.localScale.z;
+        position = this.transform.position;
+        rotation = this.transform.eulerAngles;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Constrain the scales.
-        bool exceed = false;
         Vector3 scale = this.transform.localScale;
         if (scale.x > scaleX * scaleRange[1])
         {
             scale.x = scaleX * scaleRange[1];
-            exceed = true;
         }
         else if (scale.x < scaleX * scaleRange[0])
         {
             scale.x = scaleX * scaleRange[0];
-            exceed = true;
         }
         if (scale.y > scaleY * scaleRange[1])
         {
             scale.y = scaleY * scaleRange[1];
-            exceed = true;
         }
         else if (scale.y < scaleY * scaleRange[0])
         {
             scale.y = scaleY * scaleRange[0];
-            exceed = true;
         }
         scale.z = scaleZ;
 
-        if (exceed) this.transform.localScale = scale;
+        this.transform.localScale = scale;
     }
 
     // Show the menu and mark and update the variables.
@@ -102,10 +103,26 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     {
     }
 
+    // Change the transparancy of the radar images.
     public void SetAlpha(float newAlpha)
     {
         alpha = newAlpha;
         transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
         transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
+    }
+
+    public Vector3 GetScale()
+    {
+        return new Vector3(scaleX, scaleY, scaleZ);
+    }
+
+    public void ResetRadar()
+    {
+        // Reset the radar.
+        this.gameObject.SetActive(true);
+        this.transform.position = position;
+        this.transform.rotation = Quaternion.Euler(rotation);
+        this.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
+        SetAlpha(1);
     }
 }

@@ -55,6 +55,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,6 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4435707681279537518
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,6 +136,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -158,6 +161,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6993896609560826261
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,6 +177,7 @@ GameObject:
   - component: {fileID: 6993896609560826287}
   - component: {fileID: 6993896609560826256}
   - component: {fileID: 4443364394840786298}
+  - component: {fileID: 8775970121260659736}
   m_Layer: 0
   m_Name: radarImage
   m_TagString: Untagged
@@ -189,7 +194,7 @@ Transform:
   m_GameObject: {fileID: 6993896609560826261}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 10.7986, y: -1.75, z: -131.0324}
-  m_LocalScale: {x: 36.1388, y: 5.5, z: 0.001}
+  m_LocalScale: {x: 36.1388, y: 5.5, z: 0.1}
   m_Children:
   - {fileID: 4572646506477123702}
   - {fileID: 2787175359907550699}
@@ -222,7 +227,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoConstraintSelection: 1
-  selectedConstraints: []
+  selectedConstraints:
+  - {fileID: 6993896609560826256}
+  - {fileID: 8775970121260659736}
 --- !u!114 &6993896609560826286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,19 +285,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8200a044a5affb843ba856b902d9fd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetObject: {fileID: 0}
+  targetObject: {fileID: 6993896609560826261}
   boundsOverride: {fileID: 0}
   boundsCalculationMethod: 0
   activation: 0
   flattenAxis: 0
   uniformScaleOnFlattenedAxis: 1
   boxPadding: {x: 0, y: 0, z: 0}
-  boxDisplayConfiguration: {fileID: 0}
-  linksConfiguration: {fileID: 0}
-  scaleHandlesConfiguration: {fileID: 0}
-  rotationHandlesConfiguration: {fileID: 0}
-  translationHandlesConfiguration: {fileID: 0}
-  handleProximityEffectConfiguration: {fileID: 0}
+  boxDisplayConfiguration: {fileID: 11400000, guid: c0ba4d743b86d314b92d31cdfa9c881b,
+    type: 2}
+  linksConfiguration: {fileID: 11400000, guid: 7e52924a03f61244daca8e186d540613, type: 2}
+  scaleHandlesConfiguration: {fileID: 11400000, guid: f0d6366bc7e7b32488fe44b7d7e805e5,
+    type: 2}
+  rotationHandlesConfiguration: {fileID: 11400000, guid: 532f0938d4a2dd246a91bb26df230560,
+    type: 2}
+  translationHandlesConfiguration: {fileID: 11400000, guid: 42b35932998dc694c8df66546baad004,
+    type: 2}
+  handleProximityEffectConfiguration: {fileID: 11400000, guid: 36bdea4ab43de644a823b0f54b5f7dd8,
+    type: 2}
   hideElementsInInspector: 1
   smoothingActive: 0
   rotateLerpTime: 0.001
@@ -349,3 +361,20 @@ MonoBehaviour:
   MarkObj: {fileID: 0}
   fileRoot: Radar Images/
   defaultText: {fileID: 2800000, guid: 16ea4c5ae85966f4799d2bc4a6bf157b, type: 3}
+--- !u!114 &8775970121260659736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6993896609560826261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 820f94d57893bf843a0cd6d93313fe6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handType: 3
+  proximityType: 3
+  scaleMinimum: 0.5
+  scaleMaximum: 1.5
+  relativeToInitialState: 1
