@@ -113,7 +113,8 @@ public class MenuEvents : MonoBehaviour
             Vector3 currentScale = radarImage.localScale;
             horizontalSlider.SliderValue = currentScale.x / originalScale.x - 0.5f;
             verticalSlider.SliderValue = currentScale.y / originalScale.y - 0.5f;
-            rotationSlider.SliderValue = (float)((radarImage.rotation.eulerAngles.y - originalRotation.y) / 359.9);
+            float rounded_angle = (float)((radarImage.rotation.eulerAngles.y - originalRotation.y) / 359.9);
+            rotationSlider.SliderValue = rounded_angle >= 0 ? rounded_angle : rounded_angle + 360.0f;
 
             // Set original scale values & coefficients
             float updatedScaleX = radarImage.localScale.x;
@@ -166,6 +167,7 @@ public class MenuEvents : MonoBehaviour
     // Reset the original radar image transform and re-assign the new radar image.
     public void ResetRadar(Transform newRadar, Vector3 newPosition, float newAlpha)
     {
+        MainMenu = false;
         this.transform.Find("RadarMenu").gameObject.SetActive(true);
         this.transform.Find("MainMenu").gameObject.SetActive(false);
 
