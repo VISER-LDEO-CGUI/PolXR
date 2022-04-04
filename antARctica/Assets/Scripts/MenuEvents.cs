@@ -64,6 +64,9 @@ public class MenuEvents : MonoBehaviour
     public string SelectionDialog = "Assets/dialog.txt";
     private float yOrigin = 1.75f / 5.5f;
 
+    // Measurement tool
+    public bool MeasureMode;
+
     void Start()
     {
         // Deactivate the radar menu before any selection happens.
@@ -97,8 +100,10 @@ public class MenuEvents : MonoBehaviour
             radarImage.GetComponent<RadarEvents>().ToggleLine(CSVPicksToggle.IsToggled);
 
             // Update the rotation slider value accordingly.
-            float rounded_angle = (float)(radarImage.rotation.eulerAngles.y / 359.9);
-            rotationSlider.SliderValue = rounded_angle >= 0 ? rounded_angle : rounded_angle + 360.0f;
+            float rounded_angle = (float)(radarImage.rotation.eulerAngles.y / 360.0f);
+            rounded_angle = rounded_angle >= 0 ? rounded_angle : rounded_angle + 1.0f;
+            if (Mathf.Abs(rotationSlider.SliderValue - rounded_angle) > 0.01f)
+                rotationSlider.SliderValue = rounded_angle;
 
             // Set scaled dimensions text
             VerticalTMP.text = string.Format(
@@ -212,6 +217,12 @@ public class MenuEvents : MonoBehaviour
         MainMenu = home;
         SubMenuRadar.gameObject.SetActive(!home);
         SubMenuMain.gameObject.SetActive(home);
+    }
+
+    // Measure tool button; Toggle between modes
+    public void MeasureButton()
+    {
+        MeasureMode = !MeasureMode;
     }
 
     // The four slider update interface.

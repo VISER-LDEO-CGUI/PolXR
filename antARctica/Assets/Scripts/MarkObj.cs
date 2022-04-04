@@ -18,7 +18,7 @@ public class MarkObj : MonoBehaviour
     void Update()
     {
         // Adjust the scale according to new parent.
-        Vector3 Global_Scale = this.transform.parent.transform.localScale;
+        Vector3 Global_Scale = this.transform.parent.transform.lossyScale;
         this.transform.localScale = new Vector3(Original_Scale.x / Global_Scale.x, Original_Scale.y / Global_Scale.y, Original_Scale.z / Global_Scale.z);
     }
 }

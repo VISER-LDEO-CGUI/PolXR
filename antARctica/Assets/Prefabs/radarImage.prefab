@@ -406,6 +406,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Menu: {fileID: 0}
   MarkObj: {fileID: 0}
+  MeasureObj: {fileID: 0}
+  line: {fileID: 0}
   fileRoot: Radar Images
   defaultText: {fileID: 2800000, guid: 9bb22a81707488946b25dea682dbc74e, type: 3}
 --- !u!114 &2466388036512907383
@@ -422,6 +424,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: -1
   proximityType: -1
-  scaleMinimum: 0.2
-  scaleMaximum: 2
+  scaleMinimum: 0.3
+  scaleMaximum: 3
   relativeToInitialState: 1
