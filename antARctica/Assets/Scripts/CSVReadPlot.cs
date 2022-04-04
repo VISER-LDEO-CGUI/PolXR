@@ -17,6 +17,7 @@ public class CSVReadPlot : MonoBehaviour
     public float ColorMid = -0.2f;
     public float ColorRange = 10.0f;
     public Transform Parent;
+    public Transform RadarImages;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +48,10 @@ public class CSVReadPlot : MonoBehaviour
     {
         // Split the input test by line and set the name of the line.
         string[] data = file.text.Split("\n"[0]);
-        line.name = data[1].Split(","[0])[0];
+        string label = data[1].Split(","[0])[0];
+        Transform radarImage = RadarImages.Find(label);
+        if (radarImage != null) radarImage.GetComponent<RadarEvents>().SetLine(line.transform);
+        else line.name = label;
 
         // Setting the default behavior of the particle system.
         ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[data.Length - 1];

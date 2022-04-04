@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36981d974b5546a4cbfa0b4bfa0c0ecb, type: 3}
-  m_Name: AntarcticaRotationHandles
+  m_Name: RadarRotationHandles
   m_EditorClassIdentifier: 
-  handleMaterial: {fileID: 2100000, guid: 4b82b7bd46e564947ba893e4fe672b94, type: 2}
-  handleGrabbedMaterial: {fileID: 2100000, guid: 6f925404e4154a64593afe483a8eea49,
+  handleMaterial: {fileID: 2100000, guid: 05cff17f9e45f4e48a62a976dd8dba9c, type: 2}
+  handleGrabbedMaterial: {fileID: 2100000, guid: edb240e409d9a614fbf5a4a3486683d6,
     type: 2}
   handlePrefab: {fileID: 7504372905247451914, guid: 9bf7ce93a09b4a5468c458acfe48a243,
     type: 3}
-  handleSize: 0.05
-  colliderPadding: {x: 0.05, y: 0.05, z: 0.05}
+  handleSize: 0.02
+  colliderPadding: {x: 0.02, y: 0.02, z: 0.02}
   drawTetherWhenManipulating: 1
   handlesIgnoreCollider: {fileID: 0}
   handlePrefabColliderType: 1

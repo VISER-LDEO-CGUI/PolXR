@@ -1,4 +1,5 @@
 ﻿using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,14 +18,19 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     private float alpha = 1.0f;
 
     // Keep the scales within range.
-    private float scaleX;
-    private float scaleY;
-    private float scaleZ;
+    private float scaleX, scaleY, scaleZ;
     private float[] scaleRange = { 0.5f, 1.5f };
 
-    // The original position.
+    // Return the original scale.
+    public Vector3 GetScale() { return new Vector3(scaleX, scaleY, scaleZ); }
+
+    // The original transform.
     private Vector3 position;
     private Vector3 rotation;
+
+    // The line scale and assigned or not.
+    private Vector3 LineScale;
+    private Transform CSVLine = null;
 
     // Start is called before the first frame update
     void Start()
@@ -51,38 +57,12 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        // Constrain the scales.
-        Vector3 scale = this.transform.localScale;
-        if (scale.x > scaleX * scaleRange[1])
-        {
-            scale.x = scaleX * scaleRange[1];
-        }
-        else if (scale.x < scaleX * scaleRange[0])
-        {
-            scale.x = scaleX * scaleRange[0];
-        }
-        if (scale.y > scaleY * scaleRange[1])
-        {
-            scale.y = scaleY * scaleRange[1];
-        }
-        else if (scale.y < scaleY * scaleRange[0])
-        {
-            scale.y = scaleY * scaleRange[0];
-        }
-        scale.z = scaleZ;
-
-        this.transform.localScale = scale;
-    }
+    void Update() {}
 
     // Show the menu and mark and update the variables.
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
-        // The menu.
-        Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.6f;
-        Menu.transform.GetComponent<MenuEvents>().ResetRadar(this.transform, newPosition, alpha);
-        Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
+        SychronizeMenu();
 
         // The mark.
         MarkObj.SetActive(true);
@@ -91,17 +71,10 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         MarkObj.transform.position = eventData.Pointer.Result.Details.Point;
     }
 
-    public void OnPointerDragged(MixedRealityPointerEventData eventData)
-    {
-    }
-
-    public void OnPointerUp(MixedRealityPointerEventData eventData)
-    {
-    }
-
-    public void OnPointerClicked(MixedRealityPointerEventData eventData)
-    {
-    }
+    // Unused functions.
+    public void OnPointerDragged(MixedRealityPointerEventData eventData) {}
+    public void OnPointerUp(MixedRealityPointerEventData eventData) {}
+    public void OnPointerClicked(MixedRealityPointerEventData eventData) {}
 
     // Change the transparancy of the radar images.
     public void SetAlpha(float newAlpha)
@@ -111,18 +84,55 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
     }
 
-    public Vector3 GetScale()
+    // Assign the line to the radar image.
+    public void SetLine(Transform line)
     {
-        return new Vector3(scaleX, scaleY, scaleZ);
+        line.parent = this.transform;
+        line.name = "Line";
+        CSVLine = line;
+        LineScale = line.localScale;
     }
 
+    // Reset the radar shape.
     public void ResetRadar()
     {
-        // Reset the radar.
-        this.gameObject.SetActive(true);
         this.transform.position = position;
         this.transform.rotation = Quaternion.Euler(rotation);
         this.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         SetAlpha(1);
+        ToggleRadar(true);
+    }
+
+    public void ToggleRadar(bool toggle)
+    {
+        this.transform.GetComponent<BoxCollider>().enabled = toggle;
+        this.transform.GetComponent<BoundsControl>().enabled = toggle;
+        transform.GetChild(0).gameObject.SetActive(toggle);
+        transform.GetChild(1).gameObject.SetActive(toggle);
+        MarkObj.gameObject.SetActive(toggle);
+    }
+
+    // Toggle the line.
+    public void ToggleLine(bool toggle)
+    {
+        if (CSVLine) CSVLine.localScale = toggle ? LineScale : new Vector3(0, 0, 0);
+    }
+
+    public void SychronizeMenu()
+    {
+        // The menu.
+        Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.6f;
+        Menu.transform.GetComponent<MenuEvents>().ResetRadar(this.transform, newPosition, alpha);
+        Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
+
+        // Constrain the scales.
+        Vector3 scale = this.transform.localScale;
+        scale.x = scale.x > scaleX * scaleRange[1] ? scaleX * scaleRange[1] : scale.x;
+        scale.x = scale.x < scaleX * scaleRange[0] ? scaleX * scaleRange[0] : scale.x;
+        scale.y = scale.y > scaleY * scaleRange[1] ? scaleY * scaleRange[1] : scale.y;
+        scale.y = scale.y < scaleY * scaleRange[0] ? scaleY * scaleRange[0] : scale.y;
+        scale.z = scaleZ;
+        this.transform.localScale = scale;
+        Menu.transform.GetComponent<MenuEvents>().ConstraintSlider(scale.x / scaleX - 0.5f, scale.y / scaleY - 0.5f);
     }
 }

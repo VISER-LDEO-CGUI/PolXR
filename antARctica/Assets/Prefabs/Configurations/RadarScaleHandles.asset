@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0d3e2fcd636d0243820f1bebf6e167b, type: 3}
-  m_Name: AntarcticaScaleHandles
+  m_Name: RadarScaleHandles
   m_EditorClassIdentifier: 
-  handleMaterial: {fileID: 2100000, guid: 4b82b7bd46e564947ba893e4fe672b94, type: 2}
-  handleGrabbedMaterial: {fileID: 2100000, guid: 6f925404e4154a64593afe483a8eea49,
+  handleMaterial: {fileID: 2100000, guid: 05cff17f9e45f4e48a62a976dd8dba9c, type: 2}
+  handleGrabbedMaterial: {fileID: 2100000, guid: edb240e409d9a614fbf5a4a3486683d6,
     type: 2}
-  handlePrefab: {fileID: 2983341613767381750, guid: 069e63567ca76944293fac5900b86f6c,
-    type: 3}
-  handleSize: 0.05
-  colliderPadding: {x: 0.05, y: 0.05, z: 0.05}
+  handlePrefab: {fileID: 0}
+  handleSize: 0.02
+  colliderPadding: {x: 0.02, y: 0.02, z: 0.02}
   drawTetherWhenManipulating: 1
   handlesIgnoreCollider: {fileID: 0}
   handleSlatePrefab: {fileID: 2276908067001477311, guid: 3de48fe68830e2b46a7ea63c0193b617,

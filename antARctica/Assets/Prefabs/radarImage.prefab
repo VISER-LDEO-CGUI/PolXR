@@ -171,13 +171,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6993896609560826257}
-  - component: {fileID: 6993896609560826260}
+  - component: {fileID: 3366279441700685643}
   - component: {fileID: 6993896609560826285}
-  - component: {fileID: 6993896609560826286}
   - component: {fileID: 6993896609560826287}
+  - component: {fileID: 6993896609560826286}
   - component: {fileID: 6993896609560826256}
   - component: {fileID: 4443364394840786298}
-  - component: {fileID: 8775970121260659736}
+  - component: {fileID: 2466388036512907383}
   m_Layer: 0
   m_Name: radarImage
   m_TagString: Untagged
@@ -194,14 +194,14 @@ Transform:
   m_GameObject: {fileID: 6993896609560826261}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 10.7986, y: -1.75, z: -131.0324}
-  m_LocalScale: {x: 36.1388, y: 5.5, z: 0.1}
+  m_LocalScale: {x: 36.1388, y: 5.5, z: 0.01}
   m_Children:
   - {fileID: 4572646506477123702}
   - {fileID: 2787175359907550699}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6993896609560826260
+--- !u!65 &3366279441700685643
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -229,7 +229,110 @@ MonoBehaviour:
   autoConstraintSelection: 1
   selectedConstraints:
   - {fileID: 6993896609560826256}
-  - {fileID: 8775970121260659736}
+  - {fileID: 2466388036512907383}
+--- !u!114 &6993896609560826287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6993896609560826261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8200a044a5affb843ba856b902d9fd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 6993896609560826261}
+  boundsOverride: {fileID: 0}
+  boundsCalculationMethod: 0
+  activation: 0
+  flattenAxis: 3
+  uniformScaleOnFlattenedAxis: 1
+  boxPadding: {x: 0, y: 0, z: 0}
+  boxDisplayConfiguration: {fileID: 11400000, guid: 7dcafa6ff90b603479a02879bae0b642,
+    type: 2}
+  linksConfiguration: {fileID: 0}
+  scaleHandlesConfiguration: {fileID: 11400000, guid: a2de4fce9b3b99f428e335d1c8d91e00,
+    type: 2}
+  rotationHandlesConfiguration: {fileID: 11400000, guid: 1f8ab0416b9dcac4ea14220951ffbcda,
+    type: 2}
+  translationHandlesConfiguration: {fileID: 0}
+  handleProximityEffectConfiguration: {fileID: 11400000, guid: 36bdea4ab43de644a823b0f54b5f7dd8,
+    type: 2}
+  hideElementsInInspector: 1
+  smoothingActive: 0
+  rotateLerpTime: 0.001
+  scaleLerpTime: 0.001
+  translateLerpTime: 0.001
+  enableConstraints: 1
+  constraintsManager: {fileID: 6993896609560826285}
+  rotateStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4443364394840786298}
+        m_TargetAssemblyTypeName: RadarEvents, Assembly-CSharp
+        m_MethodName: SychronizeMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  rotateStopped:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4443364394840786298}
+        m_TargetAssemblyTypeName: RadarEvents, Assembly-CSharp
+        m_MethodName: SychronizeMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  scaleStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4443364394840786298}
+        m_TargetAssemblyTypeName: RadarEvents, Assembly-CSharp
+        m_MethodName: SychronizeMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  scaleStopped:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4443364394840786298}
+        m_TargetAssemblyTypeName: RadarEvents, Assembly-CSharp
+        m_MethodName: SychronizeMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  translateStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  translateStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  elasticsManager: {fileID: 0}
 --- !u!114 &6993896609560826286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,62 +376,6 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6993896609560826287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993896609560826261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8200a044a5affb843ba856b902d9fd3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetObject: {fileID: 6993896609560826261}
-  boundsOverride: {fileID: 0}
-  boundsCalculationMethod: 0
-  activation: 0
-  flattenAxis: 0
-  uniformScaleOnFlattenedAxis: 1
-  boxPadding: {x: 0, y: 0, z: 0}
-  boxDisplayConfiguration: {fileID: 11400000, guid: c0ba4d743b86d314b92d31cdfa9c881b,
-    type: 2}
-  linksConfiguration: {fileID: 11400000, guid: 7e52924a03f61244daca8e186d540613, type: 2}
-  scaleHandlesConfiguration: {fileID: 11400000, guid: f0d6366bc7e7b32488fe44b7d7e805e5,
-    type: 2}
-  rotationHandlesConfiguration: {fileID: 11400000, guid: 532f0938d4a2dd246a91bb26df230560,
-    type: 2}
-  translationHandlesConfiguration: {fileID: 11400000, guid: 42b35932998dc694c8df66546baad004,
-    type: 2}
-  handleProximityEffectConfiguration: {fileID: 11400000, guid: 36bdea4ab43de644a823b0f54b5f7dd8,
-    type: 2}
-  hideElementsInInspector: 1
-  smoothingActive: 0
-  rotateLerpTime: 0.001
-  scaleLerpTime: 0.001
-  translateLerpTime: 0.001
-  enableConstraints: 1
-  constraintsManager: {fileID: 6993896609560826285}
-  rotateStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  rotateStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  scaleStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  scaleStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  translateStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  translateStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  elasticsManager: {fileID: 0}
 --- !u!114 &6993896609560826256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,9 +406,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Menu: {fileID: 0}
   MarkObj: {fileID: 0}
-  fileRoot: Radar Images/
-  defaultText: {fileID: 2800000, guid: 16ea4c5ae85966f4799d2bc4a6bf157b, type: 3}
---- !u!114 &8775970121260659736
+  fileRoot: Radar Images
+  defaultText: {fileID: 2800000, guid: 9bb22a81707488946b25dea682dbc74e, type: 3}
+--- !u!114 &2466388036512907383
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -373,8 +420,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820f94d57893bf843a0cd6d93313fe6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handType: 3
-  proximityType: 3
-  scaleMinimum: 0.5
-  scaleMaximum: 1.5
+  handType: -1
+  proximityType: -1
+  scaleMinimum: 0.2
+  scaleMaximum: 2
   relativeToInitialState: 1

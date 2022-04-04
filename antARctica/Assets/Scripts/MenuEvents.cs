@@ -1,4 +1,5 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,22 +11,21 @@ public class MenuEvents : MonoBehaviour
 {
     // The current menu type, true stands for main menu.
     private bool MainMenu;
+    public Transform SubMenuRadar;
+    public Transform SubMenuMain;
 
     // Initially set to an empty object to avoid null reference.
-    public Transform radarImage;
+    private Transform radarImage = null;
     public Transform RadarImagesContainer;
-    private Transform CSVPicks;
     public Transform CSVPicksContainer;
     public Transform SurfaceDEM;
     public Transform BaseDEM;
-    public BoxCollider AntarcticaBoxCollider;
-
+    public Transform Antarctica;
 
     // The data needed for smoothing the menu movement.
     private Vector3 targetPosition;
     private Vector3 targetScale = new Vector3(1.0f, 1.0f, 1.0f);
     private bool updatePosition = false;
-    public bool moveMenu = false;
 
     // The sliders.
     public PinchSlider horizontalSlider;
@@ -33,6 +33,22 @@ public class MenuEvents : MonoBehaviour
     public PinchSlider rotationSlider;
     public PinchSlider transparencySlider;
     public PinchSlider verticalExaggerationSlider;
+
+    // The initial scale, rotation and position of the radar image.
+    private Vector3 originalScale;
+    private float scaleX;
+    private float scaleY;
+
+    // The scale for calculating the text value
+    public float scale = 1000;
+
+    // Text objects
+    public TextMeshPro Title;
+    public TextMeshPro VerticalTMP;
+    public TextMeshPro HorizontalTMP;
+    public TextMeshPro RotationDegreeTMP;
+    public TextMeshPro TransparencyTMP;
+    public TextMeshPro MarkTMP;
 
     // Radar Menu Toggle Buttons
     public Interactable RadarToggle;
@@ -42,30 +58,6 @@ public class MenuEvents : MonoBehaviour
     public Interactable SurfaceDEMToggle;
     public Interactable BaseDEMToggle;
     public Interactable BoundingBoxToggle;
-
-    // The initial scale, rotation and position of the radar image.
-    public Vector3 originalScale;
-    public float scaleX;
-    public float scaleY;
-
-    // The scale for calculating the text value
-    public float scale = 1000;
-
-    // Dimension calculations.
-    private float OriginalHeight;
-    private float OriginalWidth;
-    private float ScaledHeight;
-    private float ScaledWidth;
-    private float StrainHeight;
-    private float StrainWidth;
-
-    // Text objects
-    public TextMeshPro Title;
-    public TextMeshPro VerticalTMP;
-    public TextMeshPro HorizontalTMP;
-    public TextMeshPro RotationDegreeTMP;
-    public TextMeshPro TransparencyTMP;
-    public TextMeshPro MarkTMP;
 
     // The information needed for updating the selected point coordinates.
     public GameObject MarkObj;
@@ -82,63 +74,49 @@ public class MenuEvents : MonoBehaviour
     void Update()
     {
         // The starting animation for menu.
-        if (moveMenu)
-        {
-            if (Vector3.Distance(targetPosition, this.transform.position) > 2) updatePosition = true;
-            else if (Vector3.Distance(targetPosition, this.transform.position) < 0.01f) updatePosition = false;
-            if (updatePosition) this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, 0.5f);
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Camera.main.transform.rotation, 0.01f);
-        }
+        if (Vector3.Distance(targetPosition, this.transform.position) > 2) updatePosition = true;
+        else if (Vector3.Distance(targetPosition, this.transform.position) < 0.01f) updatePosition = false;
+        if (updatePosition) this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, 0.5f);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Camera.main.transform.rotation, 0.01f);
         this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetScale, 0.5f);
         if (this.transform.localScale.x < 0.1f) this.gameObject.SetActive(false);
 
         if (MainMenu)
         {
-            // Main Menu Toggling Objects 
-            RadarImagesContainer.gameObject.SetActive(AllRadarToggle.IsToggled);
+            // Main Menu Toggling Objects.
             SurfaceDEM.gameObject.SetActive(SurfaceDEMToggle.IsToggled);
             BaseDEM.gameObject.SetActive(BaseDEMToggle.IsToggled);
-            AllLinesOn(AllCSVPicksToggle.IsToggled);
-            AntarcticaBoxCollider.enabled = BoundingBoxToggle.IsToggled;
+            MainToggling(AllCSVPicksToggle.IsToggled, AllRadarToggle.IsToggled);
+            Antarctica.GetComponent<BoxCollider>().enabled = BoundingBoxToggle.IsToggled;
+            Antarctica.GetComponent<BoundsControl>().enabled = BoundingBoxToggle.IsToggled;
         }
         else
         {
             // Radar Menu Toggling Objects
-            radarImage.gameObject.SetActive(RadarToggle.IsToggled);
-            CSVPicks.localScale = CSVPicksToggle.IsToggled? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
+            radarImage.GetComponent<RadarEvents>().ToggleRadar(RadarToggle.IsToggled);
+            radarImage.GetComponent<RadarEvents>().ToggleLine(CSVPicksToggle.IsToggled);
 
-            // Update the slider value accordingly.
-            Vector3 currentScale = radarImage.localScale;
-            horizontalSlider.SliderValue = currentScale.x / originalScale.x - 0.5f;
-            verticalSlider.SliderValue = currentScale.y / originalScale.y - 0.5f;
+            // Update the rotation slider value accordingly.
             float rounded_angle = (float)(radarImage.rotation.eulerAngles.y / 359.9);
             rotationSlider.SliderValue = rounded_angle >= 0 ? rounded_angle : rounded_angle + 360.0f;
-
-            // Set original scale values & coefficients
-            float updatedScaleX = radarImage.localScale.x;
-            float updatedScaleY = radarImage.localScale.y;
-
-            // Get current dimensions of the radar image
-            ScaledHeight = updatedScaleY * scale;
-            ScaledWidth = updatedScaleX * scale;
-
-            // Calculate strain
-            StrainHeight = Math.Abs(OriginalHeight - ScaledHeight);
-            StrainWidth = Math.Abs(OriginalWidth - ScaledWidth);
 
             // Set scaled dimensions text
             VerticalTMP.text = string.Format(
                 "Original:   {0} m \n" +
                 "Current:    {1} m \n" +
                 "Strain:     {2}",
-                OriginalHeight.ToString(), ScaledHeight.ToString(), StrainHeight.ToString());
+                (originalScale.y * scale).ToString(),
+                (radarImage.localScale.y * scale).ToString(),
+                (Math.Abs(originalScale.y - radarImage.localScale.y) * scale).ToString());
 
             // going to need a database for this/some spreadsheet with the values
             HorizontalTMP.text = string.Format(
                 "Original:   {0} m \n" +
                 "Current:    {1} m \n" +
                 "Strain:     {2}",
-                OriginalWidth.ToString(), ScaledWidth.ToString(), StrainWidth.ToString());
+                (originalScale.x * scale).ToString(),
+                (radarImage.localScale.x * scale).ToString(),
+                (Math.Abs(originalScale.x - radarImage.localScale.x) * scale).ToString());
 
             // Set rotation text
             RotationDegreeTMP.text = string.Format("ROTATION:      {0}°", radarImage.localEulerAngles.y.ToString());
@@ -147,8 +125,8 @@ public class MenuEvents : MonoBehaviour
             TransparencyTMP.text = string.Format("Transparency:      {0}%", transparencySlider.SliderValue * 100);
 
             // Update the selected point coordinates
-            float maxX = MarkObj.transform.parent.gameObject.transform.localScale.x * 10000;
-            float maxY = MarkObj.transform.parent.gameObject.transform.localScale.y * 100;
+            float maxX = radarImage.localScale.x * 10000;
+            float maxY = radarImage.localScale.y * 100;
             float radarX = (MarkObj.transform.localPosition.x + 0.5f) * maxX;
             float radarY = (MarkObj.transform.localPosition.y - yOrigin) * maxY;
 
@@ -165,26 +143,22 @@ public class MenuEvents : MonoBehaviour
     // Reset the original radar image transform and re-assign the new radar image.
     public void ResetRadar(Transform newRadar, Vector3 newPosition, float newAlpha)
     {
-        MainMenu = false;
-        this.transform.Find("RadarMenu").gameObject.SetActive(true);
-        this.transform.Find("MainMenu").gameObject.SetActive(false);
-
         targetPosition = newPosition;
 
         if (radarImage != newRadar)
         {
             // Switch to new radar and reset the values.
             radarImage = newRadar;
-            CSVPicks = CSVPicksContainer.Find(radarImage.name);
             originalScale = radarImage.GetComponent<RadarEvents>().GetScale();
 
             // Set the title of the menu to the current radar.
             Title.text = radarImage.name;
-
-            // Set original dimension values
-            OriginalHeight = originalScale.y * scale;
-            OriginalWidth = originalScale.x * scale;
         }
+
+        MainMenu = false;
+        RadarToggle.IsToggled = true;
+        SubMenuRadar.gameObject.SetActive(true);
+        SubMenuMain.gameObject.SetActive(false);
     }
 
     // The reset button for the radarImage transform.
@@ -192,15 +166,13 @@ public class MenuEvents : MonoBehaviour
     {
         if (MainMenu)
         {
-            foreach (Transform child in RadarImagesContainer)
-                child.GetComponent<RadarEvents>().ResetRadar();
+            foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
             CSVPicksToggle.IsToggled = true;
         }
         else
         {
             radarImage.GetComponent<RadarEvents>().ResetRadar();
-            CSVPicks.gameObject.transform.localScale = new Vector3(1, 1, 1);
-            RadarToggle.IsToggled = true;
+            radarImage.GetComponent<RadarEvents>().ToggleLine(true);
         }
     }
 
@@ -234,36 +206,36 @@ public class MenuEvents : MonoBehaviour
         }
     }
 
+    // Switch between different sub menus.
     public void HomeButton(bool home)
     {
         MainMenu = home;
-        this.transform.Find("RadarMenu").gameObject.SetActive(!home);
-        this.transform.Find("MainMenu").gameObject.SetActive(home);
+        SubMenuRadar.gameObject.SetActive(!home);
+        SubMenuMain.gameObject.SetActive(home);
     }
 
     // The four slider update interface.
     public void OnVerticalSliderUpdated(SliderEventData eventData)
     {
         scaleY = 0.5f + eventData.NewValue;
-        radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
+        if (radarImage) radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
     }
-
+    
     public void OnHorizontalSliderUpdated(SliderEventData eventData)
     {
         scaleX = 0.5f + eventData.NewValue;
-        radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
+        if (radarImage) radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
     }
 
     public void OnRotateSliderUpdated(SliderEventData eventData)
     {
         float rotate = (float)(359.9 * eventData.NewValue);
-        radarImage.localRotation = Quaternion.Euler(0, rotate, 0);
+        if (radarImage) radarImage.localRotation = Quaternion.Euler(0, rotate, 0);
     }
 
     public void OnTransparencySliderUpdated(SliderEventData eventData)
     {
-        if (radarImage != null && radarImage.name != "Radar Image Placeholder")
-            radarImage.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
+        if (radarImage) radarImage.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
     }
 
     // Main Menu Vertical Exaggeration Slider
@@ -273,12 +245,21 @@ public class MenuEvents : MonoBehaviour
         BaseDEM.localScale = new Vector3(1, 0.5f + eventData.NewValue, 1);
     }
 
-    // Main Menu Toggling CSV lines
-    public void AllLinesOn(bool input)
+    // Main Menu Toggling CSV and radar images.
+    public void MainToggling(bool CSVInput, bool RadarInput)
     {
-        Vector3 newScale = input ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
-        int children = CSVPicksContainer.childCount;
-        for (int i = 0; i < children; ++i)
-            CSVPicksContainer.GetChild(i).localScale = newScale;
+        Vector3 newScale = CSVInput ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
+        foreach (Transform child in CSVPicksContainer) child.localScale = newScale;
+        foreach (Transform child in RadarImagesContainer)
+        {
+            child.GetComponent<RadarEvents>().ToggleRadar(RadarInput);
+            child.GetComponent<RadarEvents>().ToggleLine(CSVInput);
+        }
+    }
+
+    public void ConstraintSlider(float x, float y)
+    {
+        horizontalSlider.SliderValue = x;
+        verticalSlider.SliderValue = y;
     }
 }
