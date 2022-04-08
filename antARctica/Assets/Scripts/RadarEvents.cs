@@ -67,7 +67,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
         SychronizeMenu();
-        
+
         // Measurement
         if (Menu.GetComponent<MenuEvents>().MeasureMode && (MarkObj.transform.parent == this.transform))
         {

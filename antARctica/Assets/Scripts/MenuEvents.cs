@@ -53,6 +53,7 @@ public class MenuEvents : MonoBehaviour
     // Radar Menu Toggle Buttons
     public Interactable RadarToggle;
     public Interactable CSVPicksToggle;
+    public Interactable MeasurementToggle;
     public Interactable AllRadarToggle;
     public Interactable AllCSVPicksToggle;
     public Interactable SurfaceDEMToggle;
@@ -61,6 +62,8 @@ public class MenuEvents : MonoBehaviour
 
     // The information needed for updating the selected point coordinates.
     public GameObject MarkObj;
+    public GameObject MeasureObj;
+    public GameObject MeasureLine;
     public string SelectionDialog = "Assets/dialog.txt";
     private float yOrigin = 1.75f / 5.5f;
 
@@ -98,6 +101,7 @@ public class MenuEvents : MonoBehaviour
             // Radar Menu Toggling Objects
             radarImage.GetComponent<RadarEvents>().ToggleRadar(RadarToggle.IsToggled);
             radarImage.GetComponent<RadarEvents>().ToggleLine(CSVPicksToggle.IsToggled);
+            Measurement(MeasurementToggle.IsToggled);
 
             // Update the rotation slider value accordingly.
             float rounded_angle = (float)(radarImage.rotation.eulerAngles.y / 360.0f);
@@ -130,16 +134,21 @@ public class MenuEvents : MonoBehaviour
             TransparencyTMP.text = string.Format("Transparency:      {0}%", transparencySlider.SliderValue * 100);
 
             // Update the selected point coordinates
-            float maxX = radarImage.localScale.x * 10000;
-            float maxY = radarImage.localScale.y * 100;
+            float maxX = radarImage.localScale.x * scale;
+            float maxY = radarImage.localScale.y * scale;
             float radarX = (MarkObj.transform.localPosition.x + 0.5f) * maxX;
             float radarY = (MarkObj.transform.localPosition.y - yOrigin) * maxY;
+            Vector2 measure;
+            if (MeasureObj.activeSelf == false) measure = new Vector2(0, 0);
+            else
+                measure = new Vector2((MeasureObj.transform.localPosition.x - MarkObj.transform.localPosition.x) * maxX,
+                (MeasureObj.transform.localPosition.y - MarkObj.transform.localPosition.y) * maxY);
 
             if (MarkObj.transform.parent.name != "Antarctica")
                 MarkTMP.text = string.Format(
                     "{0}: ({1}, {2})\n" +
-                    "X: {3}, Y: {4}",
-                    MarkObj.transform.parent.name, radarX.ToString(), radarY.ToString(), maxX.ToString(), maxY.ToString());
+                    "X: {3}, Y: {4}, D: {5}",
+                    MarkObj.transform.parent.name, radarX.ToString(), radarY.ToString(), maxX.ToString(), maxY.ToString(), Vector2.Distance(measure, new Vector2(0, 0)));
             else
                 MarkTMP.text = "No selected points.";
         }
@@ -219,10 +228,15 @@ public class MenuEvents : MonoBehaviour
         SubMenuMain.gameObject.SetActive(home);
     }
 
-    // Measure tool button; Toggle between modes
-    public void MeasureButton()
+    public void Measurement(bool input)
     {
-        MeasureMode = !MeasureMode;
+        MeasureMode = input;
+
+        if (!MeasureMode)
+        {
+            MeasureLine.SetActive(false);
+            MeasureObj.SetActive(false);
+        }
     }
 
     // The four slider update interface.
@@ -231,7 +245,7 @@ public class MenuEvents : MonoBehaviour
         scaleY = 0.5f + eventData.NewValue;
         if (radarImage) radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
     }
-    
+
     public void OnHorizontalSliderUpdated(SliderEventData eventData)
     {
         scaleX = 0.5f + eventData.NewValue;
