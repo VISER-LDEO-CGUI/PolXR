@@ -1,7 +1,6 @@
 ﻿using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
@@ -69,7 +68,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         SychronizeMenu();
 
         // Measurement
-        if (Menu.GetComponent<MenuEvents>().MeasureMode && (MarkObj.transform.parent == this.transform))
+        if (Menu.GetComponent<MenuEvents>().GetMeasureMode() && (MarkObj.transform.parent == this.transform))
         {
             MeasureObj.SetActive(true);
             MeasureObj.transform.rotation = this.transform.rotation;
@@ -89,7 +88,6 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
             MarkObj.transform.SetParent(this.transform);
             MarkObj.transform.position = eventData.Pointer.Result.Details.Point;
         }
-
     }
 
     // Unused functions.
@@ -143,7 +141,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     {
         // The menu.
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.6f;
-        Menu.transform.GetComponent<MenuEvents>().ResetRadar(this.transform, newPosition, alpha);
+        Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
         Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
 
         // Constrain the scales.

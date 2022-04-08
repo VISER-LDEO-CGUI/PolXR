@@ -56,7 +56,6 @@ public class CSVReadPlot : MonoBehaviour
         // Setting the default behavior of the particle system.
         ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[data.Length - 1];
         var main = line.main;
-        main.maxParticles = data.Length - 1;
         line.Emit(data.Length - 1);
         line.GetParticles(CSVPoints);
         int inRange = 0;
@@ -81,6 +80,7 @@ public class CSVReadPlot : MonoBehaviour
             }
         }
 
+        main.maxParticles = inRange;
         line.SetParticles(CSVPoints, inRange);
     }
 }

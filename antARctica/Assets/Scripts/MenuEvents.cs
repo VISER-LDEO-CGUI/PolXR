@@ -1,6 +1,5 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -18,8 +17,7 @@ public class MenuEvents : MonoBehaviour
     private Transform radarImage = null;
     public Transform RadarImagesContainer;
     public Transform CSVPicksContainer;
-    public Transform SurfaceDEM;
-    public Transform BaseDEM;
+    public Transform Dems;
     public Transform Antarctica;
 
     // The data needed for smoothing the menu movement.
@@ -53,27 +51,24 @@ public class MenuEvents : MonoBehaviour
     // Radar Menu Toggle Buttons
     public Interactable RadarToggle;
     public Interactable CSVPicksToggle;
-    public Interactable MeasurementToggle;
     public Interactable AllRadarToggle;
     public Interactable AllCSVPicksToggle;
-    public Interactable SurfaceDEMToggle;
-    public Interactable BaseDEMToggle;
-    public Interactable BoundingBoxToggle;
+    public Interactable MeasurementToggle;
+    public bool GetMeasureMode() { return MeasurementToggle.IsToggled; }
 
     // The information needed for updating the selected point coordinates.
     public GameObject MarkObj;
+    public Color MarkColor;
     public GameObject MeasureObj;
     public GameObject MeasureLine;
     public string SelectionDialog = "Assets/dialog.txt";
     private float yOrigin = 1.75f / 5.5f;
 
-    // Measurement tool
-    public bool MeasureMode;
-
     void Start()
     {
-        // Deactivate the radar menu before any selection happens.
+        // Deactivate the radar menu before any selection happens; deactivate the bounding box.
         HomeButton(true);
+        BoundingBoxToggle();
     }
 
     // Update is called once per frame
@@ -87,22 +82,8 @@ public class MenuEvents : MonoBehaviour
         this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetScale, 0.5f);
         if (this.transform.localScale.x < 0.1f) this.gameObject.SetActive(false);
 
-        if (MainMenu)
+        if (!MainMenu)
         {
-            // Main Menu Toggling Objects.
-            SurfaceDEM.gameObject.SetActive(SurfaceDEMToggle.IsToggled);
-            BaseDEM.gameObject.SetActive(BaseDEMToggle.IsToggled);
-            MainToggling(AllCSVPicksToggle.IsToggled, AllRadarToggle.IsToggled);
-            Antarctica.GetComponent<BoxCollider>().enabled = BoundingBoxToggle.IsToggled;
-            Antarctica.GetComponent<BoundsControl>().enabled = BoundingBoxToggle.IsToggled;
-        }
-        else
-        {
-            // Radar Menu Toggling Objects
-            radarImage.GetComponent<RadarEvents>().ToggleRadar(RadarToggle.IsToggled);
-            radarImage.GetComponent<RadarEvents>().ToggleLine(CSVPicksToggle.IsToggled);
-            Measurement(MeasurementToggle.IsToggled);
-
             // Update the rotation slider value accordingly.
             float rounded_angle = (float)(radarImage.rotation.eulerAngles.y / 360.0f);
             rounded_angle = rounded_angle >= 0 ? rounded_angle : rounded_angle + 1.0f;
@@ -145,17 +126,22 @@ public class MenuEvents : MonoBehaviour
                 (MeasureObj.transform.localPosition.y - MarkObj.transform.localPosition.y) * maxY);
 
             if (MarkObj.transform.parent.name != "Antarctica")
+            {
                 MarkTMP.text = string.Format(
                     "{0}: ({1}, {2})\n" +
-                    "X: {3}, Y: {4}, D: {5}",
-                    MarkObj.transform.parent.name, radarX.ToString(), radarY.ToString(), maxX.ToString(), maxY.ToString(), Vector2.Distance(measure, new Vector2(0, 0)));
+                    "X: {3}, Y: {4}\n",
+                    MarkObj.transform.parent.name, radarX.ToString(), radarY.ToString(), maxX.ToString(), maxY.ToString());
+                if (GetMeasureMode())
+                    MarkTMP.text += string.Format("Distance: {0}m", Vector2.Distance(measure, new Vector2(0, 0)));
+            }
+                
             else
                 MarkTMP.text = "No selected points.";
         }
     }
 
     // Reset the original radar image transform and re-assign the new radar image.
-    public void ResetRadar(Transform newRadar, Vector3 newPosition, float newAlpha)
+    public void ResetRadarSelected(Transform newRadar, Vector3 newPosition, float newAlpha)
     {
         targetPosition = newPosition;
 
@@ -180,11 +166,15 @@ public class MenuEvents : MonoBehaviour
     {
         if (MainMenu)
         {
+            AllCSVPicksToggle.IsToggled = true;
+            AllRadarToggle.IsToggled = true;
             foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
-            CSVPicksToggle.IsToggled = true;
+            MainCSVToggling();
         }
         else
         {
+            RadarToggle.IsToggled = true;
+            CSVPicksToggle.IsToggled = true;
             radarImage.GetComponent<RadarEvents>().ResetRadar();
             radarImage.GetComponent<RadarEvents>().ToggleLine(true);
         }
@@ -206,6 +196,16 @@ public class MenuEvents : MonoBehaviour
             sr.WriteLine(MarkTMP.text);
             sr.Close();
         }
+
+        ParticleSystem CSVLine = radarImage.Find("Line").GetComponent<ParticleSystem>();
+        var main = CSVLine.main;
+        main.maxParticles += 1;
+        int CSVLength = main.maxParticles + 1;
+        ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[CSVLength];
+        CSVLine.GetParticles(CSVPoints);
+        CSVPoints[CSVLength - 1].position = MarkObj.transform.position;
+        CSVPoints[CSVLength - 1].startColor = MarkColor;
+        CSVLine.SetParticles(CSVPoints, CSVLength);
     }
 
     // The close button, make the menu disappear and deactivated.
@@ -224,19 +224,9 @@ public class MenuEvents : MonoBehaviour
     public void HomeButton(bool home)
     {
         MainMenu = home;
+        Title.text = home? "AntARctica" : radarImage.name;
         SubMenuRadar.gameObject.SetActive(!home);
         SubMenuMain.gameObject.SetActive(home);
-    }
-
-    public void Measurement(bool input)
-    {
-        MeasureMode = input;
-
-        if (!MeasureMode)
-        {
-            MeasureLine.SetActive(false);
-            MeasureObj.SetActive(false);
-        }
     }
 
     // The four slider update interface.
@@ -254,7 +244,7 @@ public class MenuEvents : MonoBehaviour
 
     public void OnRotateSliderUpdated(SliderEventData eventData)
     {
-        float rotate = (float)(359.9 * eventData.NewValue);
+        float rotate = (float)(360.0f * eventData.NewValue);
         if (radarImage) radarImage.localRotation = Quaternion.Euler(0, rotate, 0);
     }
 
@@ -266,22 +256,44 @@ public class MenuEvents : MonoBehaviour
     // Main Menu Vertical Exaggeration Slider
     public void OnVerticalExaggerationSliderUpdated(SliderEventData eventData)
     {
-        SurfaceDEM.localScale = new Vector3(1, 0.5f + eventData.NewValue, 1);
-        BaseDEM.localScale = new Vector3(1, 0.5f + eventData.NewValue, 1);
+        foreach (Transform child in Dems) child.localScale = new Vector3(1, 0.5f + eventData.NewValue, 1);
     }
 
     // Main Menu Toggling CSV and radar images.
-    public void MainToggling(bool CSVInput, bool RadarInput)
+    public void MainCSVToggling()
     {
-        Vector3 newScale = CSVInput ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
+        Vector3 newScale = AllCSVPicksToggle.IsToggled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
         foreach (Transform child in CSVPicksContainer) child.localScale = newScale;
         foreach (Transform child in RadarImagesContainer)
-        {
-            child.GetComponent<RadarEvents>().ToggleRadar(RadarInput);
-            child.GetComponent<RadarEvents>().ToggleLine(CSVInput);
-        }
+            child.GetComponent<RadarEvents>().ToggleLine(AllCSVPicksToggle.IsToggled);
     }
 
+    public void MainRadarToggling()
+    {
+        foreach (Transform child in RadarImagesContainer)
+            child.GetComponent<RadarEvents>().ToggleRadar(AllRadarToggle.IsToggled);
+    }
+
+    // Single radar toggling.
+    public void CSVToggling() { radarImage.GetComponent<RadarEvents>().ToggleLine(CSVPicksToggle.IsToggled); }
+    public void RadarToggling() { radarImage.GetComponent<RadarEvents>().ToggleRadar(RadarToggle.IsToggled); }
+
+    // Find the dem according to name.
+    public void DemToggle(string name)
+    {
+        GameObject targetDem = Dems.Find(name).gameObject;
+        targetDem.SetActive(!targetDem.activeSelf);
+    }
+
+    // Switch between two states of the bounding box.
+    public void BoundingBoxToggle()
+    {
+        bool originalState = Antarctica.GetComponent<BoxCollider>().enabled;
+        Antarctica.GetComponent<BoxCollider>().enabled = !originalState;
+        Antarctica.GetComponent<BoundsControl>().enabled = !originalState;
+    }
+
+    // Synchronize the sliders
     public void ConstraintSlider(float x, float y)
     {
         horizontalSlider.SliderValue = x;
