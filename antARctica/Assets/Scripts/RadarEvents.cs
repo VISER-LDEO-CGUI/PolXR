@@ -76,10 +76,13 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
             MeasureObj.transform.SetParent(this.transform);
             MeasureObj.transform.position = eventData.Pointer.Result.Details.Point;
             line.SetActive(true);
-        } else {
+        }
+        else
+        {
             // Clean up!
             line.SetActive(false);
             MeasureObj.SetActive(false);
+
             // The mark.
             MarkObj.SetActive(true);
             MarkObj.transform.rotation = this.transform.rotation;

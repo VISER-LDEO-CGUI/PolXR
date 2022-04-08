@@ -11,8 +11,7 @@ public class UpdateLine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.GetComponent<LineRenderer>().startWidth = 0.008f;
-        this.GetComponent<LineRenderer>().endWidth = 0.008f;
+
     }
 
     // Update is called once per frame

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5570378949377832428}
   - component: {fileID: 5292319809449651660}
   m_Layer: 0
-  m_Name: Line
+  m_Name: CSVLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
