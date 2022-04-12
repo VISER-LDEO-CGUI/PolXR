@@ -34694,6 +34694,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Measure Line
       objectReference: {fileID: 0}
+    - target: {fileID: 3142387957041912246, guid: 37782fb4e9769034faef93555fa14785,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3142387957041912247, guid: 37782fb4e9769034faef93555fa14785,
         type: 3}
       propertyPath: m_RootOrder

@@ -1,5 +1,4 @@
 ﻿using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using UnityEngine;
 
@@ -33,6 +32,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
 
     // The line scale and assigned or not.
     private Vector3 LineScale;
+    private int DotCount = 0;
     private Transform CSVLine = null;
 
     // Start is called before the first frame update
@@ -104,12 +104,33 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     }
 
     // Assign the line to the radar image.
-    public void SetLine(Transform line)
+    public void SetLine(Transform line, int inputCount)
     {
-        line.parent = this.transform;
-        line.name = "Line";
-        CSVLine = line;
-        LineScale = line.localScale;
+        DotCount += inputCount;
+        if (CSVLine)
+        {
+            // Merge the two lines.
+            ParticleSystem originalLine = CSVLine.GetComponent<ParticleSystem>();
+            var main = originalLine.main;
+            ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[DotCount];
+            originalLine.GetParticles(CSVPoints);
+
+            ParticleSystem newLine = line.GetComponent<ParticleSystem>();
+            ParticleSystem.Particle[] newPoints = new ParticleSystem.Particle[inputCount];
+            newLine.GetParticles(newPoints);
+            for (int i = 1; i <= inputCount; i++) CSVPoints[DotCount - i] = newPoints[inputCount - i];
+
+            main.maxParticles = DotCount;
+            originalLine.Emit(inputCount);
+            originalLine.SetParticles(CSVPoints, DotCount + inputCount);
+        }
+        else
+        {
+            line.parent = this.transform;
+            line.name = "Line";
+            CSVLine = line;
+            LineScale = line.localScale;
+        }
     }
 
     // Reset the radar shape.
@@ -120,6 +141,19 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         this.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         SetAlpha(1);
         ToggleRadar(true);
+    }
+
+    public void UndoAddPoint(bool UndoAll)
+    {
+        ParticleSystem originalLine = CSVLine.GetComponent<ParticleSystem>();
+        var main = originalLine.main;
+        if (main.maxParticles > DotCount)
+        {
+            main.maxParticles = UndoAll ? DotCount : main.maxParticles - 1;
+            ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[main.maxParticles];
+            originalLine.GetParticles(CSVPoints);
+            originalLine.SetParticles(CSVPoints, main.maxParticles);
+        }
     }
 
     public void ToggleRadar(bool toggle)

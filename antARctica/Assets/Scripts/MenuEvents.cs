@@ -69,6 +69,7 @@ public class MenuEvents : MonoBehaviour
         // Deactivate the radar menu before any selection happens; deactivate the bounding box.
         HomeButton(true);
         BoundingBoxToggle();
+        MeasureLine.SetActive(false);
     }
 
     // Update is called once per frame
@@ -185,6 +186,11 @@ public class MenuEvents : MonoBehaviour
     // Be aware of the file path issue! And try to keep a history...
     public void WriteButton()
     {
+        RadarToggle.IsToggled = true;
+        RadarToggling();
+        CSVPicksToggle.IsToggled = true;
+        CSVToggling();
+
         if (File.Exists(SelectionDialog))
         {
             List<string> tempList = new List<string> { MarkTMP.text };
@@ -199,12 +205,24 @@ public class MenuEvents : MonoBehaviour
 
         ParticleSystem CSVLine = radarImage.Find("Line").GetComponent<ParticleSystem>();
         var main = CSVLine.main;
-        main.maxParticles += 1;
         int CSVLength = main.maxParticles + 1;
         ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[CSVLength];
         CSVLine.GetParticles(CSVPoints);
-        CSVPoints[CSVLength - 1].position = MarkObj.transform.position;
+
+        // Transform the position into particle coordinates.
+        Vector3 newPos = MarkObj.transform.TransformPoint(Vector3.zero) - CSVLine.transform.TransformPoint(Vector3.zero);
+        newPos.x /= CSVLine.transform.lossyScale.x;
+        newPos.y /= CSVLine.transform.lossyScale.y;
+        newPos.z /= CSVLine.transform.lossyScale.z;
+
+        // Set the particle format.
+        CSVPoints[CSVLength - 1] = CSVPoints[0];
+        CSVPoints[CSVLength - 1].position = newPos;
         CSVPoints[CSVLength - 1].startColor = MarkColor;
+
+        // Emit and set the new particle.
+        main.maxParticles += 1;
+        CSVLine.Emit(1);
         CSVLine.SetParticles(CSVPoints, CSVLength);
     }
 

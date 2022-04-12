@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class CSVReadPlot : MonoBehaviour
@@ -39,19 +36,13 @@ public class CSVReadPlot : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-
-    }
+    void Update() {}
 
     private void SetParticles(ParticleSystem line, TextAsset file)
     {
         // Split the input test by line and set the name of the line.
         string[] data = file.text.Split("\n"[0]);
         string label = data[1].Split(","[0])[0];
-        Transform radarImage = RadarImages.Find(label);
-        if (radarImage != null) radarImage.GetComponent<RadarEvents>().SetLine(line.transform);
-        else line.name = label;
 
         // Setting the default behavior of the particle system.
         ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[data.Length - 1];
@@ -82,5 +73,10 @@ public class CSVReadPlot : MonoBehaviour
 
         main.maxParticles = inRange;
         line.SetParticles(CSVPoints, inRange);
+
+        // Assign corredponding CSV line to radar images.
+        Transform radarImage = RadarImages.Find(label);
+        if (radarImage != null) radarImage.GetComponent<RadarEvents>().SetLine(line.transform, inRange);
+        else line.name = label;
     }
 }
