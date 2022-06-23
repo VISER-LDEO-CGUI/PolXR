@@ -37,6 +37,10 @@ public class MenuEvents : MonoBehaviour
     private float scaleX;
     private float scaleY;
 
+    // Initial status of the camera (user)
+    private Vector3 initialCamPos;
+    private Quaternion initialCamRot;
+
     // The scale for calculating the text value
     public float scale = 1000;
 
@@ -70,6 +74,8 @@ public class MenuEvents : MonoBehaviour
         HomeButton(true);
         BoundingBoxToggle();
         MeasureLine.SetActive(false);
+        initialCamPos = Camera.main.transform.position;
+        initialCamRot = Camera.main.transform.rotation;
     }
 
     // Update is called once per frame
@@ -171,6 +177,8 @@ public class MenuEvents : MonoBehaviour
             AllRadarToggle.IsToggled = true;
             foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
             MainCSVToggling();
+            Camera.main.transform.position = initialCamPos;
+            Camera.main.transform.rotation = initialCamRot;
         }
         else
         {
@@ -316,5 +324,12 @@ public class MenuEvents : MonoBehaviour
     {
         horizontalSlider.SliderValue = x;
         verticalSlider.SliderValue = y;
+    }
+
+    // Move the camera (equal to user) to somewhere near the selected radar
+    public void TeleportationButton()
+    {
+        Vector3 tlpOffset = (Camera.main.transform.position - radarImage.transform.position).normalized;
+        Camera.main.transform.position = radarImage.transform.position + tlpOffset;
     }
 }
