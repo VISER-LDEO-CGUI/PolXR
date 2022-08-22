@@ -41,16 +41,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         // Get and set the texture of the radar image object.
         // Need to fix the file path to relative path, or find another way to locate the pictures.
         Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
-        if (content != null)
-        {
-            transform.GetChild(0).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
-            transform.GetChild(1).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
-        }
-        else
-        {
-            transform.GetChild(0).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", defaultText);
-            transform.GetChild(1).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", defaultText);
-        }
+        loadImage(content);
 
         scaleX = this.transform.localScale.x;
         scaleY = this.transform.localScale.y;
@@ -62,10 +53,28 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     // Update is called once per frame
     void Update() {}
 
+    void loadImage(Texture content)
+    {
+        if (content != null)
+        {
+            transform.GetChild(0).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
+            transform.GetChild(1).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", content);
+        }
+        else
+        {
+            transform.GetChild(0).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", defaultText);
+            transform.GetChild(1).gameObject.GetComponent<Renderer>().material.SetTexture("_MainTex", defaultText);
+        }
+    }
+
     // Show the menu and mark and update the variables.
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
         SychronizeMenu();
+
+        // Possible future codes, load detailed image when selected.
+        //Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name + '_detailed');
+        //loadImage(content);
 
         // Measurement
         if (Menu.GetComponent<MenuEvents>().GetMeasureMode() && (MarkObj.transform.parent == this.transform))
@@ -141,6 +150,10 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         this.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         SetAlpha(1);
         ToggleRadar(true);
+
+        // Possible future codes, load detailed image when selected.
+        //Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
+        //loadImage(content);
     }
 
     public void UndoAddPoint(bool UndoAll)

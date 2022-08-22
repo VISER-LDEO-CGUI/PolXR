@@ -68,6 +68,9 @@ public class MenuEvents : MonoBehaviour
     public string SelectionDialog = "Assets/dialog.txt";
     private float yOrigin = 1.75f / 5.5f;
 
+    // The minimap plate.
+    public GameObject Minimap;
+
     void Start()
     {
         // Deactivate the radar menu before any selection happens; deactivate the bounding box.
@@ -76,6 +79,7 @@ public class MenuEvents : MonoBehaviour
         MeasureLine.SetActive(false);
         initialCamPos = Camera.main.transform.position;
         initialCamRot = Camera.main.transform.rotation;
+        Minimap.GetComponent<BoxCollider>().enabled = false;
     }
 
     // Update is called once per frame
@@ -319,17 +323,24 @@ public class MenuEvents : MonoBehaviour
         Antarctica.GetComponent<BoundsControl>().enabled = !originalState;
     }
 
-    // Synchronize the sliders
+    // Synchronize the sliders.
     public void ConstraintSlider(float x, float y)
     {
         horizontalSlider.SliderValue = x;
         verticalSlider.SliderValue = y;
     }
 
-    // Move the camera (equal to user) to somewhere near the selected radar
+    // Move the camera (equal to user) to somewhere near the selected radar.
     public void TeleportationButton()
     {
         Vector3 tlpOffset = (Camera.main.transform.position - radarImage.transform.position).normalized;
         Camera.main.transform.position = radarImage.transform.position + tlpOffset;
+    }
+
+    // Turn on/off the minimap.
+    public void MinimapButton()
+    {
+        Minimap.GetComponent<BoxCollider>().enabled = !Minimap.GetComponent<BoxCollider>().enabled;
+        Minimap.transform.localPosition = new Vector3(0.04f, -0.03f, 0);
     }
 }
