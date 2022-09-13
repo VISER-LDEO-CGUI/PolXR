@@ -21,19 +21,33 @@ MonoBehaviour:
     keyCode: 282
     action:
       id: 0
-      description: 
+      description: None
       axisConstraint: 0
   - localizationKey: 
     keyword: Measure
-    keyCode: 13
+    keyCode: 283
     action:
       id: 0
       description: 
       axisConstraint: 0
   - localizationKey: 
-    keyword: Close Measure
-    keyCode: 12
+    keyword: Go
+    keyCode: 284
     action:
       id: 0
       description: 
       axisConstraint: 0
+  - localizationKey: 
+    keyword: Reset
+    keyCode: 285
+    action:
+      id: 0
+      description: 
+      axisConstraint: 0
+  - localizationKey: 
+    keyword: Box
+    keyCode: 286
+    action:
+      id: 0
+      description: Trigger
+      axisConstraint: 3

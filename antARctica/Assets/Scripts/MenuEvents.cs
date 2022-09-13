@@ -24,7 +24,7 @@ public class MenuEvents : MonoBehaviour
     // The data needed for smoothing the menu movement.
     private Vector3 targetPosition;
     private Vector3 targetScale = new Vector3(1.0f, 1.0f, 1.0f);
-    private bool updatePosition = false;
+    private bool updatePosition = true;
 
     // The sliders.
     public PinchSlider horizontalSlider;
@@ -37,10 +37,6 @@ public class MenuEvents : MonoBehaviour
     private Vector3 originalScale;
     private float scaleX;
     private float scaleY;
-
-    // Initial status of the camera (user)
-    private Vector3 initialCamPos;
-    private Quaternion initialCamRot;
 
     // The scale for calculating the text value
     public float scale = 1000;
@@ -78,8 +74,6 @@ public class MenuEvents : MonoBehaviour
         HomeButton(true);
         BoundingBoxToggle();
         MeasureLine.SetActive(false);
-        initialCamPos = Camera.main.transform.position;
-        initialCamRot = Camera.main.transform.rotation;
         Minimap.GetComponent<BoxCollider>().enabled = false;
     }
 
@@ -90,14 +84,14 @@ public class MenuEvents : MonoBehaviour
         if (Vector3.Distance(targetPosition, this.transform.position) > 2) updatePosition = true;
         else if (Vector3.Distance(targetPosition, this.transform.position) < 0.01f) updatePosition = false;
         if (updatePosition) this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, 0.5f);
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Camera.main.transform.rotation, 0.01f);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Camera.main.transform.rotation, 0.02f);
         this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetScale, 0.5f);
         if (this.transform.localScale.x < 0.1f) this.gameObject.SetActive(false);
 
         if (!MainMenu)
         {
             // Update the rotation slider value accordingly.
-            float rounded_angle = (float)(radarImage.rotation.eulerAngles.y / 360.0f);
+            float rounded_angle = (float)(radarImage.localRotation.eulerAngles.y / 360.0f);
             rounded_angle = rounded_angle >= 0 ? rounded_angle : rounded_angle + 1.0f;
             if (Mathf.Abs(rotationSlider.SliderValue - rounded_angle) > 0.01f)
                 rotationSlider.SliderValue = rounded_angle;
@@ -182,8 +176,6 @@ public class MenuEvents : MonoBehaviour
             AllRadarToggle.IsToggled = true;
             foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
             MainCSVToggling();
-            Camera.main.transform.position = initialCamPos;
-            Camera.main.transform.rotation = initialCamRot;
         }
         else
         {
@@ -246,6 +238,7 @@ public class MenuEvents : MonoBehaviour
         else
         {
             targetScale = new Vector3(1.0f, 1.0f, 1.0f);
+            targetPosition = Camera.main.transform.position + Camera.main.transform.forward;
             if (this.transform.localScale.x < 0.1f) this.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             this.gameObject.SetActive(true);
         }
@@ -331,11 +324,14 @@ public class MenuEvents : MonoBehaviour
         verticalSlider.SliderValue = y;
     }
 
-    // Move the camera (equal to user) to somewhere near the selected radar.
+    // Move the user to somewhere near the selected radar.
     public void TeleportationButton()
     {
-        Vector3 tlpOffset = (Camera.main.transform.position - radarImage.transform.position).normalized;
-        MixedRealityPlayspace.Transform.Translate(radarImage.transform.position + tlpOffset);
+        if (MarkObj.transform.parent.name != "Antarctica" && MarkObj.activeSelf)
+        {
+            Vector3 tlpOffset = (Camera.main.transform.position - radarImage.transform.position).normalized;
+            MixedRealityPlayspace.Transform.Translate(radarImage.transform.position + tlpOffset);
+        }
     }
 
     // Turn on/off the minimap.
@@ -343,5 +339,19 @@ public class MenuEvents : MonoBehaviour
     {
         Minimap.GetComponent<BoxCollider>().enabled = !Minimap.GetComponent<BoxCollider>().enabled;
         Minimap.transform.localPosition = new Vector3(0.04f, -0.03f, 0);
+    }
+
+    // The voice command version for the close button.
+    public void MenuVoice()
+    {
+        if (this.gameObject.activeSelf) CloseButton(true);
+        else CloseButton(false);
+    }
+
+    // The voice command version for the toggles.
+    public void ToggleVoice(string keyword)
+    {
+        if (keyword == "measure") MeasurementToggle.IsToggled = !MeasurementToggle.IsToggled;
+        else if (keyword == "box") BoundingBoxToggle();
     }
 }

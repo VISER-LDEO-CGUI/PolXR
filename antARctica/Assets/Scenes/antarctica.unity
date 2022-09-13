@@ -18451,20 +18451,8 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 683731866665012620}
           m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
-          m_MethodName: CloseButton
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1126424197070601755}
-          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-          m_MethodName: set_enabled
-          m_Mode: 6
+          m_MethodName: MenuVoice
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18477,11 +18465,26 @@ MonoBehaviour:
     response:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 243269169}
-          m_TargetAssemblyTypeName: Microsoft.MixedReality.Toolkit.UI.Interactable,
-            Microsoft.MixedReality.Toolkit.SDK
-          m_MethodName: set_IsToggled
-          m_Mode: 6
+        - m_Target: {fileID: 683731866665012620}
+          m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+          m_MethodName: ToggleVoice
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: measure
+            m_BoolArgument: 1
+          m_CallState: 2
+  - keyword: Go
+    response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 683731866665012620}
+          m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+          m_MethodName: TeleportationButton
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18490,22 +18493,37 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
-  - keyword: Close Measure
+  - keyword: Reset
     response:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 243269169}
-          m_TargetAssemblyTypeName: Microsoft.MixedReality.Toolkit.UI.Interactable,
-            Microsoft.MixedReality.Toolkit.SDK
-          m_MethodName: set_IsToggled
-          m_Mode: 6
+        - m_Target: {fileID: 683731866665012620}
+          m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+          m_MethodName: ResetButton
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
-            m_BoolArgument: 0
+            m_BoolArgument: 1
+          m_CallState: 2
+  - keyword: Box
+    response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 683731866665012620}
+          m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+          m_MethodName: ToggleVoice
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: box
+            m_BoolArgument: 1
           m_CallState: 2
   persistentKeywords: 0
   speechConfirmationTooltipPrefab: {fileID: 8046114618238072051, guid: 271778f6c957b524981067a81d238394,
