@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
+﻿using Microsoft.MixedReality.Toolkit;
+using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using System.Collections.Generic;
 using UnityEngine;
@@ -334,7 +335,7 @@ public class MenuEvents : MonoBehaviour
     public void TeleportationButton()
     {
         Vector3 tlpOffset = (Camera.main.transform.position - radarImage.transform.position).normalized;
-        Camera.main.transform.position = radarImage.transform.position + tlpOffset;
+        MixedRealityPlayspace.Transform.Translate(radarImage.transform.position + tlpOffset);
     }
 
     // Turn on/off the minimap.
