@@ -11,4 +11,6 @@ Contributors:
 
 Working under our advisors Professor Steven Feiner, Alexandra Boghosian, Isabel Cordero, and Carmine Elvezio.
 
+<img src="https://github.com/sofiasanchez985/antARctica/blob/main/20220508_122402_HoloLens.jpg"      alt="Markdown Monster icon"      style="float: left; margin-right: 10px;" />
+
 <img src="https://github.com/sofiasanchez985/antARctica/blob/main/antARctica%20clips.png"      alt="Markdown Monster icon"      style="float: left; margin-right: 10px;" />
