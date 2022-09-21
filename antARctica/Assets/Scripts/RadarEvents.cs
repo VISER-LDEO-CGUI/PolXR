@@ -15,6 +15,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     // The file root under the "Resources" folder.
     public string fileRoot = "Radar Images";
     public Texture defaultText;
+    private bool loaded = false;
 
     // The transparency value.
     private float alpha = 1.0f;
@@ -39,8 +40,8 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     void Start()
     {
         // Get and set the texture of the radar image object.
-        Texture whiteContent = Resources.Load<Texture2D>(fileRoot + "/white");
-        loadImage(whiteContent);
+        defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
+        loadImage(defaultText);
 
         scaleX = this.transform.localScale.x;
         scaleY = this.transform.localScale.y;
@@ -74,6 +75,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         // Only load the images when selected.
         Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
         loadImage(content);
+        loaded = true;
 
         // Measurement
         if (Menu.GetComponent<MenuEvents>().GetMeasureMode() && (MarkObj.transform.parent == this.transform))
@@ -102,6 +104,24 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     public void OnPointerDragged(MixedRealityPointerEventData eventData) {}
     public void OnPointerUp(MixedRealityPointerEventData eventData) {}
     public void OnPointerClicked(MixedRealityPointerEventData eventData) {}
+
+    // Dynamic loading.
+    public void TempLoad(bool loadNew)
+    {
+        if (!loaded)
+        {
+            if (loadNew)
+            {
+                Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
+                loadImage(content);
+            }
+            else
+            {
+                defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
+                loadImage(defaultText);
+            }
+        }
+    }
 
     // Change the transparancy of the radar images.
     public void SetAlpha(float newAlpha)
@@ -151,8 +171,12 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         ToggleRadar(true);
 
         // Load place holder image when reset.
-        Texture whiteContent = Resources.Load<Texture2D>(fileRoot + "/white");
-        loadImage(whiteContent);
+        if (MarkObj.transform.parent != this.transform)
+        {
+            defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
+            loadImage(defaultText);
+            loaded = false;
+        }
     }
 
     public void UndoAddPoint(bool UndoAll)

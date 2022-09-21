@@ -55,6 +55,9 @@ public class MenuEvents : MonoBehaviour
     public Interactable AllRadarToggle;
     public Interactable AllCSVPicksToggle;
     public Interactable MeasurementToggle;
+    public Interactable SurfaceToggle;
+    public Interactable BedToggle;
+    public Interactable BoxToggle;
     public bool GetMeasureMode() { return MeasurementToggle.IsToggled; }
 
     // The information needed for updating the selected point coordinates.
@@ -75,13 +78,15 @@ public class MenuEvents : MonoBehaviour
         BoundingBoxToggle();
         MeasureLine.SetActive(false);
         Minimap.GetComponent<BoxCollider>().enabled = false;
+        MarkObj.transform.parent = Antarctica.transform;
+        MarkObj.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
         // The starting animation for menu.
-        if (Vector3.Distance(targetPosition, this.transform.position) > 2) updatePosition = true;
+        if (Vector3.Distance(targetPosition, this.transform.position) > 1) updatePosition = true;
         else if (Vector3.Distance(targetPosition, this.transform.position) < 0.01f) updatePosition = false;
         if (updatePosition) this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, 0.5f);
         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Camera.main.transform.rotation, 0.02f);
@@ -131,7 +136,7 @@ public class MenuEvents : MonoBehaviour
                 measure = new Vector2((MeasureObj.transform.localPosition.x - MarkObj.transform.localPosition.x) * maxX,
                 (MeasureObj.transform.localPosition.y - MarkObj.transform.localPosition.y) * maxY);
 
-            if (MarkObj.transform.parent.name != "Antarctica")
+            if (MarkObj.activeSelf)
             {
                 MarkTMP.text = string.Format(
                     "{0}: ({1}, {2})\n" +
@@ -174,6 +179,8 @@ public class MenuEvents : MonoBehaviour
         {
             AllCSVPicksToggle.IsToggled = true;
             AllRadarToggle.IsToggled = true;
+            MarkObj.transform.parent = Antarctica.transform;
+            MarkObj.SetActive(false);
             foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
             MainCSVToggling();
         }
@@ -196,7 +203,7 @@ public class MenuEvents : MonoBehaviour
         CSVPicksToggle.IsToggled = true;
         CSVToggling();
 
-        if (File.Exists(SelectionDialog))
+        /*if (File.Exists(SelectionDialog))
         {
             List<string> tempList = new List<string> { MarkTMP.text };
             File.AppendAllLines(SelectionDialog, tempList);
@@ -206,7 +213,7 @@ public class MenuEvents : MonoBehaviour
             var sr = File.CreateText(SelectionDialog);
             sr.WriteLine(MarkTMP.text);
             sr.Close();
-        }
+        }*/
 
         ParticleSystem CSVLine = radarImage.Find("Line").GetComponent<ParticleSystem>();
         var main = CSVLine.main;
@@ -215,7 +222,8 @@ public class MenuEvents : MonoBehaviour
         CSVLine.GetParticles(CSVPoints);
 
         // Transform the position into particle coordinates.
-        Vector3 newPos = MarkObj.transform.TransformPoint(Vector3.zero) - CSVLine.transform.TransformPoint(Vector3.zero);
+        Vector3 newPos = MarkObj.transform.position - CSVLine.transform.position;
+        newPos = Quaternion.Euler(0, -radarImage.transform.localEulerAngles.y, 0) * newPos;
         newPos.x /= CSVLine.transform.lossyScale.x;
         newPos.y /= CSVLine.transform.lossyScale.y;
         newPos.z /= CSVLine.transform.lossyScale.z;
@@ -287,6 +295,7 @@ public class MenuEvents : MonoBehaviour
     public void MainCSVToggling()
     {
         Vector3 newScale = AllCSVPicksToggle.IsToggled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
+        CSVPicksToggle.IsToggled = AllCSVPicksToggle.IsToggled;
         foreach (Transform child in CSVPicksContainer) child.localScale = newScale;
         foreach (Transform child in RadarImagesContainer)
             child.GetComponent<RadarEvents>().ToggleLine(AllCSVPicksToggle.IsToggled);
@@ -313,6 +322,7 @@ public class MenuEvents : MonoBehaviour
     public void BoundingBoxToggle()
     {
         bool originalState = Antarctica.GetComponent<BoxCollider>().enabled;
+        BoxToggle.IsToggled = !originalState;
         Antarctica.GetComponent<BoxCollider>().enabled = !originalState;
         Antarctica.GetComponent<BoundsControl>().enabled = !originalState;
     }
@@ -327,7 +337,7 @@ public class MenuEvents : MonoBehaviour
     // Move the user to somewhere near the selected radar.
     public void TeleportationButton()
     {
-        if (MarkObj.transform.parent.name != "Antarctica" && MarkObj.activeSelf)
+        if (MarkObj.activeSelf)
         {
             Vector3 tlpOffset = (Camera.main.transform.position - radarImage.transform.position).normalized;
             MixedRealityPlayspace.Transform.Translate(radarImage.transform.position + tlpOffset);
@@ -344,8 +354,9 @@ public class MenuEvents : MonoBehaviour
     // The voice command version for the close button.
     public void MenuVoice()
     {
-        if (this.gameObject.activeSelf) CloseButton(true);
-        else CloseButton(false);
+        if (!this.gameObject.activeSelf) CloseButton(false);
+        else if (!MainMenu) HomeButton(true);
+        else CloseButton(true);
     }
 
     // The voice command version for the toggles.
@@ -353,5 +364,43 @@ public class MenuEvents : MonoBehaviour
     {
         if (keyword == "measure") MeasurementToggle.IsToggled = !MeasurementToggle.IsToggled;
         else if (keyword == "box") BoundingBoxToggle();
+        else if (keyword == "model")
+        {
+            DemToggle("Bedmap2_surface_RIS");
+            DemToggle("Bedmap2_bed");
+            SurfaceToggle.IsToggled = !SurfaceToggle.IsToggled;
+            BedToggle.IsToggled = !BedToggle.IsToggled;
+        }
+        else if (keyword == "line")
+        {
+            if (MainMenu)
+            {
+                AllCSVPicksToggle.IsToggled = !AllCSVPicksToggle.IsToggled;
+                MainCSVToggling();
+            }
+            else
+            {
+                CSVPicksToggle.IsToggled = !CSVPicksToggle.IsToggled;
+                CSVToggling();
+            }
+        }
+        else if (keyword == "image")
+        {
+            if (MainMenu)
+            {
+                AllRadarToggle.IsToggled = !AllRadarToggle.IsToggled;
+                MainRadarToggling();
+            }
+            else
+            {
+                if (transparencySlider.SliderValue < 0.5) transparencySlider.SliderValue = 0.5f;
+                else
+                {
+                    RadarToggle.IsToggled = !RadarToggle.IsToggled;
+                    RadarToggling();
+                    if (RadarToggle.IsToggled) transparencySlider.SliderValue = 0;
+                }
+            }
+        }
     }
 }

@@ -51,3 +51,31 @@ MonoBehaviour:
       id: 0
       description: Trigger
       axisConstraint: 3
+  - localizationKey: 
+    keyword: Line
+    keyCode: 287
+    action:
+      id: 0
+      description: Trigger
+      axisConstraint: 3
+  - localizationKey: 
+    keyword: Image
+    keyCode: 288
+    action:
+      id: 0
+      description: Trigger
+      axisConstraint: 3
+  - localizationKey: 
+    keyword: Mark
+    keyCode: 289
+    action:
+      id: 0
+      description: Trigger
+      axisConstraint: 3
+  - localizationKey: 
+    keyword: Model
+    keyCode: 290
+    action:
+      id: 0
+      description: Trigger
+      axisConstraint: 3
