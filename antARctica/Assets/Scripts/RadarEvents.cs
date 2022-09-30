@@ -15,6 +15,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     // The file root under the "Resources" folder.
     public string fileRoot = "Radar Images";
     public Texture defaultText;
+    private bool loaded = false;
 
     // The transparency value.
     private float alpha = 1.0f;
@@ -39,14 +40,13 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     void Start()
     {
         // Get and set the texture of the radar image object.
-        // Need to fix the file path to relative path, or find another way to locate the pictures.
-        Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
-        loadImage(content);
+        defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
+        loadImage(defaultText);
 
         scaleX = this.transform.localScale.x;
         scaleY = this.transform.localScale.y;
         scaleZ = this.transform.localScale.z;
-        position = this.transform.position;
+        position = this.transform.localPosition;
         rotation = this.transform.eulerAngles;
     }
 
@@ -72,9 +72,10 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     {
         SychronizeMenu();
 
-        // Possible future codes, load detailed image when selected.
-        //Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name + '_detailed');
-        //loadImage(content);
+        // Only load the images when selected.
+        Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
+        loadImage(content);
+        loaded = true;
 
         // Measurement
         if (Menu.GetComponent<MenuEvents>().GetMeasureMode() && (MarkObj.transform.parent == this.transform))
@@ -103,6 +104,24 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     public void OnPointerDragged(MixedRealityPointerEventData eventData) {}
     public void OnPointerUp(MixedRealityPointerEventData eventData) {}
     public void OnPointerClicked(MixedRealityPointerEventData eventData) {}
+
+    // Dynamic loading.
+    public void TempLoad(bool loadNew)
+    {
+        if (!loaded)
+        {
+            if (loadNew)
+            {
+                Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
+                loadImage(content);
+            }
+            else
+            {
+                defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
+                loadImage(defaultText);
+            }
+        }
+    }
 
     // Change the transparancy of the radar images.
     public void SetAlpha(float newAlpha)
@@ -145,15 +164,19 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     // Reset the radar shape.
     public void ResetRadar()
     {
-        this.transform.position = position;
-        this.transform.rotation = Quaternion.Euler(rotation);
+        this.transform.localPosition = position;
+        this.transform.localRotation = Quaternion.Euler(rotation);
         this.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         SetAlpha(1);
         ToggleRadar(true);
 
-        // Possible future codes, load detailed image when selected.
-        //Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
-        //loadImage(content);
+        // Load place holder image when reset.
+        if (MarkObj.transform.parent != this.transform)
+        {
+            defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
+            loadImage(defaultText);
+            loaded = false;
+        }
     }
 
     public void UndoAddPoint(bool UndoAll)
@@ -188,8 +211,8 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     {
         // The menu.
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.6f;
-        Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
         Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
+        Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
 
         // Constrain the scales.
         Vector3 scale = this.transform.localScale;

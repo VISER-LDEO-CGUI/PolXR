@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
 
@@ -64,7 +65,7 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
 
         // Translate.
         Anchor.localPosition = TransVec;
-        User.position = Anchor.position;
+        MixedRealityPlayspace.Transform.Translate(Anchor.position);
     }
 
     // Unused functions.
