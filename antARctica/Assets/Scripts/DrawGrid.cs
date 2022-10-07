@@ -23,6 +23,7 @@ public class DrawGrid : MonoBehaviour
             GameObject newLine = Instantiate(gridLine, this.transform);
             newLine.GetComponent<LineRenderer>().SetPosition(0, point0);
             newLine.GetComponent<LineRenderer>().SetPosition(1, point1);
+            newLine.GetComponent<LineRenderer>().SetWidth(0, 0.03f);
             point0.z += yGap;
             point1.z += yGap;
         }
@@ -35,6 +36,7 @@ public class DrawGrid : MonoBehaviour
             GameObject newLine = Instantiate(gridLine, this.transform);
             newLine.GetComponent<LineRenderer>().SetPosition(0, point0);
             newLine.GetComponent<LineRenderer>().SetPosition(1, point1);
+            newLine.GetComponent<LineRenderer>().SetWidth(0, 0.03f);
             point0.x += xGap;
             point1.x += xGap;
         }
