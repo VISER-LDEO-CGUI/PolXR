@@ -1,4 +1,4 @@
-﻿using Microsoft.MixedReality.Toolkit;
+using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using System.Collections.Generic;
@@ -321,6 +321,17 @@ public class MenuEvents : MonoBehaviour
     // Switch between two states of the bounding box.
     public void BoundingBoxToggle()
     {
+        if (!SurfaceToggle.IsToggled)
+        {
+            DemToggle("Bedmap2_surface_RIS");
+            SurfaceToggle.IsToggled = true;
+        }
+
+        if (!BedToggle.IsToggled)
+        {
+            DemToggle("Bedmap2_bed");
+            BedToggle.IsToggled = true;
+        }
         bool originalState = Antarctica.GetComponent<BoxCollider>().enabled;
         BoxToggle.IsToggled = !originalState;
         Antarctica.GetComponent<BoxCollider>().enabled = !originalState;
