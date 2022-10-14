@@ -89,7 +89,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         loaded = true;
 
         // Measurement
-        if (Menu.GetComponent<MenuEvents>().GetMeasureMode() && (MarkObj.transform.parent == this.transform))
+        if (Menu.GetComponent<MenuEvents>().GetMeasureMode())
         {
             MeasureObj.SetActive(true);
             MeasureObj.transform.rotation = this.transform.rotation;
@@ -134,10 +134,10 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         }
     }
 
-    // Change the transparancy of the radar images.
-    public void SetAlpha(float newAlpha)
+    // Change the transparancy of the radar images. "onlyLower" used for setting radar only to more transparent level.
+    public void SetAlpha(float newAlpha, bool onlyLower = false)
     {
-        alpha = newAlpha;
+        if ((onlyLower && alpha > newAlpha) || !onlyLower) alpha = newAlpha;
         transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
         transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
     }

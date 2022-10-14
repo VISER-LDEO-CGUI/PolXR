@@ -184,8 +184,30 @@ public class MenuEvents : MonoBehaviour
             foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
             MainCSVToggling();
         }
+        // The snap function.
+        else if (MeasurementToggle.IsToggled)
+        {
+            if (MeasureObj.activeSelf && MeasureObj.transform.parent != MarkObj.transform.parent)
+            {
+                MeasureObj.transform.parent.rotation = MarkObj.transform.parent.rotation;
+
+                // Compute the offset and merge the measuring image to the marked radar image.
+                Vector3 snapOffset = (MeasureObj.transform.position - MarkObj.transform.position);
+
+                // If they are too close and user wants to, reset the image gap.
+                if (snapOffset.magnitude < 0.001f) snapOffset = MeasureObj.transform.forward * 0.1f;
+
+                MeasureObj.transform.parent.position -= snapOffset;
+
+                // Set transparency for better comparisons: only for images not so transparent.
+                MeasureObj.transform.parent.gameObject.GetComponent<RadarEvents>().SetAlpha(0.5f, true);
+                MarkObj.transform.parent.gameObject.GetComponent<RadarEvents>().SetAlpha(0.5f, true);
+                transparencySlider.SliderValue = 0.5f;
+            }
+        }
         else
         {
+            // Reset radar menu and radar attributes.
             RadarToggle.IsToggled = true;
             CSVPicksToggle.IsToggled = true;
             radarImage.GetComponent<RadarEvents>().ResetRadar();
