@@ -17,6 +17,13 @@ public class CSVReadPlot : MonoBehaviour
     public Transform RadarImages;
     public GameObject radarSample;
 
+    // The parent for the DEMs.
+    public Transform Dems;
+    public string BedName;
+    public string SurName;
+    public Material BedMat;
+    public Material SurMat;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +53,12 @@ public class CSVReadPlot : MonoBehaviour
             radarImage.transform.localScale = radarScale;
         }
         */
+
+        // Loading DEM models.
+        GameObject DemBed = Instantiate(Resources.Load("Prefabs/" + BedName), Dems) as GameObject;
+        DemBed.transform.GetChild(0).GetComponent<Renderer>().material = BedMat;
+        GameObject DemSur = Instantiate(Resources.Load("Prefabs/" + SurName), Dems) as GameObject;
+        DemSur.transform.GetChild(0).GetComponent<Renderer>().material = SurMat;
 
         // Set the default attributes for the particle system.
         var main = PSLine.main;

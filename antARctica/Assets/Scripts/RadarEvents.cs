@@ -243,8 +243,8 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     // Update the image axis.
     private void updateAxis()
     {
-        axisX = 0.6f + 0.1F / this.transform.localScale.x;
-        axisY = 0.6f + 0.1f / this.transform.localScale.y;
+        axisX = 0.6f + 0.01f / this.transform.lossyScale.x;
+        axisY = 0.6f + 0.01f / this.transform.lossyScale.y;
 
         axis.SetPosition(0, new Vector3(-axisX, axisY, 0));
         axis.SetPosition(1, new Vector3(-axisX, -axisY, 0));
