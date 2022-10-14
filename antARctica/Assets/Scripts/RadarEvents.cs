@@ -36,6 +36,9 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     private int DotCount = 0;
     private Transform CSVLine = null;
 
+    // The axis for the radar image.
+    public LineRenderer axis;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,12 +51,20 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         scaleZ = this.transform.localScale.z;
         position = this.transform.localPosition;
         rotation = this.transform.eulerAngles;
+
+        // Set the width of the line.
+        axis.startWidth = 0.1f;
+        axis.endWidth = 0.1f;
     }
 
     // Update is called once per frame
-    void Update() {}
+    void Update()
+    {
+        updateAxis();
+    }
 
-    void loadImage(Texture content)
+    // Dynamically load images after the radar image is selected/deselected.
+    private void loadImage(Texture content)
     {
         if (content != null)
         {
@@ -101,9 +112,9 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     }
 
     // Unused functions.
-    public void OnPointerDragged(MixedRealityPointerEventData eventData) {}
-    public void OnPointerUp(MixedRealityPointerEventData eventData) {}
-    public void OnPointerClicked(MixedRealityPointerEventData eventData) {}
+    public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
+    public void OnPointerUp(MixedRealityPointerEventData eventData) { }
+    public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
 
     // Dynamic loading.
     public void TempLoad(bool loadNew)
@@ -131,7 +142,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
     }
 
-    // Assign the line to the radar image.
+    // Assign the csv line to the radar image.
     public void SetLine(Transform line, int inputCount)
     {
         DotCount += inputCount;
@@ -179,6 +190,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         }
     }
 
+    // Delete points marked from the csv line (not used currently, need to add buttons)
     public void UndoAddPoint(bool UndoAll)
     {
         ParticleSystem originalLine = CSVLine.GetComponent<ParticleSystem>();
@@ -192,6 +204,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         }
     }
 
+    // Turn on/off the image itself.
     public void ToggleRadar(bool toggle)
     {
         this.transform.GetComponent<BoxCollider>().enabled = toggle;
@@ -207,6 +220,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         if (CSVLine) CSVLine.localScale = toggle ? LineScale : new Vector3(0, 0, 0);
     }
 
+    // Sychronize the parameters for the main/radar menu.
     public void SychronizeMenu()
     {
         // The menu.
@@ -223,5 +237,13 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         scale.z = scaleZ;
         this.transform.localScale = scale;
         Menu.transform.GetComponent<MenuEvents>().ConstraintSlider(scale.x / scaleX - 0.5f, scale.y / scaleY - 0.5f);
+    }
+
+    // Update the image axis.
+    private void updateAxis()
+    {
+        axis.SetPosition(0, new Vector3(0, 0, 0));
+        axis.SetPosition(1, new Vector3(0, 1, 1));
+        axis.SetPosition(2, new Vector3(1, 1, 1));
     }
 }
