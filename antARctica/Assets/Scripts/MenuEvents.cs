@@ -122,8 +122,8 @@ public class MenuEvents : MonoBehaviour
             // Set rotation text
             RotationDegreeTMP.text = string.Format("ROTATION:      {0}°", radarImage.localEulerAngles.y.ToString());
 
-            // Set rotation text
-            TransparencyTMP.text = string.Format("Transparency:      {0}%", transparencySlider.SliderValue * 100);
+            // Set transparency text
+            TransparencyTMP.text = string.Format("Transparency:      {0}%", Mathf.Round(transparencySlider.SliderValue * 4) * 25);
 
             // Update the selected point coordinates
             float maxX = radarImage.localScale.x * scale;
@@ -282,6 +282,8 @@ public class MenuEvents : MonoBehaviour
 
     public void OnTransparencySliderUpdated(SliderEventData eventData)
     {
+        //Round the result to nearest levels.
+        transparencySlider.SliderValue = Mathf.Round(eventData.NewValue * 4) / 4;
         if (radarImage) radarImage.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
     }
 
