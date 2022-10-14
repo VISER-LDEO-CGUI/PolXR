@@ -38,6 +38,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
 
     // The axis for the radar image.
     public LineRenderer axis;
+    private float axisX, axisY;
 
     // Start is called before the first frame update
     void Start()
@@ -53,8 +54,8 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         rotation = this.transform.eulerAngles;
 
         // Set the width of the line.
-        axis.startWidth = 0.1f;
-        axis.endWidth = 0.1f;
+        axis.startWidth = 0.01f;
+        axis.endWidth = 0.01f;
     }
 
     // Update is called once per frame
@@ -242,8 +243,11 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     // Update the image axis.
     private void updateAxis()
     {
-        axis.SetPosition(0, new Vector3(0, 0, 0));
-        axis.SetPosition(1, new Vector3(0, 1, 1));
-        axis.SetPosition(2, new Vector3(1, 1, 1));
+        axisX = 0.6f + 0.1F / this.transform.localScale.x;
+        axisY = 0.6f + 0.1f / this.transform.localScale.y;
+
+        axis.SetPosition(0, new Vector3(-axisX, axisY, 0));
+        axis.SetPosition(1, new Vector3(-axisX, -axisY, 0));
+        axis.SetPosition(2, new Vector3(axisX, -axisY, 0));
     }
 }
