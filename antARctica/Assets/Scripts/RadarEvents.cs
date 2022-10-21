@@ -231,6 +231,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.6f;
         Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
         Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
+        Menu.transform.GetComponent<MenuEvents>().syncScaleSlider();
 
         // Constrain the scales.
         Vector3 scale = this.transform.localScale;
@@ -240,7 +241,6 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         scale.y = scale.y < scaleY * scaleRange[0] ? scaleY * scaleRange[0] : scale.y;
         scale.z = scaleZ;
         this.transform.localScale = scale;
-        Menu.transform.GetComponent<MenuEvents>().ConstraintSlider(scale.x / scaleX - 0.5f, scale.y / scaleY - 0.5f);
     }
 
     // Update the image axis.

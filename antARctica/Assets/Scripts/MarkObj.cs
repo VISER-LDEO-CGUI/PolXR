@@ -19,7 +19,7 @@ public class MarkObj : MonoBehaviour
         for (int currentStep = 0; currentStep < steps; currentStep++)
         {
             float currentRadian = (float)currentStep / (steps - 1) * 2 * Mathf.PI;
-            Vector3 currentPosition = new Vector3(radius * Mathf.Cos(currentRadian), radius * Mathf.Sin(currentRadian), 0);
+            Vector3 currentPosition = new Vector3(radius * Mathf.Cos(currentRadian), radius * Mathf.Sin(currentRadian), 0.0f);
             circleRenderer.SetPosition(currentStep, currentPosition);
         }
     }

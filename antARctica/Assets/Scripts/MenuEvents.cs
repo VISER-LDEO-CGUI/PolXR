@@ -35,8 +35,8 @@ public class MenuEvents : MonoBehaviour
 
     // The initial scale, rotation and position of the radar image.
     private Vector3 originalScale;
-    private float scaleX;
-    private float scaleY;
+    private float scaleX = 1.0f;
+    private float scaleY = 1.0f;
 
     // The scale for calculating the text value
     public float scale = 1000;
@@ -287,14 +287,14 @@ public class MenuEvents : MonoBehaviour
     // The four slider update interface.
     public void OnVerticalSliderUpdated(SliderEventData eventData)
     {
-        scaleY = 0.5f + eventData.NewValue;
-        if (radarImage) radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
+        if (radarImage && verticalSlider.gameObject.tag == "Active")
+            radarImage.localScale = new Vector3(radarImage.localScale.x, originalScale.y * scaleY * (0.5f + eventData.NewValue), originalScale.z);
     }
 
     public void OnHorizontalSliderUpdated(SliderEventData eventData)
     {
-        scaleX = 0.5f + eventData.NewValue;
-        if (radarImage) radarImage.localScale = new Vector3(originalScale.x * scaleX, originalScale.y * scaleY, originalScale.z);
+        if (radarImage && horizontalSlider.gameObject.tag == "Active")
+            radarImage.localScale = new Vector3(originalScale.x * scaleX * (0.5f + eventData.NewValue), radarImage.localScale.y, originalScale.z);
     }
 
     public void OnRotateSliderUpdated(SliderEventData eventData)
@@ -389,19 +389,22 @@ public class MenuEvents : MonoBehaviour
     }
 
     // Synchronize the sliders.
-    public void ConstraintSlider(float x, float y)
+    public void syncScaleSlider()
     {
-        horizontalSlider.SliderValue = x;
-        verticalSlider.SliderValue = y;
+        if (radarImage)
+        {
+            scaleX = radarImage.localScale.x / originalScale.x;
+            scaleY = radarImage.localScale.y / originalScale.y;
+        }
     }
 
     // Move the user to somewhere near the selected radar.
     public void TeleportationButton()
     {
-        if (MarkObj.activeSelf)
+        if (MarkObj.activeSelf && (Camera.main.transform.position - MarkObj.transform.position).magnitude > 1)
         {
-            Vector3 tlpOffset = (Camera.main.transform.position - radarImage.transform.position).normalized;
-            MixedRealityPlayspace.Transform.Translate(radarImage.transform.position + tlpOffset);
+            Vector3 tlpOffset = (Camera.main.transform.position - MarkObj.transform.position).normalized;
+            MixedRealityPlayspace.Transform.Translate(-tlpOffset);
         }
     }
 
