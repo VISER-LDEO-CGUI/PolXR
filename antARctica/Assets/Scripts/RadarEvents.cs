@@ -90,7 +90,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         loaded = true;
 
         // Measurement
-        if (Menu.GetComponent<MenuEvents>().GetMeasureMode())
+        if (Menu.GetComponent<MenuEvents>().measureMode() == 1)
         {
             MeasureObj.SetActive(true);
             MeasureObj.transform.rotation = this.transform.rotation;
@@ -100,9 +100,12 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         }
         else
         {
-            // Clean up!
-            line.SetActive(false);
-            MeasureObj.SetActive(false);
+            if (Menu.GetComponent<MenuEvents>().measureMode() == 0)
+            {
+                // Clean up!
+                line.SetActive(false);
+                MeasureObj.SetActive(false);
+            }
 
             // The mark.
             MarkObj.SetActive(true);
@@ -144,7 +147,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     }
 
     // Assign the csv line to the radar image.
-    public void SetLine(Transform line, int inputCount)
+    public void SetLine(Transform inputLine, int inputCount)
     {
         DotCount += inputCount;
         if (CSVLine)
@@ -155,7 +158,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
             ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[DotCount];
             originalLine.GetParticles(CSVPoints);
 
-            ParticleSystem newLine = line.GetComponent<ParticleSystem>();
+            ParticleSystem newLine = inputLine.GetComponent<ParticleSystem>();
             ParticleSystem.Particle[] newPoints = new ParticleSystem.Particle[inputCount];
             newLine.GetParticles(newPoints);
             for (int i = 1; i <= inputCount; i++) CSVPoints[DotCount - i] = newPoints[inputCount - i];
@@ -166,10 +169,10 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         }
         else
         {
-            line.parent = this.transform;
-            line.name = "Line";
-            CSVLine = line;
-            LineScale = line.localScale;
+            inputLine.parent = this.transform;
+            inputLine.name = "Line";
+            CSVLine = inputLine;
+            LineScale = inputLine.localScale;
         }
     }
 

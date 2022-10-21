@@ -16,6 +16,8 @@ public class CSVReadPlot : MonoBehaviour
     public Transform Parent;
     public Transform RadarImages;
     public GameObject radarSample;
+    public string radarFile;
+    public int radarXIndex, radarYIndex, radarHeightIndex;
 
     // The parent for the DEMs.
     public Transform Dems;
@@ -27,32 +29,47 @@ public class CSVReadPlot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Load the images here.
-        /*
-        TextAsset radarPos = (TextAsset)Resources.Load("radarPos", typeof(TextAsset));
-        string[] radarDatas = radarPos.text.Split("\n"[0]);
-        Vector3 radarCoord = new Vector3(0f, 0f, 0f);
-        Vector3 radarScale = new Vector3(1.0f, 5.5f, 0.01f);
+        // Load the images here. Should have one start and one end.
+        TextAsset radarPos = (TextAsset)Resources.Load(radarFile, typeof(TextAsset));
 
-        for (int i = 1; i < radarDatas.Length - 1; i++)
+        if (radarPos != null)
         {
-            string[] radarData = radarDatas[i].Split(","[0]);
-            GameObject radarImage = Instantiate(radarSample, RadarImages);
-            radarImage.name = radarData[0];
+            string[] radarDatas = radarPos.text.Split("\n"[0]);
+            Vector3 radarStart = new Vector3(0f, -1.75f, 0f);
+            Vector3 radarEnd = new Vector3(0f, -1.75f, 0f);
 
-            // This should be the centroid of the radar.
-            radarCoord.x = float.Parse(radarData[1]);
-            radarCoord.y = float.Parse(radarData[2]);
-            radarCoord.z = float.Parse(radarData[3]);
+            // Ignore the first line which is the name of the columns.
+            int indexCounter = 1;
 
-            // This should be the width and height of the radar.
-            radarScale.x = float.Parse(radarData[4]);
-            //radarScale.y = float.Parse(radarData[5]);
+            while (indexCounter < radarDatas.Length - 1)
+            {
+                string[] radarData = radarDatas[indexCounter++].Split(","[0]);
+                GameObject radarImage = Instantiate(radarSample, RadarImages);
+                radarImage.name = radarData[0];
 
-            radarImage.transform.localPosition = radarCoord;
-            radarImage.transform.localScale = radarScale;
+                // This should be the start of the radar.
+                radarStart.x = float.Parse(radarData[radarXIndex]);
+                //radarStart.y = float.Parse(radarData[radarHeightIndex]);
+                radarStart.z = float.Parse(radarData[radarYIndex]);
+
+                radarData = radarDatas[indexCounter++].Split(","[0]);
+
+                // This should be the end of the radar.
+                radarEnd.x = float.Parse(radarData[radarXIndex]);
+                //radarEnd.y = float.Parse(radarData[radarHeightIndex]);
+                radarEnd.z = float.Parse(radarData[radarYIndex]);
+
+                radarImage.transform.localPosition = (radarStart + radarEnd) / 2;
+
+                // Identify the prefix for x-oriented or z-oriented radar images.
+                if (radarImage.name[0] == 'T')
+                {
+                    radarImage.transform.Rotate(0.0f, 90.0f, 0.0f, Space.World);
+                    radarImage.transform.localScale = new Vector3(Math.Abs(radarEnd.z - radarStart.z), 5.5f, 0.01f);
+                }
+                else radarImage.transform.localScale = new Vector3(Math.Abs(radarEnd.x - radarStart.x), 5.5f, 0.01f);
+            }
         }
-        */
 
         // Loading DEM models.
         GameObject DemBed = Instantiate(Resources.Load("Prefabs/" + BedName), Dems) as GameObject;

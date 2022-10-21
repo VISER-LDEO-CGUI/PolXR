@@ -3,6 +3,9 @@
 public class MarkObj : MonoBehaviour
 {
     private Vector3 Original_Scale;
+    public LineRenderer circleRenderer;
+    public int steps;
+    public float radius;
 
     // Start is called before the first frame update
     void Start()
@@ -10,6 +13,15 @@ public class MarkObj : MonoBehaviour
         // Record the starting scale.
         Original_Scale = this.transform.lossyScale;
         this.gameObject.SetActive(false);
+
+        // Draw circle. https://pastebin.com/ZHG0crvP
+        circleRenderer.positionCount = steps;
+        for (int currentStep = 0; currentStep < steps; currentStep++)
+        {
+            float currentRadian = (float)currentStep / (steps - 1) * 2 * Mathf.PI;
+            Vector3 currentPosition = new Vector3(radius * Mathf.Cos(currentRadian), radius * Mathf.Sin(currentRadian), 0);
+            circleRenderer.SetPosition(currentStep, currentPosition);
+        }
     }
 
     // Update is called once per frame

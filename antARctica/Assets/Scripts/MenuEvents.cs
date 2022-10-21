@@ -48,6 +48,7 @@ public class MenuEvents : MonoBehaviour
     public TextMeshPro RotationDegreeTMP;
     public TextMeshPro TransparencyTMP;
     public TextMeshPro MarkTMP;
+    public TextMeshPro MeasureModeText;
 
     // Radar Menu Toggle Buttons
     public Interactable RadarToggle;
@@ -55,10 +56,10 @@ public class MenuEvents : MonoBehaviour
     public Interactable AllRadarToggle;
     public Interactable AllCSVPicksToggle;
     public Interactable MeasurementToggle;
+    public Interactable SecondMeasurementToggle;
     public Interactable SurfaceToggle;
     public Interactable BedToggle;
     public Interactable BoxToggle;
-    public bool GetMeasureMode() { return MeasurementToggle.IsToggled; }
 
     // The information needed for updating the selected point coordinates.
     public GameObject MarkObj;
@@ -142,7 +143,7 @@ public class MenuEvents : MonoBehaviour
                     "{0}: ({1}, {2})\n" +
                     "X: {3}, Y: {4}\n",
                     MarkObj.transform.parent.name, radarX.ToString(), radarY.ToString(), maxX.ToString(), maxY.ToString());
-                if (GetMeasureMode())
+                if (measureMode() != 0)
                     MarkTMP.text += string.Format("Distance: {0}m", Vector2.Distance(measure, new Vector2(0, 0)));
             }
                 
@@ -185,7 +186,7 @@ public class MenuEvents : MonoBehaviour
             MainCSVToggling();
         }
         // The snap function.
-        else if (MeasurementToggle.IsToggled)
+        else if (measureMode() != 0)
         {
             if (MeasureObj.activeSelf && MeasureObj.transform.parent != MarkObj.transform.parent)
             {
@@ -362,6 +363,31 @@ public class MenuEvents : MonoBehaviour
         Antarctica.GetComponent<BoundsControl>().enabled = !originalState;
     }
 
+    // Synchronize the measurement toggle function.
+    // 0 for not turned on, 1 for measure object (end), 2 for mark object (start).
+    public int measureMode(bool voiceSync = false)
+    {
+        if (voiceSync)
+        {
+            SecondMeasurementToggle.IsToggled = MeasurementToggle.IsToggled && !SecondMeasurementToggle.IsToggled;
+            MeasurementToggle.IsToggled = !(MeasurementToggle.IsToggled && !SecondMeasurementToggle.IsToggled);
+        }
+
+        if (!MeasurementToggle.IsToggled)
+        {
+            SecondMeasurementToggle.IsToggled = false;
+            SecondMeasurementToggle.gameObject.SetActive(false);
+            MeasureModeText.text = "MEASUREMENT MODE";
+            return 0;
+        }
+        else
+        {
+            SecondMeasurementToggle.gameObject.SetActive(true);
+            MeasureModeText.text = "MEASUREMENT MODE\nCHANGE START";
+            return SecondMeasurementToggle.IsToggled ? 2 : 1;
+        }
+    }
+
     // Synchronize the sliders.
     public void ConstraintSlider(float x, float y)
     {
@@ -397,7 +423,7 @@ public class MenuEvents : MonoBehaviour
     // The voice command version for the toggles.
     public void ToggleVoice(string keyword)
     {
-        if (keyword == "measure") MeasurementToggle.IsToggled = !MeasurementToggle.IsToggled;
+        if (keyword == "measure") measureMode(true);
         else if (keyword == "box") BoundingBoxToggle();
         else if (keyword == "model")
         {
