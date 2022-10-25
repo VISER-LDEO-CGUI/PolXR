@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using TMPro;
 
 public class MarkObj : MonoBehaviour
 {
@@ -6,6 +7,19 @@ public class MarkObj : MonoBehaviour
     public LineRenderer circleRenderer;
     public int steps;
     public float radius;
+
+    // The axis for the radar image.
+    public LineRenderer axis;
+    private float axisX, axisY;
+
+    // The axis labels.
+    public Transform coordComponents;
+    public Transform labels;
+    public GameObject xyAxisLabel;
+    public Vector2 intervalXY = new Vector2(500, 100);
+    public float gap = 0.06f;
+    public bool showAxis;
+    private Transform prevParent;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +36,13 @@ public class MarkObj : MonoBehaviour
             Vector3 currentPosition = new Vector3(radius * Mathf.Cos(currentRadian), radius * Mathf.Sin(currentRadian), 0.0f);
             circleRenderer.SetPosition(currentStep, currentPosition);
         }
+
+        if (showAxis)
+        {
+            // Set the width of the line.
+            axis.startWidth = 0.01f;
+            axis.endWidth = 0.01f;
+        }
     }
 
     // Update is called once per frame
@@ -30,5 +51,46 @@ public class MarkObj : MonoBehaviour
         // Adjust the scale according to new parent.
         Vector3 Global_Scale = this.transform.parent.transform.lossyScale;
         this.transform.localScale = new Vector3(Original_Scale.x / Global_Scale.x, Original_Scale.y / Global_Scale.y, Original_Scale.z / Global_Scale.z);
+
+        if (showAxis) updateAxis();
+    }
+
+    // Update the image axis.
+    private void updateAxis(bool forceUpdate = false)
+    {
+        // Set up axis.
+        axisX = 0.5f + gap / coordComponents.lossyScale.x;
+        axisY = 0.5f + gap / coordComponents.lossyScale.y;
+
+        axis.SetPosition(0, new Vector3(-axisX, axisY, 0));
+        axis.SetPosition(1, new Vector3(-axisX, -axisY, 0));
+        axis.SetPosition(2, new Vector3(axisX, -axisY, 0));
+
+        // Please ensure that the new parent is a radar image.
+        if ((this.transform.parent != prevParent || forceUpdate) && this.transform.parent.name != "Antarctica")
+        {
+            prevParent = this.transform.parent;
+            coordComponents.parent = this.transform.parent;
+            coordComponents.transform.localPosition = new Vector3(0, 0, 0);
+            coordComponents.transform.localScale = new Vector3(1, 1, 1);
+            coordComponents.transform.localEulerAngles = new Vector3(0, 0, 0);
+            Vector3 radarOriginalScale = coordComponents.parent.GetComponent<RadarEvents>().GetScale();
+
+            // Destroy the prev labels.
+            foreach (Transform child in labels) Destroy(child.gameObject);
+
+            // Update axis labels.
+            for (int i = 0; i * intervalXY.x < radarOriginalScale.x * 1000; i++)
+            {
+                GameObject newLabel = Instantiate(xyAxisLabel, labels);
+                newLabel.GetComponent<DynamicLabel>().Initialize(true, i * intervalXY.x / radarOriginalScale.x / 1000 - 0.5f, gap / 2, (i * intervalXY.x).ToString());
+            }
+
+            for (int i = 0; i * intervalXY.y < radarOriginalScale.y * 100; i++)
+            {
+                GameObject newLabel = Instantiate(xyAxisLabel, labels);
+                newLabel.GetComponent<DynamicLabel>().Initialize(false, i * intervalXY.y / radarOriginalScale.y / 100 - 0.5f, gap / 2, (i * intervalXY.y).ToString());
+            }
+        }
     }
 }

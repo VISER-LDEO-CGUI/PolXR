@@ -20,9 +20,8 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     // The transparency value.
     private float alpha = 1.0f;
 
-    // Keep the scales within range.
+    // Keep the original scale.
     private float scaleX, scaleY, scaleZ;
-    private float[] scaleRange = { 0.5f, 1.5f };
 
     // Return the original scale.
     public Vector3 GetScale() { return new Vector3(scaleX, scaleY, scaleZ); }
@@ -36,10 +35,6 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     private int DotCount = 0;
     private Transform CSVLine = null;
 
-    // The axis for the radar image.
-    public LineRenderer axis;
-    private float axisX, axisY;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -52,16 +47,11 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         scaleZ = this.transform.localScale.z;
         position = this.transform.localPosition;
         rotation = this.transform.eulerAngles;
-
-        // Set the width of the line.
-        axis.startWidth = 0.01f;
-        axis.endWidth = 0.01f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        updateAxis();
     }
 
     // Dynamically load images after the radar image is selected/deselected.
@@ -232,25 +222,5 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
         Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
         Menu.transform.GetComponent<MenuEvents>().syncScaleSlider();
-
-        // Constrain the scales.
-        Vector3 scale = this.transform.localScale;
-        scale.x = scale.x > scaleX * scaleRange[1] ? scaleX * scaleRange[1] : scale.x;
-        scale.x = scale.x < scaleX * scaleRange[0] ? scaleX * scaleRange[0] : scale.x;
-        scale.y = scale.y > scaleY * scaleRange[1] ? scaleY * scaleRange[1] : scale.y;
-        scale.y = scale.y < scaleY * scaleRange[0] ? scaleY * scaleRange[0] : scale.y;
-        scale.z = scaleZ;
-        this.transform.localScale = scale;
-    }
-
-    // Update the image axis.
-    private void updateAxis()
-    {
-        axisX = 0.6f + 0.01f / this.transform.lossyScale.x;
-        axisY = 0.6f + 0.01f / this.transform.lossyScale.y;
-
-        axis.SetPosition(0, new Vector3(-axisX, axisY, 0));
-        axis.SetPosition(1, new Vector3(-axisX, -axisY, 0));
-        axis.SetPosition(2, new Vector3(axisX, -axisY, 0));
     }
 }
