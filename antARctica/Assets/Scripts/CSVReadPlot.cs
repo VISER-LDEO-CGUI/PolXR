@@ -74,8 +74,12 @@ public class CSVReadPlot : MonoBehaviour
         // Loading DEM models.
         GameObject DemBed = Instantiate(Resources.Load("Prefabs/" + BedName), Dems) as GameObject;
         DemBed.transform.GetChild(0).GetComponent<Renderer>().material = BedMat;
+        DemBed.layer = LayerMask.NameToLayer("Both Camera");
+        DemBed.transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("Both Camera");
         GameObject DemSur = Instantiate(Resources.Load("Prefabs/" + SurName), Dems) as GameObject;
         DemSur.transform.GetChild(0).GetComponent<Renderer>().material = SurMat;
+        DemSur.layer = LayerMask.NameToLayer("Both Camera");
+        DemSur.transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("Both Camera");
 
         // Set the default attributes for the particle system.
         var main = PSLine.main;
@@ -91,9 +95,6 @@ public class CSVReadPlot : MonoBehaviour
             SetParticles(newLine, file);
         }
     }
-
-    // Update is called once per frame
-    void Update() {}
 
     private void SetParticles(ParticleSystem line, TextAsset file)
     {

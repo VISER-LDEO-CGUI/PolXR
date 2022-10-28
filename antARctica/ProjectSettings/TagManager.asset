@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Active
+  - Radar Image
   layers:
   - Default
   - TransparentFX
@@ -12,10 +13,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Both Camera
+  - Minimap Camera Only
+  - None Camera
+  - Both Camera
   - 
   - 
   - 

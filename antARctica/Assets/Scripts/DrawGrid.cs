@@ -45,10 +45,4 @@ public class DrawGrid : MonoBehaviour
 
         Destroy(gridLine);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

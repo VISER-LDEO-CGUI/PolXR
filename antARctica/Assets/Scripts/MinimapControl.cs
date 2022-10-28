@@ -9,6 +9,9 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
     // The position information of the scene and user.
     public Transform Antarctica;
     public Transform User;
+    public Camera MinimapCamera;
+    public Vector3 MapCamPosition = new Vector3(-12.5f, 100f, -90f);
+    public float ViewSize = 60f;
 
     // Synchronize between main scene and minimap.
     public Vector3 Offset = new Vector3(0.01f, 0.042f, 0.026f);
@@ -16,7 +19,6 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
     private Vector3 PosVec;
     private Vector3 TransVec;
     public Material Normal;
-    public Material Outofbound;
     public Material Translate;
 
     // The red dot on minimap.
@@ -26,12 +28,19 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
     // Start is called before the first frame update
     void Start()
     {
-        
+        PositionObj.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Set the camera position to capture the correct view.
+        Vector3 OffsetScaled = MapCamPosition * Antarctica.localScale.x;
+        OffsetScaled.y = MapCamPosition.y;
+        MinimapCamera.transform.position = Antarctica.transform.position + OffsetScaled;
+        MinimapCamera.transform.eulerAngles = new Vector3(90, 0, 0);
+        MinimapCamera.orthographicSize = ViewSize * Antarctica.localScale.x;
+
         // Compute and update the current user position relative to the scene;
         PosVec = Antarctica.transform.InverseTransformPoint(User.transform.position);
         PosVec.y = PosVec.z;
@@ -40,16 +49,13 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
 
         // Make sure the dot does not go out of the bounding area.
         if (this.GetComponent<BoxCollider>().enabled) PositionObj.GetComponent<MeshRenderer>().material = Translate;
-        else if (Mathf.Abs(PosVec.x) < 0.05f && Mathf.Abs(PosVec.y) < 0.0375f) PositionObj.GetComponent<MeshRenderer>().material = Normal;
-        else PositionObj.GetComponent<MeshRenderer>().material = Outofbound;
+        else PositionObj.GetComponent<MeshRenderer>().material = Normal;
 
-        // Ceil and floor the value.
-        if (PosVec.x >= 0.05f) PosVec.x = 0.05f;
-        else if (PosVec.x <= -0.05f) PosVec.x = -0.05f;
-        if (PosVec.y >= 0.0375f) PosVec.y = 0.0375f;
-        else if (PosVec.y <= -0.0375f) PosVec.y = -0.0375f;
-
-        PositionObj.transform.localPosition = PosVec;
+        // Setting the height of the mark.
+        Vector3 newPosition = PositionObj.transform.parent.position;
+        newPosition.y = Antarctica.position.y + MapCamPosition.y * 0.9f;
+        PositionObj.transform.position = newPosition;
+        PositionObj.transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
     // Translate to the target point.
