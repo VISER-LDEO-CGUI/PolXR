@@ -94,6 +94,7 @@ public class MarkObj : MonoBehaviour
                     GameObject newLabel = Instantiate(xyAxisLabel, labels);
                     // Change "gap * 1.5f" to change where the physical axis is placed
                     newLabel.GetComponent<DynamicLabel>().Initialize(true, i * intervalXY.x / radarOriginalScale.x / 10 - 0.5f, gap * 1.5f, (i * intervalXY.x).ToString() + " km");
+                    
                 }
 
                 for (int j = 0; (j - 1) * intervalXY.y < radarOriginalScale.y * 100; j++)

@@ -11,11 +11,12 @@ public class DynamicLabel : MonoBehaviour
     private bool xyDirection;
     private float alongAxis;
     private float gap;
+    public LineRenderer tickMark;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        tickMark.startWidth = 0.005f;
     }
 
     // Update is called once per frame
@@ -30,6 +31,9 @@ public class DynamicLabel : MonoBehaviour
     // Update the text and relative position in the start.
     public void Initialize(bool xyInput, float posInput, float gapInput, string content)
     {
+        //tickMark.SetPosition(0, new Vector3( , , 0));
+        //tickMark.SetPosition(1, new Vector3( , , 0));
+
         this.GetComponent<TextMeshPro>().text = content;
         xyDirection = xyInput;
         alongAxis = posInput;
