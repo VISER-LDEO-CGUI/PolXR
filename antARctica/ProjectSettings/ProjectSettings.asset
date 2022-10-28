@@ -695,7 +695,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: OCULUSINTEGRATION_PRESENT
+    1: OCULUSINTEGRATION_PRESENT;FUSION_WEAVER
     7: OCULUSINTEGRATION_PRESENT;FUSION_WEAVER
     14: FUSION_WEAVER
   additionalCompilerArguments: {}
@@ -752,8 +752,8 @@ PlayerSettings:
       PrivateNetworkClientServer: False
       InternetClientServer: False
       VideosLibrary: False
+      BackgroundMediaPlayback: False
       Objects3D: False
-      InternetClient: True
       RemoteSystem: False
       BlockedChatMessages: False
       PhoneCall: False
@@ -775,9 +775,9 @@ PlayerSettings:
       PointOfService: False
       RecordedCallsFolder: False
       Contacts: False
+      InternetClient: True
       Proximity: False
       CodeGeneration: False
-      BackgroundMediaPlayback: False
       EnterpriseAuthentication: False
   metroTargetDeviceFamilies:
     Desktop: False
