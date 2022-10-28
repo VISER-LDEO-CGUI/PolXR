@@ -18,7 +18,7 @@ public class MarkObj : MonoBehaviour
     public Transform coordComponents;
     public Transform labels;
     public GameObject xyAxisLabel;
-    public Vector2 intervalXY = new Vector2(500, 100);
+    public Vector2 intervalXY = new Vector2(5, 100);
     public float gap = 0.06f;
     public bool showAxis;
     private Transform prevParent;
@@ -69,17 +69,17 @@ public class MarkObj : MonoBehaviour
             axisY = 0.5f + gap / coordComponents.lossyScale.y;
 
             Vector3 radarOriginalScale = this.transform.parent.GetComponent<RadarEvents>().GetScale();
-            int numberOfLabelsX = (int)Math.Ceiling((radarOriginalScale.x * 1000) / intervalXY.x);
+            int numberOfLabelsX = (int)Math.Ceiling((radarOriginalScale.x * 10) / intervalXY.x);
             int numberOfLabelsY = (int)Math.Ceiling((radarOriginalScale.y * 100) / intervalXY.y);
 
-            float ratioX = (numberOfLabelsX * intervalXY.x) / (radarOriginalScale.x * 1000)- 1f;
+            float ratioX = (numberOfLabelsX * intervalXY.x) / (radarOriginalScale.x * 10)- 1f;
             float ratioY = (numberOfLabelsY * intervalXY.y) / (radarOriginalScale.y * 100) - 1f;
 
-            verticalAxis.SetPosition(0, new Vector3(-0.5f, -axisY, 0));
-            verticalAxis.SetPosition(1, new Vector3(axisX + ratioX, -axisY, 0));
+            horizontalAxis.SetPosition(0, new Vector3(-0.5f, -axisY, 0));
+            horizontalAxis.SetPosition(1, new Vector3(0.5f, -axisY, 0));
             
-            horizontalAxis.SetPosition(0, new Vector3(-axisX, -0.5f, 0));
-            horizontalAxis.SetPosition(1, new Vector3(-axisX, axisY + ratioY, 0));
+            verticalAxis.SetPosition(0, new Vector3(-axisX, -0.5f, 0));
+            verticalAxis.SetPosition(1, new Vector3(-axisX, 0.5f, 0));
 
             // Ensure that the new parent is a radar image.
             if (this.transform.parent != prevParent || forceUpdate)
@@ -96,16 +96,17 @@ public class MarkObj : MonoBehaviour
                 foreach (Transform child in labels) Destroy(child.gameObject);
 
                 // Update axis labels.
-                for (int i = 0; (i - 1) * intervalXY.x < radarOriginalScale.x * 1000; i++)
+                for (int i = 0; (i - 1) * intervalXY.x < radarOriginalScale.x * 10; i++)
                 {
                     GameObject newLabel = Instantiate(xyAxisLabel, labels);
-                    newLabel.GetComponent<DynamicLabel>().Initialize(true, i * intervalXY.x / radarOriginalScale.x / 1000 - 0.5f, gap / 2, (i * intervalXY.x).ToString());
+                    // Change "gap * 1.5f" to change where the physical axis is placed
+                    newLabel.GetComponent<DynamicLabel>().Initialize(true, i * intervalXY.x / radarOriginalScale.x / 10 - 0.5f, gap * 1.5f, (i * intervalXY.x).ToString());
                 }
 
                 for (int j = 0; (j - 1) * intervalXY.y < radarOriginalScale.y * 100; j++)
                 {
                     GameObject newLabel = Instantiate(xyAxisLabel, labels);
-                    newLabel.GetComponent<DynamicLabel>().Initialize(false, j * intervalXY.y / radarOriginalScale.y / 100 - 0.5f, gap / 2, (j * intervalXY.y).ToString());
+                    newLabel.GetComponent<DynamicLabel>().Initialize(false, j * intervalXY.y / radarOriginalScale.y / 100 - 0.5f, gap * 1.5f, (j * intervalXY.y).ToString());
                 }
             }
         }
