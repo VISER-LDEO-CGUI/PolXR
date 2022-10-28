@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 4443364394840786298}
   m_Layer: 0
   m_Name: radarImage
-  m_TagString: Untagged
+  m_TagString: Radar Image
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -444,8 +444,3 @@ MonoBehaviour:
   line: {fileID: 0}
   fileRoot: Radar Images
   defaultText: {fileID: 2800000, guid: 9bb22a81707488946b25dea682dbc74e, type: 3}
-  axis: {fileID: 0}
-  labels: {fileID: 0}
-  xAxisLabel: {fileID: 0}
-  yAxisLabel: {fileID: 0}
-  intervalLength: 100
