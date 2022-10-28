@@ -18,7 +18,7 @@ public class MarkObj : MonoBehaviour
     public Transform coordComponents;
     public Transform labels;
     public GameObject xyAxisLabel;
-    public Vector2 intervalXY = new Vector2(5, 100);
+    public Vector2 intervalXY = new Vector2(5, 50);
     public float gap = 0.06f;
     public bool showAxis;
     private Transform prevParent;
@@ -68,13 +68,6 @@ public class MarkObj : MonoBehaviour
             axisX = 0.5f + gap / coordComponents.lossyScale.x;
             axisY = 0.5f + gap / coordComponents.lossyScale.y;
 
-            Vector3 radarOriginalScale = this.transform.parent.GetComponent<RadarEvents>().GetScale();
-            int numberOfLabelsX = (int)Math.Ceiling((radarOriginalScale.x * 10) / intervalXY.x);
-            int numberOfLabelsY = (int)Math.Ceiling((radarOriginalScale.y * 100) / intervalXY.y);
-
-            float ratioX = (numberOfLabelsX * intervalXY.x) / (radarOriginalScale.x * 10)- 1f;
-            float ratioY = (numberOfLabelsY * intervalXY.y) / (radarOriginalScale.y * 100) - 1f;
-
             horizontalAxis.SetPosition(0, new Vector3(-0.5f, -axisY, 0));
             horizontalAxis.SetPosition(1, new Vector3(0.5f, -axisY, 0));
             
@@ -90,13 +83,13 @@ public class MarkObj : MonoBehaviour
                 coordComponents.transform.localScale = new Vector3(1, 1, 1);
                 coordComponents.transform.localEulerAngles = new Vector3(0, 0, 0);
                 
-                radarOriginalScale = coordComponents.parent.GetComponent<RadarEvents>().GetScale();
+                Vector3 radarOriginalScale = coordComponents.parent.GetComponent<RadarEvents>().GetScale();
 
                 // Destroy the prev labels.
                 foreach (Transform child in labels) Destroy(child.gameObject);
 
                 // Update axis labels.
-                for (int i = 0; (i - 1) * intervalXY.x < radarOriginalScale.x * 10; i++)
+                for (int i = 0; i * intervalXY.x < radarOriginalScale.x * 10; i++)
                 {
                     GameObject newLabel = Instantiate(xyAxisLabel, labels);
                     // Change "gap * 1.5f" to change where the physical axis is placed

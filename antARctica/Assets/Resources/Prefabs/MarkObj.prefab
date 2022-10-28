@@ -217,7 +217,7 @@ MonoBehaviour:
   coordComponents: {fileID: 1445204120338431796}
   labels: {fileID: 3947513876557672129}
   xyAxisLabel: {fileID: 4116164232359831222}
-  intervalXY: {x: 10, y: 100}
+  intervalXY: {x: 10, y: 50}
   gap: 0.06
   showAxis: 1
 --- !u!1 &2413761777036351319
