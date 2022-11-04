@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEngine;
 
 public class CSVReadPlot : MonoBehaviour
@@ -136,5 +137,27 @@ public class CSVReadPlot : MonoBehaviour
         Transform radarImage = RadarImages.Find(label);
         if (radarImage != null) radarImage.GetComponent<RadarEvents>().SetLine(line.transform, inRange);
         else line.name = label;
+    }
+
+    // Function to save the radar images' positions.
+    public void SaveScene()
+    {
+        string radarInfo = "Name, Position, Scale, Rotation\n";
+        foreach (Transform radarImage in RadarImages)
+        {
+            radarInfo += radarImage.name + ",";
+            radarInfo += radarImage.position.ToString() + ",";
+            radarInfo += radarImage.localScale.ToString() + ",";
+            radarInfo += radarImage.eulerAngles.ToString() + "\n";
+        }
+
+        var saveFile = File.CreateText("Resources/Save.txt");
+        saveFile.WriteLine(radarInfo);
+        saveFile.Close();
+    }
+
+    public void LoadScene()
+    {
+
     }
 }
