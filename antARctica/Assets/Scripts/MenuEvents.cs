@@ -313,7 +313,7 @@ public class MenuEvents : MonoBehaviour
     // Main Menu Vertical Exaggeration Slider
     public void OnVerticalExaggerationSliderUpdated(SliderEventData eventData)
     {
-        foreach (Transform child in Dems) child.localScale = new Vector3(1, 0.5f + eventData.NewValue, 1);
+        foreach (Transform child in Dems) child.localScale = new Vector3(1, 0.1f + (4.9f * eventData.NewValue), 1);
     }
 
     // Main Menu Toggling CSV and radar images.
