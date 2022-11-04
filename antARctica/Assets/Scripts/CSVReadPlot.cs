@@ -156,6 +156,7 @@ public class CSVReadPlot : MonoBehaviour
         saveFile.Close();
     }
 
+    // Function to load the radar images' positions.
     public void LoadScene()
     {
 

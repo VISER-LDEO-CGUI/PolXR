@@ -9366,7 +9366,7 @@ Transform:
   - {fileID: 667108908}
   - {fileID: 670084207}
   m_Father: {fileID: 4316553457426812439}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &610825581
 GameObject:
@@ -11471,8 +11471,7 @@ MonoBehaviour:
   MinimapCamera: {fileID: 1727482072}
   MapCamPosition: {x: -12.5, y: 100, z: -90}
   ViewSize: 60
-  Offset: {x: 0.01, y: 0.042, z: 0}
-  Scale: {x: 0.0005, y: 0.0005, z: 0}
+  userHeight: 5
   Normal: {fileID: 2100000, guid: 5fe3095c56327cc48829c9844e845421, type: 2}
   Translate: {fileID: 2100000, guid: 9cb28e89e319c4746905bcbf39222b2f, type: 2}
   PositionObj: {fileID: 444113664}
@@ -15335,7 +15334,7 @@ Transform:
   - {fileID: 2029810232}
   - {fileID: 1494776110}
   m_Father: {fileID: 4316553457426812439}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &881002143
 GameObject:
@@ -20495,7 +20494,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1231498948}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.25026906, y: -0.084199995, z: 0}
+  m_LocalPosition: {x: 0.13026917, y: -0.0795, z: 0.024429321}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children:
   - {fileID: 2111841103}
@@ -20503,8 +20502,8 @@ Transform:
   - {fileID: 25953406}
   - {fileID: 1851458108}
   - {fileID: 256220557}
-  m_Father: {fileID: 1494776110}
-  m_RootOrder: 1
+  m_Father: {fileID: 4316553457426812439}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1231498950
 MonoBehaviour:
@@ -22580,7 +22579,7 @@ Transform:
   - {fileID: 1259983449}
   - {fileID: 195184524}
   m_Father: {fileID: 1494776110}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1307169940
 MonoBehaviour:
@@ -25302,7 +25301,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 708454381}
-  - {fileID: 1231498949}
   - {fileID: 1307169939}
   m_Father: {fileID: 853555539}
   m_RootOrder: 5
@@ -27355,7 +27353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1620536410}
   - component: {fileID: 1620536411}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33593,7 +33591,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2049385537}
   - component: {fileID: 2049385538}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36763,6 +36761,7 @@ Transform:
   - {fileID: 127785026036656212}
   - {fileID: 1186256853847558821}
   - {fileID: 834522222}
+  - {fileID: 1231498949}
   - {fileID: 608409566}
   - {fileID: 853555539}
   m_Father: {fileID: 140567122}
