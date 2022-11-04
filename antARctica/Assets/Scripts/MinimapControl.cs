@@ -14,9 +14,7 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
     public float ViewSize = 60f;
 
     // Synchronize between main scene and minimap.
-    public Vector3 Offset = new Vector3(0.01f, 0.042f, 0.026f);
-    public Vector3 Scale = new Vector3(0.005f, 0.005f, 0);
-    private Vector3 PosVec;
+    public float userHeight = 5;
     private Vector3 TransVec;
     public Material Normal;
     public Material Translate;
@@ -41,12 +39,6 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
         MinimapCamera.transform.eulerAngles = new Vector3(90, 0, 0);
         MinimapCamera.orthographicSize = ViewSize * Antarctica.localScale.x;
 
-        // Compute and update the current user position relative to the scene;
-        PosVec = Antarctica.transform.InverseTransformPoint(User.transform.position);
-        PosVec.y = PosVec.z;
-        PosVec = Vector3.Scale(PosVec, Scale);
-        PosVec += Offset;
-
         // Make sure the dot does not go out of the bounding area.
         if (this.GetComponent<BoxCollider>().enabled) PositionObj.GetComponent<MeshRenderer>().material = Translate;
         else PositionObj.GetComponent<MeshRenderer>().material = Normal;
@@ -64,14 +56,19 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
         // Compute the real offset.
         TransVec = eventData.Pointer.Result.Details.Point;
         TransVec = this.transform.InverseTransformPoint(TransVec);
-        TransVec -= Offset;
-        TransVec.x = TransVec.x / Scale.x;
-        TransVec.z = TransVec.y / Scale.y;
-        TransVec.y = 0;
+
+        // X and Y axis are different lengths. X is longer than Y.
+        TransVec.x *= (this.transform.localScale.x / this.transform.localScale.y) * (2 * ViewSize);
+        TransVec.z = TransVec.y * (2 * ViewSize);
+
+        // Offset
+        TransVec += MapCamPosition;
+
+        TransVec.y = userHeight;
 
         // Translate.
         Anchor.localPosition = TransVec;
-        MixedRealityPlayspace.Transform.Translate(Anchor.position);
+        MixedRealityPlayspace.Transform.Translate(Anchor.position - User.position);
     }
 
     // Unused functions.
