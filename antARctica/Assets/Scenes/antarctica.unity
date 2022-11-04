@@ -11476,7 +11476,7 @@ MonoBehaviour:
   Normal: {fileID: 2100000, guid: 5fe3095c56327cc48829c9844e845421, type: 2}
   Translate: {fileID: 2100000, guid: 9cb28e89e319c4746905bcbf39222b2f, type: 2}
   PositionObj: {fileID: 444113664}
-  Anchor: {fileID: 1620536410}
+  Anchor: {fileID: 1022979507}
 --- !u!65 &670084209
 BoxCollider:
   m_ObjectHideFlags: 0
