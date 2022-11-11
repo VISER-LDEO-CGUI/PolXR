@@ -18,6 +18,7 @@ Here is a list of interactions available using the Oculus Controllers:
 | Trigger Buttons | Used to interact with the menus and select radar images |
 | Joysticks | Used to move around the entire scene freely |
 
+<br />
 
 Here is a list of interactions available with the main menu. All of these interactions can be used with the Oculus Controller trigger buttons:
 | Main Menu Interaction Title | Description |
