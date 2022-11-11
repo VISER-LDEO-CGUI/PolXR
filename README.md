@@ -6,6 +6,34 @@ Contributors:
 
 * [Sofia Sanchez](https://github.com/sofiasanchez985/greenland), Columbia University
 * [Shengyue Guo](https://github.com/guosy1998), Columbia University
+* [Qazi Ashikin](https://github.com/aizaq1), Columbia University
+* [Joel Salzman](https://github.com/joelsalzman), Columbia University
+* [Ben Yang](github.com/benplus1/), Columbia University
+
+Here's a list of interactions available using the Oculus Controllers:
+| Interaction | Description |
+| ----------- | ----------- |
+| Trigger Buttons | Title |
+| Joysticks | Text |
+
+Here's a list of interactions available with the menu:
+| Interaction | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
+
+Here's a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
+| Voice Command | Description |
+| ----------- | ----------- |
+| "Menu" | Open/close the menu |
+| "Model" | Turn on/off the DEM models |
+| "Image" | Turn on/off the image for the selected radar line |
+| "Line" | Turn on/off the CSV picks for the selected radar line |
+| "Go" | Teleport to the image location for the selected radar line |
+| "Mark" | Add a point to the image for the selected radar line |
+| "Reset" | Reset the radar lines for the whole scene |
+| "Measure" | Turn on/off measurement mode |
+| "Box" | Turn on/off the bounding box for the entire scene |
 
 --- This project is still in development!! ---
 
