@@ -223,7 +223,7 @@ public class MenuEvents : MonoBehaviour
     {
         if (MainMenu)
         {
-
+            Antarctica.GetComponent<CSVReadPlot>().SaveScene();
         }
         else
         {

@@ -145,13 +145,13 @@ public class CSVReadPlot : MonoBehaviour
         string radarInfo = "Name, Position, Scale, Rotation\n";
         foreach (Transform radarImage in RadarImages)
         {
-            radarInfo += radarImage.name + ",";
-            radarInfo += radarImage.position.ToString() + ",";
-            radarInfo += radarImage.localScale.ToString() + ",";
-            radarInfo += radarImage.eulerAngles.ToString() + "\n";
+            radarInfo += radarImage.name + ";";
+            radarInfo += radarImage.localPosition.ToString("F3") + ";";
+            radarInfo += radarImage.localScale.ToString("F3") + ";";
+            radarInfo += radarImage.localEulerAngles.ToString("F3") + "\n";
         }
 
-        var saveFile = File.CreateText("Resources/Save.txt");
+        var saveFile = File.CreateText("Assets/Resources/Save.txt");
         saveFile.WriteLine(radarInfo);
         saveFile.Close();
     }
@@ -159,6 +159,33 @@ public class CSVReadPlot : MonoBehaviour
     // Function to load the radar images' positions.
     public void LoadScene()
     {
+        TextAsset SaveFile = (TextAsset)Resources.Load("Save", typeof(TextAsset));
 
+        if (SaveFile != null)
+        {
+            string[] radaInfos = SaveFile.text.Split("\n"[0]);
+
+            // Ignore the first line which is the name of the columns.
+            int indexCounter = 1;
+
+            while (indexCounter < radaInfos.Length - 1)
+            {
+                string[] radarInfo = radaInfos[indexCounter++].Split(";"[0]);
+                Transform radarImage = RadarImages.Find(radarInfo[0]);
+                if (radarImage != null)
+                {
+                    radarImage.localPosition = ToVector3(radarInfo[1]);
+                    radarImage.localScale = ToVector3(radarInfo[2]);
+                    radarImage.localEulerAngles = ToVector3(radarInfo[3]);
+                }
+            }
+        }
+    }
+
+    // Parse a vector3 type.
+    private Vector3 ToVector3(string input)
+    {
+        string[] digits = input.Substring(1, input.Length - 2).Split(',');
+        return new Vector3(float.Parse(digits[0]), float.Parse(digits[1]), float.Parse(digits[2]));
     }
 }
