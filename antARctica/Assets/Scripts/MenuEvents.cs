@@ -180,10 +180,10 @@ public class MenuEvents : MonoBehaviour
         {
             AllCSVPicksToggle.IsToggled = true;
             AllRadarToggle.IsToggled = true;
-            MarkObj.transform.parent = Antarctica.transform;
-            MarkObj.SetActive(false);
             foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
             MainCSVToggling();
+            MarkObj.transform.parent = Antarctica.transform;
+            MarkObj.SetActive(false);
         }
         // The snap function.
         else if (measureMode() != 0)
