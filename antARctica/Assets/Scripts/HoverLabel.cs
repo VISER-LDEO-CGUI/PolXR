@@ -22,7 +22,7 @@ public class HoverLabel : MonoBehaviour
         // Try to locate the controllers.
         handDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
         if (handDevice == null) handDevice = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
-        findController = (handDevice == null);
+        findController = !(handDevice == null);
     }
 
     // Update is called once per frame

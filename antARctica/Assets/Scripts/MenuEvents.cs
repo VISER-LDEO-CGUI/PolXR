@@ -355,13 +355,13 @@ public class MenuEvents : MonoBehaviour
     {
         if (!SurfaceToggle.IsToggled)
         {
-            DemToggle("Bedmap2_surface_RIS");
+            DemToggle(Antarctica.GetComponent<CSVReadPlot>().SurName + "(Clone)");
             SurfaceToggle.IsToggled = true;
         }
 
         if (!BedToggle.IsToggled)
         {
-            DemToggle("Bedmap2_bed");
+            DemToggle(Antarctica.GetComponent<CSVReadPlot>().BedName + "(Clone)");
             BedToggle.IsToggled = true;
         }
         bool originalState = Antarctica.GetComponent<BoxCollider>().enabled;
