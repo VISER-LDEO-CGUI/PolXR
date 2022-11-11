@@ -19,16 +19,18 @@ Here's a list of interactions available using the Oculus Controllers:
 | Joysticks | Text |
 
 Here's a list of interactions available with the menu:
-| Menu Location | Button Title | Description |
+| Menu Location | Interaction Title | Description |
 | ----------- | ----------- | | ----------- |
 | Main Menu | Surface DEM | | Checking this button turns the Surface DEM on/off |
 | Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
-| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
+| Main Menu | Vertical Exaggeration | | Vertically stretches or shrinks the radar image. The exaggeration is dynamic and can be repeated. |
 | Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
 | Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
 | Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
 | Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
 | Paragraph   | Text        | ||
+
+
 
 Here's a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
 | Voice Command | Description |
