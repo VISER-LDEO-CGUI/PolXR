@@ -12,13 +12,14 @@ Contributors:
 
 ***Last Updated 11/11/2022.***
 
-Here's a list of interactions available using the Oculus Controllers:
+Here is a list of interactions available using the Oculus Controllers:
 | Interaction | Description |
 | :-----------: | ----------- |
 | Trigger Buttons | Used to interact with the menus and select radar images |
 | Joysticks | Used to move around the entire scene freely |
 
-Here's a list of interactions available with the main menu. All of these interactions can be used with the Oculus Controller trigger buttons:
+
+Here is a list of interactions available with the main menu. All of these interactions can be used with the Oculus Controller trigger buttons:
 | Main Menu Interaction Title | Description |
 | :-----------: | ----------- |
 | Surface DEM | Checking this button turns the Surface DEM on/off |
@@ -33,7 +34,8 @@ Here's a list of interactions available with the main menu. All of these interac
 | Sidebar "Pin" | Saves scene information to .txt file |
 | Minimap | If teleport mode is enabled, teleports the user to that location in the scene |
 
-Here's a list of interactions available with the line menu. All of these interactions can be used with the Oculus Controller trigger buttons:
+
+Here is a list of interactions available with the line menu. All of these interactions can be used with the Oculus Controller trigger buttons:
 | Line Menu Interaction Title | Description |
 | :-----------: | ----------- |
 | Vertical Exaggeration | Vertically stretches or shrinks the radar image (the exaggeration is dynamic and can be repeated limitlessly) |
@@ -49,13 +51,15 @@ Here's a list of interactions available with the line menu. All of these interac
 | Sidebar "Pin" | Saves the radar information to .txt file |
 | Sidebar ">" | Teleports to the location of the radar line in the scene |
 
-Here's a list of interactions available with the minimap menu. All of these interactions can be used with the Oculus Controller trigger buttons:
+
+Here is a list of interactions available with the minimap menu. All of these interactions can be used with the Oculus Controller trigger buttons:
 | Minimap Menu Interaction Title | Description |
 | :-----------: | ----------- |
 | Sidebar "Minimap" - First Click | Allows for moving the minimap itself (the dot will be red) |
 | Sidebar "Minimap" - Second Click | Allows for teleportation to any selected location on the minimap (the dot will be green) |
 
-Here's a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
+
+Here is a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
 | Voice Command | Description |
 | :-----------: | ----------- |
 | "Menu" | Open/close the menu |
