@@ -10,6 +10,8 @@ Contributors:
 * [Joel Salzman](https://github.com/joelsalzman), Columbia University
 * [Ben Yang](github.com/benplus1/), Columbia University
 
+***Last Updated 11/11/2022.***
+
 Here's a list of interactions available using the Oculus Controllers:
 | Interaction | Description |
 | ----------- | ----------- |
@@ -17,10 +19,16 @@ Here's a list of interactions available using the Oculus Controllers:
 | Joysticks | Text |
 
 Here's a list of interactions available with the menu:
-| Interaction | Description |
-| ----------- | ----------- |
-| Header      | Title       |
-| Paragraph   | Text        |
+| Menu Location | Button Title | Description |
+| ----------- | ----------- | | ----------- |
+| Main Menu | Surface DEM | | Checking this button turns the Surface DEM on/off |
+| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
+| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
+| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
+| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
+| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
+| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
+| Paragraph   | Text        | ||
 
 Here's a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
 | Voice Command | Description |
