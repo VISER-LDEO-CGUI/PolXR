@@ -52,7 +52,7 @@ Here is a list of interactions available with the line menu. All of these intera
 | Sidebar ">" | Teleports to the location of the radar line in the scene |
 
 
-Here is a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
+Here is a list of interactions available using voice commands. The voice commands can be used at any time and do not need to be toggled. Simply say the word clearly and antARctica will process the command:
 | Voice Command | Description |
 | :-----------: | ----------- |
 | "Menu" | Open/close the menu |
