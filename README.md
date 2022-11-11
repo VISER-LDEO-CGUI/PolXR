@@ -14,13 +14,13 @@ Contributors:
 
 Here's a list of interactions available using the Oculus Controllers:
 | Interaction | Description |
-| :-----------: | :-----------: |
+| :-----------: | ----------- |
 | Trigger Buttons | Used to interact with the menus and select radar images |
 | Joysticks | Used to move around the entire scene freely |
 
 Here's a list of interactions available with the main menu. All of these interactions can be used with the Oculus Controller trigger buttons:
 | Main Menu Interaction Title | Description |
-| :-----------: | :-----------: |
+| :-----------: | ----------- |
 | Surface DEM | Checking this button turns the Surface DEM on/off |
 | Base DEM | Checking this button turns the Base DEM on/off |
 | All Radar Images | Checking this button turns all the radar lines on/off |
@@ -35,7 +35,7 @@ Here's a list of interactions available with the main menu. All of these interac
 
 Here's a list of interactions available with the line menu. All of these interactions can be used with the Oculus Controller trigger buttons:
 | Line Menu Interaction Title | Description |
-| :-----------: | :-----------: |
+| :-----------: | ----------- |
 | Vertical Exaggeration | Vertically stretches or shrinks the radar image (the exaggeration is dynamic and can be repeated limitlessly) |
 | Horizontal Exaggeration | Horizontally stretches or shrinks the radar image (the exaggeration is dynamic and can be repeated limitlessly) |
 | Rotation | Rotates the image by the seleced amount of degrees |
@@ -51,7 +51,7 @@ Here's a list of interactions available with the line menu. All of these interac
 
 Here's a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
 | Voice Command | Description |
-| :-----------: | :-----------: |
+| :-----------: | ----------- |
 | "Menu" | Open/close the menu |
 | "Model" | Turn on/off the DEM models |
 | "Image" | Turn on/off the image for the selected radar line |
