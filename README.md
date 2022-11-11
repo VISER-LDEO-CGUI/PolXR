@@ -10,7 +10,6 @@ Contributors:
 * [Joel Salzman](https://github.com/joelsalzman), Columbia University
 * [Ben Yang](github.com/benplus1/), Columbia University
 
-<br />
 
 ***Last Updated 11/11/2022.***
 
