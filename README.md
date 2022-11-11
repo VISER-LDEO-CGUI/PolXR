@@ -49,6 +49,12 @@ Here's a list of interactions available with the line menu. All of these interac
 | Sidebar "Pin" | Saves the radar information to .txt file |
 | Sidebar ">" | Teleports to the location of the radar line in the scene |
 
+Here's a list of interactions available with the minimap menu. All of these interactions can be used with the Oculus Controller trigger buttons:
+| Minimap Menu Interaction Title | Description |
+| :-----------: | ----------- |
+| Sidebar "Minimap" - First Click | Allows for moving the minimap itself (the dot will be red) |
+| Sidebar "Minimap" - Second Click | Allows for teleportation to any selected location on the minimap (the dot will be green) |
+
 Here's a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
 | Voice Command | Description |
 | :-----------: | ----------- |
