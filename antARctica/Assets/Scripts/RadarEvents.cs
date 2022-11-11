@@ -207,7 +207,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         this.transform.GetComponent<BoundsControl>().enabled = toggle;
         transform.GetChild(0).gameObject.SetActive(toggle);
         transform.GetChild(1).gameObject.SetActive(toggle);
-        MarkObj.gameObject.SetActive(toggle);
+        MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
     }
 
     // Toggle the line.
