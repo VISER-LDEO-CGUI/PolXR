@@ -29,7 +29,7 @@ Here is a list of interactions available with the main menu. All of these intera
 | Bounding Box | Checking this button turns the bounding box for the entire scene on/off |
 | Vertical Exaggeration | Vertically stretches or shrinks the DEMs (the exaggeration is dynamic and can be repeated limitlessly) |
 | Sidebar "X" | Closes the menu |
-| Sidebar "Minimap" | Turns teleport mode on (dot will be green) or off (dot will be red and allows for moving the minimap itself) |
+| Sidebar "Minimap" | Turns teleport mode on (dot will be green) or off (dot will be red and allows for moving the minimap) |
 | Sidebar "Refresh" | Resets the entire scene |
 | Sidebar "Pin" | Saves scene information to .txt file |
 | Minimap | If teleport mode is enabled, teleports the user to that location in the scene |
