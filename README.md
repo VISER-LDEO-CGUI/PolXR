@@ -29,7 +29,7 @@ Here is a list of interactions available with the main menu. All of these intera
 | Bounding Box | Checking this button turns the bounding box for the entire scene on/off |
 | Vertical Exaggeration | Vertically stretches or shrinks the DEMs (the exaggeration is dynamic and can be repeated limitlessly) |
 | Sidebar "X" | Closes the menu |
-| Sidebar "Minimap" | Turns teleport mode on/off |
+| Sidebar "Minimap" | Turns teleport mode on (dot will be green) or off (dot will be red and allows for moving the minimap itself) |
 | Sidebar "Refresh" | Resets the entire scene |
 | Sidebar "Pin" | Saves scene information to .txt file |
 | Minimap | If teleport mode is enabled, teleports the user to that location in the scene |
@@ -50,13 +50,6 @@ Here is a list of interactions available with the line menu. All of these intera
 | Sidebar "Refresh" | Resets the radar line |
 | Sidebar "Pin" | Saves the radar information to .txt file |
 | Sidebar ">" | Teleports to the location of the radar line in the scene |
-
-
-Here is a list of interactions available with the minimap menu. All of these interactions can be used with the Oculus Controller trigger buttons:
-| Minimap Menu Interaction Title | Description |
-| :-----------: | ----------- |
-| Sidebar "Minimap" - First Click | Allows for moving the minimap itself (the dot will be red) |
-| Sidebar "Minimap" - Second Click | Allows for teleportation to any selected location on the minimap (the dot will be green) |
 
 
 Here is a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
