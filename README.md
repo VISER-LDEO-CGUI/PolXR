@@ -10,6 +10,8 @@ Contributors:
 * [Joel Salzman](https://github.com/joelsalzman), Columbia University
 * [Ben Yang](github.com/benplus1/), Columbia University
 
+<br />
+
 ***Last Updated 11/11/2022.***
 
 Here is a list of interactions available using the Oculus Controllers:
@@ -35,6 +37,7 @@ Here is a list of interactions available with the main menu. All of these intera
 | Sidebar "Pin" | Saves scene information to .txt file |
 | Minimap | If teleport mode is enabled, teleports the user to that location in the scene |
 
+<br />
 
 Here is a list of interactions available with the line menu. All of these interactions can be used with the Oculus Controller trigger buttons:
 | Line Menu Interaction Title | Description |
@@ -52,6 +55,7 @@ Here is a list of interactions available with the line menu. All of these intera
 | Sidebar "Pin" | Saves the radar information to .txt file |
 | Sidebar ">" | Teleports to the location of the radar line in the scene |
 
+<br />
 
 Here is a list of interactions available using voice commands. The voice commands can be used at any time and do not need to be toggled. Simply say the word clearly and antARctica will process the command:
 | Voice Command | Description |
@@ -65,6 +69,8 @@ Here is a list of interactions available using voice commands. The voice command
 | "Reset" | Reset the radar lines for the whole scene |
 | "Measure" | Turn on/off measurement mode |
 | "Box" | Turn on/off the bounding box for the entire scene |
+
+<br />
 
 --- This project is still in development!! ---
 
