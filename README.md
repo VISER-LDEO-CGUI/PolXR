@@ -15,22 +15,39 @@ Contributors:
 Here's a list of interactions available using the Oculus Controllers:
 | Interaction | Description |
 | ----------- | ----------- |
-| Trigger Buttons | Title |
-| Joysticks | Text |
+| Trigger Buttons | Used to interact with the menus and select radar images |
+| Joysticks | Used to move around the entire scene freely |
 
-Here's a list of interactions available with the menu:
-| Menu Location | Interaction Title | Description |
-| ----------- | ----------- | | ----------- |
-| Main Menu | Surface DEM | | Checking this button turns the Surface DEM on/off |
-| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
-| Main Menu | Vertical Exaggeration | | Vertically stretches or shrinks the radar image. The exaggeration is dynamic and can be repeated. |
-| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
-| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
-| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
-| Main Menu | Base DEM | | Checking this button turns the Base DEM on/off |
-| Paragraph   | Text        | ||
+Here's a list of interactions available with the main menu. All of these interactions can be used with the Oculus Controller trigger buttons:
+| Main Menu Interaction Title | Description |
+| ----------- | | ----------- |
+| Surface DEM | | Checking this button turns the Surface DEM on/off |
+| Base DEM | | Checking this button turns the Base DEM on/off |
+| All Radar Images | | Checking this button turns all the radar lines on/off |
+| All CSV Picks | | Checking this button turns all the CSV Picks on/off |
+| Bounding Box | | Checking this button turns the bounding box for the entire scene on/off |
+| Vertical Exaggeration | | Vertically stretches or shrinks the DEMs (the exaggeration is dynamic and can be repeated limitlessly) |
+| Sidebar "X" | | Closes the menu |
+| Sidebar "Minimap" | | Turns teleport mode on/off |
+| Sidebar "Refresh" | | Resets the entire scene |
+| Sidebar "Pin" | | Saves scene information to .txt file |
+| Minimap | | If teleport mode is enabled, teleports the user to that location in the scene |
 
-
+Here's a list of interactions available with the line menu. All of these interactions can be used with the Oculus Controller trigger buttons:
+| Line Menu Interaction Title | Description |
+| ----------- | | ----------- |
+| Vertical Exaggeration | | Vertically stretches or shrinks the radar image (the exaggeration is dynamic and can be repeated limitlessly) |
+| Horizontal Exaggeration | | Horizontally stretches or shrinks the radar image (the exaggeration is dynamic and can be repeated limitlessly) |
+| Rotation | | Rotates the image by the seleced amount of degrees |
+| Transparency | | Makes the radar image transparent by the selected percent |
+| View Radar Image | | Checking this button turns the selected radar image on/off |
+| View CSV Picks | | Checking this button turns the selected CSV Picks on/off |
+| Measurement Mode | | Turns measurent mode on/off (allows user to place two marks on the same image and measure the distance between |
+| Sidebar "X" | | Closes the menu |
+| Sidebar "Home" | | Opens the main menu |
+| Sidebar "Refresh" | | Resets the radar line |
+| Sidebar "Pin" | | Saves the radar information to .txt file |
+| Sidebar ">" | | Teleports to the location of the radar line in the scene |
 
 Here's a list of interactions available using voice commands. Simply say the word clearly and antARctica will process the command:
 | Voice Command | Description |
