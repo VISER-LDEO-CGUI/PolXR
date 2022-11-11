@@ -1161,7 +1161,7 @@ PrefabInstance:
     - target: {fileID: 7028062144966977923, guid: 3ff6380050a8f8643a5358a3e1896750,
         type: 3}
       propertyPath: m_text
-      value: Reset scene
+      value: Reset Scene
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff6380050a8f8643a5358a3e1896750, type: 3}
@@ -6523,6 +6523,11 @@ PrefabInstance:
       propertyPath: distance
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 3163649244588532399, guid: 3ff6380050a8f8643a5358a3e1896750,
+        type: 3}
+      propertyPath: controller
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4887324138101969816, guid: 3ff6380050a8f8643a5358a3e1896750,
         type: 3}
       propertyPath: m_Pivot.x
@@ -6631,7 +6636,7 @@ PrefabInstance:
     - target: {fileID: 7028062144966977923, guid: 3ff6380050a8f8643a5358a3e1896750,
         type: 3}
       propertyPath: m_text
-      value: Close the menu
+      value: Close Menu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff6380050a8f8643a5358a3e1896750, type: 3}
@@ -18764,7 +18769,7 @@ PrefabInstance:
     - target: {fileID: 7028062144966977923, guid: 3ff6380050a8f8643a5358a3e1896750,
         type: 3}
       propertyPath: m_text
-      value: Save scene
+      value: Save Scene
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff6380050a8f8643a5358a3e1896750, type: 3}
@@ -27591,7 +27596,7 @@ PrefabInstance:
     - target: {fileID: 7028062144966977923, guid: 3ff6380050a8f8643a5358a3e1896750,
         type: 3}
       propertyPath: m_text
-      value: Go to main menu
+      value: Main Menu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff6380050a8f8643a5358a3e1896750, type: 3}
@@ -29543,7 +29548,7 @@ PrefabInstance:
     - target: {fileID: 7028062144966977923, guid: 3ff6380050a8f8643a5358a3e1896750,
         type: 3}
       propertyPath: m_text
-      value: Teleport to radar
+      value: Go to Radar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff6380050a8f8643a5358a3e1896750, type: 3}
@@ -33592,7 +33597,7 @@ PrefabInstance:
     - target: {fileID: 7028062144966977923, guid: 3ff6380050a8f8643a5358a3e1896750,
         type: 3}
       propertyPath: m_text
-      value: Load scene
+      value: Load Scene
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff6380050a8f8643a5358a3e1896750, type: 3}
@@ -36905,7 +36910,7 @@ PrefabInstance:
     - target: {fileID: 7028062144966977923, guid: 3ff6380050a8f8643a5358a3e1896750,
         type: 3}
       propertyPath: m_text
-      value: Toggle teleport
+      value: Toggle Teleport
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ff6380050a8f8643a5358a3e1896750, type: 3}
