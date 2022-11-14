@@ -50,7 +50,7 @@ Here is a list of interactions available with the line menu. All of these intera
 | Measurement Mode | Turns measurent mode on/off (allows user to place two marks on the same image and measure the distance between |
 | Sidebar "X" | Closes the menu |
 | Sidebar "Home" | Opens the main menu |
-| Sidebar "Refresh" | Resets the radar line |
+| Sidebar "Refresh" | Resets the radar line, or snap two radar images under measure mode |
 | Sidebar "Pin" | Saves the radar information to .txt file |
 | Sidebar ">" | Teleports to the location of the radar line in the scene |
 
