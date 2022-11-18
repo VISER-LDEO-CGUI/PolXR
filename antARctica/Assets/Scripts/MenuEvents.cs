@@ -180,10 +180,10 @@ public class MenuEvents : MonoBehaviour
         {
             AllCSVPicksToggle.IsToggled = true;
             AllRadarToggle.IsToggled = true;
-            MarkObj.transform.parent = Antarctica.transform;
-            MarkObj.SetActive(false);
             foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
             MainCSVToggling();
+            MarkObj.transform.parent = Antarctica.transform;
+            MarkObj.SetActive(false);
         }
         // The snap function.
         else if (measureMode() != 0)
@@ -221,45 +221,52 @@ public class MenuEvents : MonoBehaviour
     // Be aware of the file path issue! And try to keep a history...
     public void WriteButton()
     {
-        RadarToggle.IsToggled = true;
-        RadarToggling();
-        CSVPicksToggle.IsToggled = true;
-        CSVToggling();
-
-        /*if (File.Exists(SelectionDialog))
+        if (MainMenu)
         {
-            List<string> tempList = new List<string> { MarkTMP.text };
-            File.AppendAllLines(SelectionDialog, tempList);
+            Antarctica.GetComponent<CSVReadPlot>().SaveScene();
         }
         else
         {
-            var sr = File.CreateText(SelectionDialog);
-            sr.WriteLine(MarkTMP.text);
-            sr.Close();
-        }*/
+            RadarToggle.IsToggled = true;
+            RadarToggling();
+            CSVPicksToggle.IsToggled = true;
+            CSVToggling();
 
-        ParticleSystem CSVLine = radarImage.Find("Line").GetComponent<ParticleSystem>();
-        var main = CSVLine.main;
-        int CSVLength = main.maxParticles + 1;
-        ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[CSVLength];
-        CSVLine.GetParticles(CSVPoints);
+            /*if (File.Exists(SelectionDialog))
+            {
+                List<string> tempList = new List<string> { MarkTMP.text };
+                File.AppendAllLines(SelectionDialog, tempList);
+            }
+            else
+            {
+                var sr = File.CreateText(SelectionDialog);
+                sr.WriteLine(MarkTMP.text);
+                sr.Close();
+            }*/
 
-        // Transform the position into particle coordinates.
-        Vector3 newPos = MarkObj.transform.position - CSVLine.transform.position;
-        newPos = Quaternion.Euler(0, -radarImage.transform.localEulerAngles.y, 0) * newPos;
-        newPos.x /= CSVLine.transform.lossyScale.x;
-        newPos.y /= CSVLine.transform.lossyScale.y;
-        newPos.z /= CSVLine.transform.lossyScale.z;
+            ParticleSystem CSVLine = radarImage.Find("Line").GetComponent<ParticleSystem>();
+            var main = CSVLine.main;
+            int CSVLength = main.maxParticles + 1;
+            ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[CSVLength];
+            CSVLine.GetParticles(CSVPoints);
 
-        // Set the particle format.
-        CSVPoints[CSVLength - 1] = CSVPoints[0];
-        CSVPoints[CSVLength - 1].position = newPos;
-        CSVPoints[CSVLength - 1].startColor = MarkColor;
+            // Transform the position into particle coordinates.
+            Vector3 newPos = MarkObj.transform.position - CSVLine.transform.position;
+            newPos = Quaternion.Euler(0, -radarImage.transform.localEulerAngles.y, 0) * newPos;
+            newPos.x /= CSVLine.transform.lossyScale.x;
+            newPos.y /= CSVLine.transform.lossyScale.y;
+            newPos.z /= CSVLine.transform.lossyScale.z;
 
-        // Emit and set the new particle.
-        main.maxParticles += 1;
-        CSVLine.Emit(1);
-        CSVLine.SetParticles(CSVPoints, CSVLength);
+            // Set the particle format.
+            CSVPoints[CSVLength - 1] = CSVPoints[0];
+            CSVPoints[CSVLength - 1].position = newPos;
+            CSVPoints[CSVLength - 1].startColor = MarkColor;
+
+            // Emit and set the new particle.
+            main.maxParticles += 1;
+            CSVLine.Emit(1);
+            CSVLine.SetParticles(CSVPoints, CSVLength);
+        }
     }
 
     // The close button, make the menu disappear and deactivated.
@@ -313,7 +320,7 @@ public class MenuEvents : MonoBehaviour
     // Main Menu Vertical Exaggeration Slider
     public void OnVerticalExaggerationSliderUpdated(SliderEventData eventData)
     {
-        foreach (Transform child in Dems) child.localScale = new Vector3(1, 0.5f + eventData.NewValue, 1);
+        foreach (Transform child in Dems) child.localScale = new Vector3(1, 0.1f + (4.9f * eventData.NewValue), 1);
     }
 
     // Main Menu Toggling CSV and radar images.
@@ -348,13 +355,13 @@ public class MenuEvents : MonoBehaviour
     {
         if (!SurfaceToggle.IsToggled)
         {
-            DemToggle("Bedmap2_surface_RIS");
+            DemToggle(Antarctica.GetComponent<CSVReadPlot>().SurName + "(Clone)");
             SurfaceToggle.IsToggled = true;
         }
 
         if (!BedToggle.IsToggled)
         {
-            DemToggle("Bedmap2_bed");
+            DemToggle(Antarctica.GetComponent<CSVReadPlot>().BedName + "(Clone)");
             BedToggle.IsToggled = true;
         }
         bool originalState = Antarctica.GetComponent<BoxCollider>().enabled;

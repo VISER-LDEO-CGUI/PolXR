@@ -35,6 +35,9 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     private int DotCount = 0;
     private Transform CSVLine = null;
 
+    // The mark shown on the minimap
+    public GameObject radarMark;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,16 +45,14 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
         loadImage(defaultText);
 
+        // Turn off marks initially.
+        radarMark.SetActive(false);
+
         scaleX = this.transform.localScale.x;
         scaleY = this.transform.localScale.y;
         scaleZ = this.transform.localScale.z;
         position = this.transform.localPosition;
         rotation = this.transform.eulerAngles;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
     // Dynamically load images after the radar image is selected/deselected.
@@ -181,6 +182,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
             defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
             loadImage(defaultText);
             loaded = false;
+            radarMark.SetActive(false);
         }
     }
 
@@ -205,7 +207,7 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         this.transform.GetComponent<BoundsControl>().enabled = toggle;
         transform.GetChild(0).gameObject.SetActive(toggle);
         transform.GetChild(1).gameObject.SetActive(toggle);
-        MarkObj.gameObject.SetActive(toggle);
+        MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
     }
 
     // Toggle the line.
@@ -222,5 +224,6 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
         Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
         Menu.transform.GetComponent<MenuEvents>().syncScaleSlider();
+        radarMark.SetActive(true);
     }
 }
