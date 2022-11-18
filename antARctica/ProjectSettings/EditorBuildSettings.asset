@@ -6,11 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/antarctica-photon.unity
+    guid: 0b0b84fe7605d4d4fb185d813591c8df
+  - enabled: 1
+    path: 
+    guid: 0cce72acd714a1d4f9d52d3f81b50b7e
+  - enabled: 1
     path: Assets/Scenes/antarctica.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 0
-    path: Assets/Samples/Mixed Reality Toolkit Examples/2.7.2/Demos - HandTracking/Scenes/HandMenuExamples.unity
+    path: 
     guid: 2792ec9767804e644906ab978f2eed23
+  - enabled: 1
+    path: Assets/Scenes/homescreen.unity
+    guid: de0cb7e77de81ba42bb5ba8d3c35123a
+  - enabled: 1
+    path: Assets/Scenes/greenland.unity
+    guid: 59f633de1da7670498ed579da6db9e97
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: b959d621a4b20024ba9dbb895a73a7fa,
       type: 2}
