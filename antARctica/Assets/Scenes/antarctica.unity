@@ -7530,7 +7530,7 @@ MonoBehaviour:
   BedName: Bedmap2_bed
   SurName: Bedmap2_surface_RIS
   BedMat: {fileID: 2100000, guid: 00da5349686fad24598d0591acbc27ad, type: 2}
-  SurMat: {fileID: 2100000, guid: 8a1076fcfce446e4a93d7dbf01a3c238, type: 2}
+  SurMat: {fileID: 2100000, guid: 9b6e2aee85b230c4db999a50db100868, type: 2}
 --- !u!114 &469521225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8276,7 +8276,7 @@ Transform:
   m_GameObject: {fileID: 518494630}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0001, y: 0.005, z: 0.0001}
+  m_LocalScale: {x: 0.01, y: 0.25, z: 0.01}
   m_Children: []
   m_Father: {fileID: 469521222}
   m_RootOrder: 2
