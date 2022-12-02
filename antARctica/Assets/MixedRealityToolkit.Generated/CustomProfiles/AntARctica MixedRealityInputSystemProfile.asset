@@ -128,6 +128,18 @@ MonoBehaviour:
     runtimePlatform: 33
     deviceManagerProfile: {fileID: 11400000, guid: 8f48cb9c26fb518499c65c9f9e8bb4ed,
       type: 2}
+  - componentType:
+      reference: 
+    componentName: New data provider 16
+    priority: 0
+    runtimePlatform: -1
+    deviceManagerProfile: {fileID: 0}
+  - componentType:
+      reference: 
+    componentName: New data provider 17
+    priority: 0
+    runtimePlatform: -1
+    deviceManagerProfile: {fileID: 0}
   focusProviderType:
     reference: Microsoft.MixedReality.Toolkit.Input.FocusProvider, Microsoft.MixedReality.Toolkit.Services.InputSystem
   raycastProviderType:

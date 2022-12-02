@@ -30,7 +30,21 @@ MonoBehaviour:
   m_AutomaticLoading: 0
   m_AutomaticRunning: 0
   m_Loaders:
-  - {fileID: 11400000, guid: 815c85e661a0c8a4dad564cfd8f46f6e, type: 2}
+  - {fileID: 11400000, guid: e7cf81643f8e0044898acb12eeac21e1, type: 2}
+--- !u!114 &-3988679817189981047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d236b7d11115f2143951f1e14045df39, type: 3}
+  m_Name: WebGL Settings
+  m_EditorClassIdentifier: 
+  m_LoaderManagerInstance: {fileID: -1776996140517483370}
+  m_InitManagerOnStart: 1
 --- !u!114 &-1983991007908662398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,6 +59,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LoaderManagerInstance: {fileID: -6031060463706830674}
   m_InitManagerOnStart: 1
+--- !u!114 &-1776996140517483370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c3631f5e58749a59194e0cf6baf6d5, type: 3}
+  m_Name: WebGL Providers
+  m_EditorClassIdentifier: 
+  m_RequiresSettingsUpdate: 0
+  m_AutomaticLoading: 0
+  m_AutomaticRunning: 0
+  m_Loaders: []
 --- !u!114 &-1189897754270430549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,8 +91,7 @@ MonoBehaviour:
   m_AutomaticLoading: 0
   m_AutomaticRunning: 0
   m_Loaders:
-  - {fileID: 11400000, guid: 815c85e661a0c8a4dad564cfd8f46f6e, type: 2}
-  - {fileID: 11400000, guid: 2f3aa3bdf5b82d9418913751ddd2cce2, type: 2}
+  - {fileID: 11400000, guid: e7cf81643f8e0044898acb12eeac21e1, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,11 +104,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2dc886499c26824283350fa532d087d, type: 3}
   m_Name: XRGeneralSettings
   m_EditorClassIdentifier: 
-  Keys: 0e0000000100000007000000
+  Keys: 0e00000001000000070000000d000000
   Values:
   - {fileID: -8962003527778058740}
   - {fileID: 2316467113931802923}
   - {fileID: -1983991007908662398}
+  - {fileID: -3988679817189981047}
 --- !u!114 &2316467113931802923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,4 +140,4 @@ MonoBehaviour:
   m_AutomaticLoading: 0
   m_AutomaticRunning: 0
   m_Loaders:
-  - {fileID: 11400000, guid: 2f3aa3bdf5b82d9418913751ddd2cce2, type: 2}
+  - {fileID: 11400000, guid: e7cf81643f8e0044898acb12eeac21e1, type: 2}
