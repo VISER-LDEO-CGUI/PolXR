@@ -17,14 +17,16 @@ public class DynamicLabel : MonoBehaviour
     void Start()
     {
         tickMark.startWidth = 0.005f;
+        Original_Scale /= this.transform.parent.parent.parent.parent.lossyScale.x;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Adjust the scale according to new parent.
-        Vector3 Global_Scale = this.transform.parent.transform.lossyScale;
-        this.transform.localScale = new Vector3(Original_Scale.x / Global_Scale.x, Original_Scale.y / Global_Scale.y, Original_Scale.z / Global_Scale.z);
+        Vector3 Global_Scale = this.transform.parent.lossyScale;
+        float scaleFactor = this.transform.parent.parent.parent.parent.lossyScale.x;
+        this.transform.localScale = new Vector3(Original_Scale.x / Global_Scale.x, Original_Scale.y / Global_Scale.y, Original_Scale.z / Global_Scale.z) * scaleFactor;
         updatePosition();
     }
 
@@ -55,8 +57,8 @@ public class DynamicLabel : MonoBehaviour
         else
         {
             this.GetComponent<TextMeshPro>().rectTransform.localPosition = new Vector3(-gap / this.transform.parent.lossyScale.x - 0.5f, alongAxis, 0);
-            tickMark.SetPosition(0, new Vector3(0.3f * gap / this.transform.parent.lossyScale.y, 0, 0));
-            tickMark.SetPosition(1, new Vector3(0.7f * gap / this.transform.parent.lossyScale.y, 0, 0));
+            tickMark.SetPosition(0, new Vector3(0.3f * gap / this.transform.parent.lossyScale.x, 0, 0));
+            tickMark.SetPosition(1, new Vector3(0.7f * gap / this.transform.parent.lossyScale.x, 0, 0));
         }
     }
 }

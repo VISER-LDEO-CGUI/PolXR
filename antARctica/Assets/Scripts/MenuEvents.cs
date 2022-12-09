@@ -473,5 +473,9 @@ public class MenuEvents : MonoBehaviour
                 }
             }
         }
+        else if (keyword == "delete one" || keyword == "delete all")
+        {
+            if (radarImage) radarImage.GetComponent<RadarEvents>().UndoAddPoint(keyword == "delete all");
+        }
     }
 }

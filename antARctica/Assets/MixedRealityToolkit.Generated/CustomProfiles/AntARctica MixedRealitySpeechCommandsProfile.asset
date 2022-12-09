@@ -79,3 +79,17 @@ MonoBehaviour:
       id: 0
       description: Trigger
       axisConstraint: 3
+  - localizationKey: 
+    keyword: Delete One
+    keyCode: 0
+    action:
+      id: 0
+      description: Trigger
+      axisConstraint: 3
+  - localizationKey: 
+    keyword: Delete All
+    keyCode: 0
+    action:
+      id: 0
+      description: Trigger
+      axisConstraint: 3
