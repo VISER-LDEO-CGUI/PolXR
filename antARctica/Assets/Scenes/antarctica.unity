@@ -37971,6 +37971,7 @@ MonoBehaviour:
   MeasureLine: {fileID: 1225008628}
   SelectionDialog: Assets/dialog.txt
   Minimap: {fileID: 670084206}
+  PSLine: {fileID: 5570378949377832428, guid: 3c004ad714ddd264e87e8ef5a18f66b7, type: 3}
 --- !u!4 &691096096247673046
 Transform:
   m_ObjectHideFlags: 0

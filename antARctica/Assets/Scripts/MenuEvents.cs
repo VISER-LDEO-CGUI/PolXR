@@ -72,6 +72,9 @@ public class MenuEvents : MonoBehaviour
     // The minimap plate.
     public GameObject Minimap;
 
+    // The particle system for showing lines.
+    public ParticleSystem PSLine;
+
     void Start()
     {
         // Deactivate the radar menu before any selection happens; deactivate the bounding box.
@@ -221,10 +224,7 @@ public class MenuEvents : MonoBehaviour
     // Be aware of the file path issue! And try to keep a history...
     public void WriteButton()
     {
-        if (MainMenu)
-        {
-            Antarctica.GetComponent<CSVReadPlot>().SaveScene();
-        }
+        if (MainMenu) Antarctica.GetComponent<CSVReadPlot>().SaveScene();
         else
         {
             RadarToggle.IsToggled = true;
@@ -244,6 +244,8 @@ public class MenuEvents : MonoBehaviour
                 sr.Close();
             }*/
 
+            // Trying to find or add a new particle system for the radar image.
+            if (radarImage.Find("Line") == null) Antarctica.GetComponent<CSVReadPlot>().AddPSLine(radarImage);
             ParticleSystem CSVLine = radarImage.Find("Line").GetComponent<ParticleSystem>();
             var main = CSVLine.main;
             int CSVLength = main.maxParticles + 1;

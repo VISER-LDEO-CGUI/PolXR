@@ -97,6 +97,15 @@ public class CSVReadPlot : MonoBehaviour
         }
     }
 
+    // Add a new PS Line to a radar image.
+    public void AddPSLine(Transform radarImage)
+    {
+        ParticleSystem newLine = Instantiate(PSLine, Parent);
+        var main = newLine.main;
+        main.maxParticles = 0;
+        radarImage.GetComponent<RadarEvents>().SetLine(newLine.transform, 0);
+    }
+
     private void SetParticles(ParticleSystem line, TextAsset file)
     {
         // Split the input test by line and set the name of the line.
