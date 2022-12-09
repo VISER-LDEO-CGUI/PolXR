@@ -33,10 +33,10 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
     void Update()
     {
         // Set the camera position to capture the correct view.
+        MinimapCamera.transform.eulerAngles = new Vector3(90, Antarctica.transform.eulerAngles.y, 0);
         Vector3 OffsetScaled = MapCamPosition * Antarctica.localScale.x;
         OffsetScaled.y = MapCamPosition.y;
-        MinimapCamera.transform.position = Antarctica.transform.position + OffsetScaled;
-        MinimapCamera.transform.eulerAngles = new Vector3(90, 0, 0);
+        MinimapCamera.transform.position = Antarctica.transform.position + Quaternion.Euler(0, Antarctica.transform.eulerAngles.y, 0) * OffsetScaled;
         MinimapCamera.orthographicSize = ViewSize * Antarctica.localScale.x;
 
         // Make sure the dot does not go out of the bounding area.
