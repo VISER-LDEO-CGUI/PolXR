@@ -101,8 +101,6 @@ public class CSVReadPlot : MonoBehaviour
     public void AddPSLine(Transform radarImage)
     {
         ParticleSystem newLine = Instantiate(PSLine, Parent);
-        var main = newLine.main;
-        main.maxParticles = 0;
         radarImage.GetComponent<RadarEvents>().SetLine(newLine.transform, 0);
     }
 
@@ -115,6 +113,7 @@ public class CSVReadPlot : MonoBehaviour
         // Setting the default behavior of the particle system.
         ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[data.Length - 1];
         var main = line.main;
+        main.maxParticles = data.Length - 1;
         line.Emit(data.Length - 1);
         line.GetParticles(CSVPoints);
         int inRange = 0;

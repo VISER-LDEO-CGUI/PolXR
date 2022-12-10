@@ -246,28 +246,8 @@ public class MenuEvents : MonoBehaviour
 
             // Trying to find or add a new particle system for the radar image.
             if (radarImage.Find("Line") == null) Antarctica.GetComponent<CSVReadPlot>().AddPSLine(radarImage);
-            ParticleSystem CSVLine = radarImage.Find("Line").GetComponent<ParticleSystem>();
-            var main = CSVLine.main;
-            int CSVLength = main.maxParticles + 1;
-            ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[CSVLength];
-            CSVLine.GetParticles(CSVPoints);
 
-            // Transform the position into particle coordinates.
-            Vector3 newPos = MarkObj.transform.position - CSVLine.transform.position;
-            newPos = Quaternion.Euler(0, -radarImage.transform.localEulerAngles.y, 0) * newPos;
-            newPos.x /= CSVLine.transform.lossyScale.x;
-            newPos.y /= CSVLine.transform.lossyScale.y;
-            newPos.z /= CSVLine.transform.lossyScale.z;
-
-            // Set the particle format.
-            CSVPoints[CSVLength - 1] = CSVPoints[0];
-            CSVPoints[CSVLength - 1].position = newPos;
-            CSVPoints[CSVLength - 1].startColor = MarkColor;
-
-            // Emit and set the new particle.
-            main.maxParticles += 1;
-            CSVLine.Emit(1);
-            CSVLine.SetParticles(CSVPoints, CSVLength);
+            radarImage.GetComponent<RadarEvents>().AddNewPoint(MarkColor);
         }
     }
 

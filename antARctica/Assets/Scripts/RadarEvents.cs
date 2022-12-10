@@ -38,6 +38,10 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     // The mark shown on the minimap
     public GameObject radarMark;
 
+    private bool newPointAdded = false;
+    private Vector3 newPointPos;
+    private Color markColor;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +57,27 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
         scaleZ = this.transform.localScale.z;
         position = this.transform.localPosition;
         rotation = this.transform.eulerAngles;
+    }
+
+    // For adding particle. Late update needed because the initialization of particle system takes time.
+    private void LateUpdate()
+    {
+        if (newPointAdded)
+        {
+            var main = CSVLine.GetComponent<ParticleSystem>().main;
+            ParticleSystem.Particle[] CSVPoints = new ParticleSystem.Particle[main.maxParticles];
+            CSVLine.GetComponent<ParticleSystem>().GetParticles(CSVPoints);
+
+            // Set the particle format.
+            CSVPoints[main.maxParticles - 1] = CSVPoints[0];
+            CSVPoints[main.maxParticles - 1].position = newPointPos;
+            CSVPoints[main.maxParticles - 1].startColor = markColor;
+
+            // Set the new particle.
+            CSVLine.GetComponent<ParticleSystem>().SetParticles(CSVPoints, main.maxParticles);
+
+            newPointAdded = false;
+        }
     }
 
     // Dynamically load images after the radar image is selected/deselected.
@@ -183,6 +208,30 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
             loadImage(defaultText);
             loaded = false;
             radarMark.SetActive(false);
+        }
+    }
+
+    // Add a point in the line.
+    public void AddNewPoint(Color inputColor)
+    {
+        if (CSVLine && MarkObj.activeSelf && MarkObj.transform.parent == this.transform)
+        {
+            // Transform the position into particle coordinates.
+            newPointPos = MarkObj.transform.position - CSVLine.transform.position;
+            newPointPos = Quaternion.Euler(0, -this.transform.localEulerAngles.y, 0) * newPointPos;
+            newPointPos.x /= CSVLine.lossyScale.x;
+            newPointPos.y /= CSVLine.lossyScale.y;
+            newPointPos.z /= CSVLine.lossyScale.z;
+
+            markColor = inputColor;
+
+            // Emit a new particle.
+            var main = CSVLine.GetComponent<ParticleSystem>().main;
+            main.maxParticles += 1;
+            CSVLine.GetComponent<ParticleSystem>().Emit(1);
+
+            // Append for position setting.
+            newPointAdded = true;
         }
     }
 

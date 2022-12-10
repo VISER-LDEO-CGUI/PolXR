@@ -51,14 +51,14 @@ public class DynamicLabel : MonoBehaviour
         if (xyDirection)
         {
             this.GetComponent<TextMeshPro>().rectTransform.localPosition = new Vector3(alongAxis, -gap / this.transform.parent.lossyScale.y - 0.5f, 0);
-            tickMark.SetPosition(0, new Vector3(0, 0.3f * gap / this.transform.parent.lossyScale.y, 0));
-            tickMark.SetPosition(1, new Vector3(0, 0.7f * gap / this.transform.parent.lossyScale.y, 0));
+            tickMark.SetPosition(0, new Vector3(0, 0.3f * gap / this.transform.lossyScale.y, 0));
+            tickMark.SetPosition(1, new Vector3(0, 0.7f * gap / this.transform.lossyScale.y, 0));
         }
         else
         {
             this.GetComponent<TextMeshPro>().rectTransform.localPosition = new Vector3(-gap / this.transform.parent.lossyScale.x - 0.5f, alongAxis, 0);
-            tickMark.SetPosition(0, new Vector3(0.3f * gap / this.transform.parent.lossyScale.x, 0, 0));
-            tickMark.SetPosition(1, new Vector3(0.7f * gap / this.transform.parent.lossyScale.x, 0, 0));
+            tickMark.SetPosition(0, new Vector3(0.3f * gap / this.transform.lossyScale.x, 0, 0));
+            tickMark.SetPosition(1, new Vector3(0.7f * gap / this.transform.lossyScale.x, 0, 0));
         }
     }
 }

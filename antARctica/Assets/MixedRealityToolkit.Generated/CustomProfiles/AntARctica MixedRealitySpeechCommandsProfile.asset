@@ -81,14 +81,14 @@ MonoBehaviour:
       axisConstraint: 3
   - localizationKey: 
     keyword: Delete One
-    keyCode: 0
+    keyCode: 291
     action:
       id: 0
       description: Trigger
       axisConstraint: 3
   - localizationKey: 
     keyword: Delete All
-    keyCode: 0
+    keyCode: 292
     action:
       id: 0
       description: Trigger
