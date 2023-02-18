@@ -1,6 +1,12 @@
-# antARctica: AR visualizer for ice-penetrating radar data on Antarctica's Ross Ice Shelf
+# PolAR: XR scientific visualization tool for ice-penetrating radar data in Antarctica and Greenland
 
-This application is being developed to facilitate the analysis of radar data for polar geophysicists by placing the data in context with the ice shelves over which it was collected. A thesis will be made public by October 2022 that gives a more robust explination of the underlying earth science and development process of this project. See the previous iteration of this project + a demo video at https://github.com/sofiasanchez985/greenland
+Project Website: https://pgg.ldeo.columbia.edu/projects/POL-AR
+
+This application is being developed to facilitate the analysis of radar data for polar geophysicists by placing the data in context with the ice shelves over which it was collected.
+
+There are two major previous iterations of this project.
+* https://github.com/sofiasanchez985/greenland
+* https://github.com/guosy1998/antARctica
 
 Contributors:
 
@@ -56,7 +62,7 @@ Here is a list of interactions available with the line menu. All of these intera
 
 <br />
 
-Here is a list of interactions available using voice commands. The voice commands can be used at any time and do not need to be toggled. Simply say the word clearly and antARctica will process the command:
+Here is a list of interactions available using voice commands. The voice commands can be used at any time and do not need to be toggled. Simply say the word clearly and PolAR will process the command:
 | Voice Command | Description |
 | :-----------: | ----------- |
 | "Menu" | Open/close the menu |
@@ -73,7 +79,7 @@ Here is a list of interactions available using voice commands. The voice command
 
 --- This project is still in development!! ---
 
-Working under our advisors Professor Steven Feiner, Alexandra Boghosian, Isabel Cordero, and Carmine Elvezio.
+Working under our advisors Professor Steven Feiner, Professor Kirsty Tinto, and Dr. Alexandra Boghosian. Significant assistance provided by Isabel Cordero and Carmine Elvezio.
 
 <img src="https://github.com/sofiasanchez985/antARctica/blob/main/20220508_122402_HoloLens.jpg"      alt="Markdown Monster icon"      style="float: left; margin-right: 10px;" />
 
