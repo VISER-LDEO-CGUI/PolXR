@@ -134,7 +134,7 @@ public class CSVReadPlot : MonoBehaviour
                 CSVPoints[inRange].position = new Vector3(x, y, z);
                 CSVPoints[inRange].startColor = PSColor;
                 // changes color based on height, but currently, heights are too similar, need to modify it if needed.
-                //CSVPoints[inRange].startColor = new Color(PSColor.r, (y - ColorMid) / ColorRange, PSColor.b, 1.0f);
+                // CSVPoints[inRange].startColor = new Color(PSColor.r, (y - ColorMid) / ColorRange, PSColor.b, 1.0f);
                 inRange += 1;
             }
         }
