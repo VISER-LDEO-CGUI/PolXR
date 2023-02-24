@@ -144,7 +144,8 @@ public class CSVReadPlot : MonoBehaviour
 
         // Assign corredponding CSV line to radar images.
         Transform radarImage = RadarImages.Find(label);
-        if (radarImage != null) radarImage.GetComponent<RadarEvents>().SetLine(line.transform, inRange);
+        if (radarImage != null) 
+            radarImage.GetComponent<RadarEvents>().SetLine(line.transform, inRange);
         else line.name = label;
     }
 
