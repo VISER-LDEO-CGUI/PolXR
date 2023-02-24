@@ -43,7 +43,6 @@ public class HomeMenuEvents : MonoBehaviour
         
         if (this.transform.localScale.x < 0.1f) 
             this.gameObject.SetActive(false);
-
     }
 
     public void changeAntarctica()
