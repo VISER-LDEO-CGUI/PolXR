@@ -6,6 +6,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class MenuEvents : MonoBehaviour
 {
@@ -74,6 +75,11 @@ public class MenuEvents : MonoBehaviour
 
     // The particle system for showing lines.
     public ParticleSystem PSLine;
+
+    // Variables for scene-swapping
+    public string[] scenePaths;
+    readonly int HOMESCREEN_INDEX = 0;
+    public Interactable HomeMenuButton;
 
     void Start()
     {
@@ -459,5 +465,10 @@ public class MenuEvents : MonoBehaviour
         {
             if (radarImage) radarImage.GetComponent<RadarEvents>().UndoAddPoint(keyword == "delete all");
         }
+    }
+
+    public void returnToHomeScreen()
+    {
+        SceneManager.LoadScene(scenePaths[HOMESCREEN_INDEX], LoadSceneMode.Single);
     }
 }

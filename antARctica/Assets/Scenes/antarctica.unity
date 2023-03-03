@@ -8739,9 +8739,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 469521224}
-        m_TargetAssemblyTypeName: CSVReadPlot, Assembly-CSharp
-        m_MethodName: LoadScene
+      - m_Target: {fileID: 683731866665012620}
+        m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+        m_MethodName: returnToHomeScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -39316,6 +39316,9 @@ MonoBehaviour:
   SelectionDialog: Assets/dialog.txt
   Minimap: {fileID: 670084206}
   PSLine: {fileID: 5570378949377832428, guid: 3c004ad714ddd264e87e8ef5a18f66b7, type: 3}
+  scenePaths:
+  - Assets/Scenes/homescreen.unity
+  HomeMenuButton: {fileID: 509152532}
 --- !u!4 &691096096247673046
 Transform:
   m_ObjectHideFlags: 0
