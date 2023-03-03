@@ -5221,6 +5221,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 280355869}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &280355871 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3163649244588532399, guid: 3ff6380050a8f8643a5358a3e1896750,
+    type: 3}
+  m_PrefabInstance: {fileID: 280355869}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f859430ceee481541887d40470de4c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &288208384
 GameObject:
   m_ObjectHideFlags: 0
@@ -10690,6 +10702,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 683057693}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &683057695 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3163649244588532399, guid: 3ff6380050a8f8643a5358a3e1896750,
+    type: 3}
+  m_PrefabInstance: {fileID: 683057693}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f859430ceee481541887d40470de4c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &683923293
 GameObject:
   m_ObjectHideFlags: 0
@@ -11566,6 +11590,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1714836253}
+          m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+          m_MethodName: setEnabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
     ClassName: InteractableOnFocusReceiver
     AssemblyQualifiedName: Microsoft.MixedReality.Toolkit.UI.InteractableOnFocusReceiver,
       Microsoft.MixedReality.Toolkit.SDK
@@ -11602,6 +11638,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: 
             m_MethodName: AnimateOutHighlightPlate
             m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1714836253}
+            m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+            m_MethodName: setEnabled
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12101,6 +12149,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 683057695}
+          m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+          m_MethodName: setEnabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
     ClassName: InteractableOnFocusReceiver
     AssemblyQualifiedName: Microsoft.MixedReality.Toolkit.UI.InteractableOnFocusReceiver,
       Microsoft.MixedReality.Toolkit.SDK
@@ -12137,6 +12197,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: 
             m_MethodName: AnimateOutHighlightPlate
             m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 683057695}
+            m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+            m_MethodName: setEnabled
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -13638,6 +13710,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 280355871}
+          m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+          m_MethodName: setEnabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
     ClassName: InteractableOnFocusReceiver
     AssemblyQualifiedName: Microsoft.MixedReality.Toolkit.UI.InteractableOnFocusReceiver,
       Microsoft.MixedReality.Toolkit.SDK
@@ -13674,6 +13758,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: 
             m_MethodName: AnimateOutHighlightPlate
             m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 280355871}
+            m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+            m_MethodName: setEnabled
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -15872,6 +15968,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1695730664}
+          m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+          m_MethodName: setEnabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
     ClassName: InteractableOnFocusReceiver
     AssemblyQualifiedName: Microsoft.MixedReality.Toolkit.UI.InteractableOnFocusReceiver,
       Microsoft.MixedReality.Toolkit.SDK
@@ -15908,6 +16016,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: 
             m_MethodName: AnimateOutHighlightPlate
             m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1695730664}
+            m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+            m_MethodName: setEnabled
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -17542,6 +17662,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1114658987}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1114658989 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3163649244588532399, guid: 3ff6380050a8f8643a5358a3e1896750,
+    type: 3}
+  m_PrefabInstance: {fileID: 1114658987}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f859430ceee481541887d40470de4c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1117228187
 GameObject:
   m_ObjectHideFlags: 0
@@ -19482,6 +19614,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1114658989}
+          m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+          m_MethodName: setEnabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
     ClassName: InteractableOnFocusReceiver
     AssemblyQualifiedName: Microsoft.MixedReality.Toolkit.UI.InteractableOnFocusReceiver,
       Microsoft.MixedReality.Toolkit.SDK
@@ -19518,6 +19662,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: 
             m_MethodName: AnimateOutHighlightPlate
             m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1114658989}
+            m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+            m_MethodName: setEnabled
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -21734,6 +21890,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1312690345}
+          m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+          m_MethodName: setEnabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
     ClassName: InteractableOnFocusReceiver
     AssemblyQualifiedName: Microsoft.MixedReality.Toolkit.UI.InteractableOnFocusReceiver,
       Microsoft.MixedReality.Toolkit.SDK
@@ -21770,6 +21938,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: 
             m_MethodName: AnimateOutHighlightPlate
             m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1312690345}
+            m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+            m_MethodName: setEnabled
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -22174,6 +22354,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309959717}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1312690345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3163649244588532399, guid: 3ff6380050a8f8643a5358a3e1896750,
+    type: 3}
+  m_PrefabInstance: {fileID: 489231664}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f859430ceee481541887d40470de4c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1313198169
 GameObject:
   m_ObjectHideFlags: 0
@@ -27432,6 +27624,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1641026230}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1656180880 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3163649244588532399, guid: 3ff6380050a8f8643a5358a3e1896750,
+    type: 3}
+  m_PrefabInstance: {fileID: 1248254116}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f859430ceee481541887d40470de4c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1665344626
 GameObject:
   m_ObjectHideFlags: 0
@@ -27964,6 +28168,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.032, y: 0.032, z: 0.016}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1695730664 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3163649244588532399, guid: 3ff6380050a8f8643a5358a3e1896750,
+    type: 3}
+  m_PrefabInstance: {fileID: 1499218464}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f859430ceee481541887d40470de4c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1695783470
 GameObject:
   m_ObjectHideFlags: 0
@@ -28250,6 +28466,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1714836251}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1714836253 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3163649244588532399, guid: 3ff6380050a8f8643a5358a3e1896750,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714836251}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f859430ceee481541887d40470de4c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1723583055
 GameObject:
   m_ObjectHideFlags: 0
@@ -38472,6 +38700,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1656180880}
+          m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+          m_MethodName: setEnabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
     ClassName: InteractableOnFocusReceiver
     AssemblyQualifiedName: Microsoft.MixedReality.Toolkit.UI.InteractableOnFocusReceiver,
       Microsoft.MixedReality.Toolkit.SDK
@@ -38508,6 +38748,18 @@ MonoBehaviour:
             m_TargetAssemblyTypeName: 
             m_MethodName: AnimateOutHighlightPlate
             m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1656180880}
+            m_TargetAssemblyTypeName: HoverLabel, Assembly-CSharp
+            m_MethodName: setEnabled
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
