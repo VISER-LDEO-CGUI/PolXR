@@ -20,6 +20,10 @@ public class HomeMenuEvents : MonoBehaviour
     public Interactable AntarcticaButton;
     public Interactable GreenlandButton;
 
+    // Indices for scenes
+    readonly int ANTARCTICA_INDEX = 0;
+    readonly int GREENLAND_INDEX = 1;
+
     void Start()
     {
         // Deactivate the radar menu before any selection happens; deactivate the bounding box.
@@ -47,11 +51,11 @@ public class HomeMenuEvents : MonoBehaviour
 
     public void changeAntarctica()
     {
-        SceneManager.LoadScene(scenePaths[0], LoadSceneMode.Single);
+        SceneManager.LoadScene(scenePaths[ANTARCTICA_INDEX], LoadSceneMode.Single);
     }
 
     public void changeGreenland()
     {
-        SceneManager.LoadScene(scenePaths[1], LoadSceneMode.Single);
+        SceneManager.LoadScene(scenePaths[GREENLAND_INDEX], LoadSceneMode.Single);
     }
 }
