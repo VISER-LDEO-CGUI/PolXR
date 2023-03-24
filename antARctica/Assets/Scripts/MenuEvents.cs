@@ -275,7 +275,8 @@ public class MenuEvents : MonoBehaviour
     {
         MainMenu = home;
         Scene currentScene = SceneManager.GetActiveScene();
-        Title.text = home ? currentScene.name : radarImage.name;
+        string sceneName = string.Concat(currentScene.name[0].ToString().ToUpper(), currentScene.name.Substring(1));
+        Title.text = home ? sceneName: radarImage.name;
         SubMenuRadar.gameObject.SetActive(!home);
         SubMenuMain.gameObject.SetActive(home);
     }
