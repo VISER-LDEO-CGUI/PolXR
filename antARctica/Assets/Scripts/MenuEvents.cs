@@ -274,7 +274,8 @@ public class MenuEvents : MonoBehaviour
     public void HomeButton(bool home)
     {
         MainMenu = home;
-        Title.text = home? "AntARctica" : radarImage.name;
+        Scene currentScene = SceneManager.GetActiveScene();
+        Title.text = home ? currentScene.name : radarImage.name;
         SubMenuRadar.gameObject.SetActive(!home);
         SubMenuMain.gameObject.SetActive(home);
     }
