@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class MenuEvents : MonoBehaviour
 {
     // The current menu type, true stands for main menu.
-    private bool MainMenu;
+    private bool isMainMenu;
     public Transform SubMenuRadar;
     public Transform SubMenuMain;
 
@@ -103,7 +103,7 @@ public class MenuEvents : MonoBehaviour
         this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetScale, 0.5f);
         if (this.transform.localScale.x < 0.1f) this.gameObject.SetActive(false);
 
-        if (!MainMenu)
+        if (!isMainMenu)
         {
             // Update the rotation slider value accordingly.
             float rounded_angle = (float)(radarImage.localRotation.eulerAngles.y / 360.0f);
@@ -176,7 +176,7 @@ public class MenuEvents : MonoBehaviour
             Title.text = radarImage.name;
         }
 
-        MainMenu = false;
+        isMainMenu = false;
         RadarToggle.IsToggled = true;
         SubMenuRadar.gameObject.SetActive(true);
         SubMenuMain.gameObject.SetActive(false);
@@ -185,7 +185,7 @@ public class MenuEvents : MonoBehaviour
     // The reset button for the radarImage transform.
     public void ResetButton()
     {
-        if (MainMenu)
+        if (isMainMenu)
         {
             AllCSVPicksToggle.IsToggled = true;
             AllRadarToggle.IsToggled = true;
@@ -230,7 +230,7 @@ public class MenuEvents : MonoBehaviour
     // Be aware of the file path issue! And try to keep a history...
     public void WriteButton()
     {
-        if (MainMenu) Antarctica.GetComponent<CSVReadPlot>().SaveScene();
+        if (isMainMenu) Antarctica.GetComponent<CSVReadPlot>().SaveScene();
         else
         {
             RadarToggle.IsToggled = true;
@@ -273,7 +273,7 @@ public class MenuEvents : MonoBehaviour
     // Switch between different sub menus.
     public void HomeButton(bool home)
     {
-        MainMenu = home;
+        isMainMenu = home;
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = string.Concat(currentScene.name[0].ToString().ToUpper(), currentScene.name.Substring(1));
         Title.text = home ? sceneName: radarImage.name;
@@ -416,7 +416,7 @@ public class MenuEvents : MonoBehaviour
     public void MenuVoice()
     {
         if (!this.gameObject.activeSelf) CloseButton(false);
-        else if (!MainMenu) HomeButton(true);
+        else if (!isMainMenu) HomeButton(true);
         else CloseButton(true);
     }
 
@@ -434,7 +434,7 @@ public class MenuEvents : MonoBehaviour
         }
         else if (keyword == "line")
         {
-            if (MainMenu)
+            if (isMainMenu)
             {
                 AllCSVPicksToggle.IsToggled = !AllCSVPicksToggle.IsToggled;
                 MainCSVToggling();
@@ -447,7 +447,7 @@ public class MenuEvents : MonoBehaviour
         }
         else if (keyword == "image")
         {
-            if (MainMenu)
+            if (isMainMenu)
             {
                 AllRadarToggle.IsToggled = !AllRadarToggle.IsToggled;
                 MainRadarToggling();
