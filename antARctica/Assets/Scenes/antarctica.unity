@@ -750,7 +750,7 @@ MonoBehaviour:
   interactionStartSound: {fileID: 8300000, guid: 6c0efce9e4f4243449555af66e975f27,
     type: 3}
   interactionEndSound: {fileID: 8300000, guid: 32c013149113ba24cb267e1e3f6725c7, type: 3}
-  playTickSounds: 1
+  playTickSounds: 0
   alignWithStepSlider: 1
   passNotchSound: {fileID: 8300000, guid: 0632575a55cf09349a999a10968f6395, type: 3}
   tickEvery: 0.1
@@ -4013,7 +4013,7 @@ MonoBehaviour:
   interactionStartSound: {fileID: 8300000, guid: 6c0efce9e4f4243449555af66e975f27,
     type: 3}
   interactionEndSound: {fileID: 8300000, guid: 32c013149113ba24cb267e1e3f6725c7, type: 3}
-  playTickSounds: 1
+  playTickSounds: 0
   alignWithStepSlider: 1
   passNotchSound: {fileID: 8300000, guid: 0632575a55cf09349a999a10968f6395, type: 3}
   tickEvery: 0.1
@@ -22183,7 +22183,7 @@ MonoBehaviour:
   interactionStartSound: {fileID: 8300000, guid: 6c0efce9e4f4243449555af66e975f27,
     type: 3}
   interactionEndSound: {fileID: 8300000, guid: 32c013149113ba24cb267e1e3f6725c7, type: 3}
-  playTickSounds: 1
+  playTickSounds: 0
   alignWithStepSlider: 1
   passNotchSound: {fileID: 8300000, guid: 0632575a55cf09349a999a10968f6395, type: 3}
   tickEvery: 0.1
@@ -24618,7 +24618,7 @@ MonoBehaviour:
   interactionStartSound: {fileID: 8300000, guid: 6c0efce9e4f4243449555af66e975f27,
     type: 3}
   interactionEndSound: {fileID: 8300000, guid: 32c013149113ba24cb267e1e3f6725c7, type: 3}
-  playTickSounds: 1
+  playTickSounds: 0
   alignWithStepSlider: 1
   passNotchSound: {fileID: 8300000, guid: 0632575a55cf09349a999a10968f6395, type: 3}
   tickEvery: 0.1
@@ -39319,6 +39319,7 @@ MonoBehaviour:
   scenePaths:
   - Assets/Scenes/homescreen.unity
   HomeMenuButton: {fileID: 509152532}
+  audioSource: {fileID: 0}
 --- !u!4 &691096096247673046
 Transform:
   m_ObjectHideFlags: 0
@@ -42849,7 +42850,7 @@ MonoBehaviour:
   interactionStartSound: {fileID: 8300000, guid: 6c0efce9e4f4243449555af66e975f27,
     type: 3}
   interactionEndSound: {fileID: 8300000, guid: 32c013149113ba24cb267e1e3f6725c7, type: 3}
-  playTickSounds: 1
+  playTickSounds: 0
   alignWithStepSlider: 1
   passNotchSound: {fileID: 8300000, guid: 0632575a55cf09349a999a10968f6395, type: 3}
   tickEvery: 0.1

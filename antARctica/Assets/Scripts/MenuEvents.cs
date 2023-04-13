@@ -81,6 +81,9 @@ public class MenuEvents : MonoBehaviour
     readonly int HOMESCREEN_INDEX = 0;
     public Interactable HomeMenuButton;
 
+    // Deals with muting/unmuting sounds
+    public AudioSource audioSource;
+
     void Start()
     {
         // Deactivate the radar menu before any selection happens; deactivate the bounding box.
@@ -472,5 +475,10 @@ public class MenuEvents : MonoBehaviour
     public void returnToHomeScreen()
     {
         SceneManager.LoadScene(scenePaths[HOMESCREEN_INDEX], LoadSceneMode.Single);
+    }
+
+    public void muteButton()
+    {
+
     }
 }
