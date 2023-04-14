@@ -79,7 +79,6 @@ public class MenuEvents : MonoBehaviour
     // Variables for scene-swapping
     public string[] scenePaths;
     readonly int HOMESCREEN_INDEX = 0;
-    public Interactable HomeMenuButton;
 
     // Deals with muting/unmuting sounds
     public AudioSource audioSource;
