@@ -6,6 +6,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using System.IO;
+//using System.Text.Json;
 using UnityEngine.SceneManagement;
 
 public class MenuEvents : MonoBehaviour
@@ -138,15 +139,20 @@ public class MenuEvents : MonoBehaviour
             TransparencyTMP.text = string.Format("Transparency:      {0}%", Mathf.Round(transparencySlider.SliderValue * 4) * 25);
 
             // Update the selected point coordinates
-            float maxX = radarImage.localScale.x * scale;
+            float maxX = radarImage.localScale.x * scale; // converting to radar image x in scene coords
             float maxY = radarImage.localScale.y * scale;
             float radarX = (MarkObj.transform.localPosition.x + 0.5f) * maxX;
             float radarY = (MarkObj.transform.localPosition.y - yOrigin) * maxY;
-            Vector2 measure;
-            if (MeasureObj.activeSelf == false) measure = new Vector2(0, 0);
-            else
-                measure = new Vector2((MeasureObj.transform.localPosition.x - MarkObj.transform.localPosition.x) * maxX,
-                (MeasureObj.transform.localPosition.y - MarkObj.transform.localPosition.y) * maxY);
+
+            Vector3 MarkObjFromSceneOrigin = MarkObj.transform.parent.position;
+            Vector3 MeasureObjFromSceneOrigin = MeasureObj.transform.parent.position;
+            
+            //DistanceVectorGameUnits
+            float measure = Vector3.Distance(MarkObjFromSceneOrigin, MeasureObjFromSceneOrigin);
+
+
+            //string allSceneEPSG = File.ReadAllText(@"./epsg.json");
+            //var sceneEPSG = JsonSerializer.Deserialize<SceneCodes>(allSceneEPSG);
 
             if (MarkObj.activeSelf)
             {
@@ -155,7 +161,7 @@ public class MenuEvents : MonoBehaviour
                     "X: {3}, Y: {4}\n",
                     MarkObj.transform.parent.name, radarX.ToString(), radarY.ToString(), maxX.ToString(), maxY.ToString());
                 if (measureMode() != 0)
-                    MarkTMP.text += string.Format("Distance: {0}m", Vector2.Distance(measure, new Vector2(0, 0)));
+                    MarkTMP.text += string.Format("Distance: {0}m", measure);
             }
                 
             else
