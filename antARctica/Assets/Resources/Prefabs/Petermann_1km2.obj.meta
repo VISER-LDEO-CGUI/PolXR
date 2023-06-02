@@ -3,7 +3,12 @@ guid: 20a9464df215dd24ab3de603e651d082
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BedMachine_v5_Pete_extent_1km_BedMachine_v5_Pete_extent_1km_Material.001Mat
+    second: {fileID: 2100000, guid: cc8bd04f8bb6b2143909813caaa8efc6, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

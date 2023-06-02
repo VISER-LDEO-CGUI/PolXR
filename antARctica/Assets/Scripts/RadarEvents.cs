@@ -193,16 +193,16 @@ public class RadarEvents : MonoBehaviour, IMixedRealityPointerHandler
     }
 
     // Reset the radar shape.
-    public void ResetRadar()
+    public void ResetRadar(bool whiten)
     {
         this.transform.localPosition = position;
         this.transform.localRotation = Quaternion.Euler(rotation);
         this.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         SetAlpha(1);
-        ToggleRadar(true);
+        if (whiten) ToggleRadar(true);
 
         // Load place holder image when reset.
-        if (MarkObj.transform.parent != this.transform)
+        if (whiten && MarkObj.transform.parent != this.transform)
         {
             defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
             loadImage(defaultText);

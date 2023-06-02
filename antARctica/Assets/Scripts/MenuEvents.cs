@@ -6,7 +6,6 @@ using UnityEngine;
 using TMPro;
 using System;
 using System.IO;
-//using System.Text.Json;
 using UnityEngine.SceneManagement;
 
 public class MenuEvents : MonoBehaviour
@@ -17,10 +16,10 @@ public class MenuEvents : MonoBehaviour
     public Transform SubMenuMain;
 
     // Initially set to an empty object to avoid null reference.
-    private Transform radarImage = null;
-    public Transform RadarImagesContainer;
+    private Transform radargram = null;
+    public Transform RadarImageContainer;
+    public Transform DEMs;
     public Transform CSVPicksContainer;
-    public Transform Dems;
     public Transform Antarctica;
 
     // The data needed for smoothing the menu movement.
@@ -109,7 +108,7 @@ public class MenuEvents : MonoBehaviour
         if (!isMainMenu)
         {
             // Update the rotation slider value accordingly.
-            float rounded_angle = (float)(radarImage.localRotation.eulerAngles.y / 360.0f);
+            float rounded_angle = (float)(radargram.localRotation.eulerAngles.y / 360.0f);
             rounded_angle = rounded_angle >= 0 ? rounded_angle : rounded_angle + 1.0f;
             if (Mathf.Abs(rotationSlider.SliderValue - rounded_angle) > 0.01f)
                 rotationSlider.SliderValue = rounded_angle;
@@ -120,8 +119,8 @@ public class MenuEvents : MonoBehaviour
                 "Current:    {1} m \n" +
                 "Strain:     {2}",
                 (originalScale.y * scale).ToString(),
-                (radarImage.localScale.y * scale).ToString(),
-                (Math.Abs(originalScale.y - radarImage.localScale.y) * scale).ToString());
+                (radargram.localScale.y * scale).ToString(),
+                (Math.Abs(originalScale.y - radargram.localScale.y) * scale).ToString());
 
             // going to need a database for this/some spreadsheet with the values
             HorizontalTMP.text = string.Format(
@@ -129,18 +128,18 @@ public class MenuEvents : MonoBehaviour
                 "Current:    {1} m \n" +
                 "Strain:     {2}",
                 (originalScale.x * scale).ToString(),
-                (radarImage.localScale.x * scale).ToString(),
-                (Math.Abs(originalScale.x - radarImage.localScale.x) * scale).ToString());
+                (radargram.localScale.x * scale).ToString(),
+                (Math.Abs(originalScale.x - radargram.localScale.x) * scale).ToString());
 
             // Set rotation text
-            RotationDegreeTMP.text = string.Format("ROTATION:      {0}°", radarImage.localEulerAngles.y.ToString());
+            RotationDegreeTMP.text = string.Format("ROTATION:      {0}°", radargram.localEulerAngles.y.ToString());
 
             // Set transparency text
             TransparencyTMP.text = string.Format("Transparency:      {0}%", Mathf.Round(transparencySlider.SliderValue * 4) * 25);
 
             // Update the selected point coordinates
-            float maxX = radarImage.localScale.x * scale; // converting to radar image x in scene coords
-            float maxY = radarImage.localScale.y * scale;
+            float maxX = radargram.localScale.x * scale; // converting to radar image x in scene coords
+            float maxY = radargram.localScale.y * scale;
             float radarX = (MarkObj.transform.localPosition.x + 0.5f) * maxX;
             float radarY = (MarkObj.transform.localPosition.y - yOrigin) * maxY;
 
@@ -174,14 +173,14 @@ public class MenuEvents : MonoBehaviour
     {
         targetPosition = newPosition;
 
-        if (radarImage != newRadar)
+        if (radargram != newRadar)
         {
             // Switch to new radar and reset the values.
-            radarImage = newRadar;
-            originalScale = radarImage.GetComponent<RadarEvents>().GetScale();
+            radargram = newRadar;
+            originalScale = radargram.GetComponent<RadarEvents>().GetScale();
 
             // Set the title of the menu to the current radar.
-            Title.text = radarImage.name;
+            Title.text = radargram.name;
         }
 
         isMainMenu = false;
@@ -190,14 +189,14 @@ public class MenuEvents : MonoBehaviour
         SubMenuMain.gameObject.SetActive(false);
     }
 
-    // The reset button for the radarImage transform.
+    // The reset button for the radargram transform.
     public void ResetButton()
     {
         if (isMainMenu)
         {
             AllCSVPicksToggle.IsToggled = true;
             AllRadarToggle.IsToggled = true;
-            foreach (Transform child in RadarImagesContainer) child.GetComponent<RadarEvents>().ResetRadar();
+            foreach (Transform child in RadarImageContainer) child.GetComponent<RadarEvents>().ResetRadar(true);
             MainCSVToggling();
             MarkObj.transform.parent = Antarctica.transform;
             MarkObj.SetActive(false);
@@ -228,8 +227,8 @@ public class MenuEvents : MonoBehaviour
             // Reset radar menu and radar attributes.
             RadarToggle.IsToggled = true;
             CSVPicksToggle.IsToggled = true;
-            radarImage.GetComponent<RadarEvents>().ResetRadar();
-            radarImage.GetComponent<RadarEvents>().ToggleLine(true);
+            radargram.GetComponent<RadarEvents>().ResetRadar(false);
+            radargram.GetComponent<RadarEvents>().ToggleLine(true);
         }
     }
 
@@ -259,9 +258,9 @@ public class MenuEvents : MonoBehaviour
             }*/
 
             // Trying to find or add a new particle system for the radar image.
-            if (radarImage.Find("Line") == null) Antarctica.GetComponent<CSVReadPlot>().AddPSLine(radarImage);
+            if (radargram.Find("Line") == null) Antarctica.GetComponent<CSVReadPlot>().AddPSLine(radargram);
 
-            radarImage.GetComponent<RadarEvents>().AddNewPoint(MarkColor);
+            radargram.GetComponent<RadarEvents>().AddNewPoint(MarkColor);
         }
     }
 
@@ -284,7 +283,7 @@ public class MenuEvents : MonoBehaviour
         isMainMenu = home;
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = string.Concat(currentScene.name[0].ToString().ToUpper(), currentScene.name.Substring(1));
-        Title.text = home ? sceneName: radarImage.name;
+        Title.text = home || (radargram == null) ? sceneName: radargram.name;
         SubMenuRadar.gameObject.SetActive(!home);
         SubMenuMain.gameObject.SetActive(home);
     }
@@ -292,33 +291,33 @@ public class MenuEvents : MonoBehaviour
     // The four slider update interface.
     public void OnVerticalSliderUpdated(SliderEventData eventData)
     {
-        if (radarImage && verticalSlider.gameObject.tag == "Active")
-            radarImage.localScale = new Vector3(radarImage.localScale.x, originalScale.y * scaleY * (0.5f + eventData.NewValue), originalScale.z);
+        if (radargram && verticalSlider.gameObject.tag == "Active")
+            radargram.localScale = new Vector3(radargram.localScale.x, originalScale.y * scaleY * (0.5f + eventData.NewValue), originalScale.z);
     }
 
     public void OnHorizontalSliderUpdated(SliderEventData eventData)
     {
-        if (radarImage && horizontalSlider.gameObject.tag == "Active")
-            radarImage.localScale = new Vector3(originalScale.x * scaleX * (0.5f + eventData.NewValue), radarImage.localScale.y, originalScale.z);
+        if (radargram && horizontalSlider.gameObject.tag == "Active")
+            radargram.localScale = new Vector3(originalScale.x * scaleX * (0.5f + eventData.NewValue), radargram.localScale.y, originalScale.z);
     }
 
     public void OnRotateSliderUpdated(SliderEventData eventData)
     {
         float rotate = (float)(360.0f * eventData.NewValue);
-        if (radarImage) radarImage.localRotation = Quaternion.Euler(0, rotate, 0);
+        if (radargram) radargram.localRotation = Quaternion.Euler(0, rotate, 0);
     }
 
     public void OnTransparencySliderUpdated(SliderEventData eventData)
     {
         //Round the result to nearest levels.
         transparencySlider.SliderValue = Mathf.Round(eventData.NewValue * 4) / 4;
-        if (radarImage) radarImage.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
+        if (radargram) radargram.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
     }
 
     // Main Menu Vertical Exaggeration Slider
     public void OnVerticalExaggerationSliderUpdated(SliderEventData eventData)
     {
-        foreach (Transform child in Dems) child.localScale = new Vector3(1, 0.1f + (4.9f * eventData.NewValue), 1);
+        //foreach (Transform child in DEMs) child.localScale = new Vector3(1, 0.1f + (4.9f * eventData.NewValue), 1);
     }
 
     // Main Menu Toggling CSV and radar images.
@@ -327,24 +326,24 @@ public class MenuEvents : MonoBehaviour
         Vector3 newScale = AllCSVPicksToggle.IsToggled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
         CSVPicksToggle.IsToggled = AllCSVPicksToggle.IsToggled;
         foreach (Transform child in CSVPicksContainer) child.localScale = newScale;
-        foreach (Transform child in RadarImagesContainer)
+        foreach (Transform child in RadarImageContainer)
             child.GetComponent<RadarEvents>().ToggleLine(AllCSVPicksToggle.IsToggled);
     }
 
     public void MainRadarToggling()
     {
-        foreach (Transform child in RadarImagesContainer)
+        foreach (Transform child in RadarImageContainer)
             child.GetComponent<RadarEvents>().ToggleRadar(AllRadarToggle.IsToggled);
     }
 
     // Single radar toggling.
-    public void CSVToggling() { radarImage.GetComponent<RadarEvents>().ToggleLine(CSVPicksToggle.IsToggled); }
-    public void RadarToggling() { radarImage.GetComponent<RadarEvents>().ToggleRadar(RadarToggle.IsToggled); }
+    public void CSVToggling() { radargram.GetComponent<RadarEvents>().ToggleLine(CSVPicksToggle.IsToggled); }
+    public void RadarToggling() { radargram.GetComponent<RadarEvents>().ToggleRadar(RadarToggle.IsToggled); }
 
     // Find the dem according to name.
     public void DemToggle(string name)
     {
-        GameObject targetDem = Dems.Find(name).gameObject;
+        GameObject targetDem = DEMs.Find(name).gameObject;
         targetDem.SetActive(!targetDem.activeSelf);
     }
 
@@ -396,10 +395,10 @@ public class MenuEvents : MonoBehaviour
     // Synchronize the sliders.
     public void syncScaleSlider()
     {
-        if (radarImage)
+        if (radargram)
         {
-            scaleX = radarImage.localScale.x / originalScale.x;
-            scaleY = radarImage.localScale.y / originalScale.y;
+            scaleX = radargram.localScale.x / originalScale.x;
+            scaleY = radargram.localScale.y / originalScale.y;
         }
     }
 
@@ -473,7 +472,7 @@ public class MenuEvents : MonoBehaviour
         }
         else if (keyword == "delete one" || keyword == "delete all")
         {
-            if (radarImage) radarImage.GetComponent<RadarEvents>().UndoAddPoint(keyword == "delete all");
+            if (radargram) radargram.GetComponent<RadarEvents>().UndoAddPoint(keyword == "delete all");
         }
     }
 
