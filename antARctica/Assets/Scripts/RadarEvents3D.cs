@@ -27,7 +27,7 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     private Vector3 rotation;
 
     // The 3D stuff
-    public GameObject radargram;
+    public GameObject radargrams;
     public GameObject flightline;
 
     // The minimap objects
@@ -46,19 +46,21 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
         rotation = this.transform.eulerAngles;
 
         // Initialize children properly
-        radargram = this.transform.GetChild(0).gameObject;
-        flightline = this.transform.GetChild(1).gameObject;
+        flightline = this.transform.GetChild(0).gameObject;
+        radargrams = this.transform.GetChild(1).gameObject;
         radarMark = this.transform.GetChild(2).gameObject;
 
         radarMark.SetActive(false);
         TogglePolyline(true, false);
-        ToggleRadar(true);
+        radargrams.SetActive(false);
     }
 
     public void TogglePolyline(bool toggle, bool selected)
     {
-        flightline.SetActive(toggle);
-
+        flightline.gameObject.SetActive(toggle);
+        LineRenderer lineRenderer = flightline.gameObject.GetComponent<LineRenderer>();
+        lineRenderer.startColor = selected ? new Color(1f, 0f, 0f) : new Color(1f, .5f, 0f);
+        lineRenderer.endColor = lineRenderer.startColor;
     }
 
     // Turn on/off the 3D surface
@@ -66,13 +68,14 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     {
         this.transform.GetComponent<BoxCollider>().enabled = toggle;
         //this.transform.GetComponent<BoundsControl>().enabled = toggle;
-        transform.GetChild(0).gameObject.SetActive(toggle);
+        radargrams.gameObject.SetActive(toggle);
         //MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
     }
 
     // Show the menu and mark and update the variables
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
+        Debug.Log("Triggered OnPointerDown!");
         SychronizeMenu();
 
         // Only load the images when selected
@@ -96,6 +99,7 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     {
         if ((onlyLower && alpha > newAlpha) || !onlyLower) alpha = newAlpha;
         transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
+        transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
     }
 
     // Reset the radar shape

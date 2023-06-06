@@ -26,15 +26,29 @@ public class LoadFlightLines : MonoBehaviour
         for (int i = 0; i < meshes.Length; i++)
         {
             // Select mesh
-            GameObject mesh = Instantiate(meshes[i] as GameObject);
+            GameObject meshForward = Instantiate(meshes[i] as GameObject);
+            GameObject meshBackward = Instantiate(meshes[i] as GameObject);
             GameObject line = polylines[i];
 
+            // Texture the other side of the mesh
+            MeshFilter meshFilter = meshBackward.GetComponent<MeshFilter>();
+            Mesh meshUnderlying = meshFilter.mesh;
+            int[] triangles = meshUnderlying.triangles;
+            for (int j = 0; j < triangles.Length; j += 3)
+            {
+                int temp = triangles[j];
+                triangles[j] = triangles[j + 1];
+                triangles[j + 1] = temp;
+            }
+            meshUnderlying.triangles = triangles;
+
             // Naming stuff
-            mesh.name = mesh.name.Replace("(Clone)", "");
-            line.name = $"FL_{mesh.name.Substring(5)}";
+            meshForward.name = meshForward.name.Replace("(Clone)", "");
+            meshBackward.name = "_" + meshForward.name;
+            line.name = $"FL_{meshForward.name.Substring(5)}";
 
             // Create a parent to use for RadarEvents3D
-            GameObject parent = new GameObject("GRP_" + mesh.name);
+            GameObject parent = new GameObject("GRP_" + meshForward.name);
             parent.transform.SetParent(Container);
             parent.AddComponent<RadarEvents3D>();
             parent.AddComponent<BoxCollider>();
@@ -43,27 +57,24 @@ public class LoadFlightLines : MonoBehaviour
             parent.transform.localPosition = new Vector3(0, 0, 0);
             parent.transform.rotation = Quaternion.identity;
 
+            // Create a parent to group both radargram object
+            GameObject radargram = new GameObject("OBJ_" + meshForward.name);
+
             // Set the children
-            mesh.transform.parent = parent.transform;
             line.transform.parent = parent.transform;
+            radargram.transform.parent = parent.transform;
+            meshForward.transform.parent = radargram.transform;
+            meshBackward.transform.parent = radargram.transform;
 
             // Place children properly in relation to the DEM
-            mesh = positionOnDEM(mesh, DEM);
-            line = positionOnDEM(line, DEM);
+            Quaternion q = line.transform.rotation;
+            line.transform.rotation = Quaternion.Euler(-90f, 0, 180f);
 
             // Create and place the radar mark for the minimap
-            Vector3 position = mesh.transform.position + mesh.transform.localPosition; // TODO: this
+            Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
             GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
 
         }
-    }
-
-    public GameObject positionOnDEM(GameObject obj, GameObject DEM)
-    {
-        obj.transform.localPosition = DEM.transform.localPosition;
-        obj.transform.rotation = DEM.transform.rotation;
-        obj.transform.localScale = DEM.transform.localScale;
-        return obj;
     }
 
     public GameObject[] createPolylineObjects(string line_id)
@@ -102,8 +113,8 @@ public class LoadFlightLines : MonoBehaviour
                     // Extract coordinates as floats
                     string[] vertexComponents = textline.Split(' ');
                     float x = float.Parse(vertexComponents[1]);
-                    float y = float.Parse(vertexComponents[2]);
-                    float z = float.Parse(vertexComponents[3]);
+                    float y = float.Parse(vertexComponents[3]); // because unity and blender have different y/z
+                    float z = float.Parse(vertexComponents[2]);
 
                     // Store the coordinates
                     Vector3 vertex = new Vector3(x, y, z);
@@ -119,8 +130,8 @@ public class LoadFlightLines : MonoBehaviour
             // Add colors
             lineRenderer.startColor = new Color(1.0f, 0.5f, 0f);
             lineRenderer.endColor = lineRenderer.startColor;
-            lineRenderer.startWidth = 0.1f;
-            lineRenderer.endWidth = 0.1f;
+            lineRenderer.startWidth = 0.05f;
+            lineRenderer.endWidth = 0.05f;
             lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
 
             // Store the polyline
@@ -128,6 +139,8 @@ public class LoadFlightLines : MonoBehaviour
 
         }
 
+        Destroy(gridLine);
+        
         return polylines;
     }
 
