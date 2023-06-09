@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 
 public class LoadFlightLines : MonoBehaviour
 {
@@ -21,63 +22,80 @@ public class LoadFlightLines : MonoBehaviour
     {
         // Load the data
         UnityEngine.Object[] meshes = Resources.LoadAll("Radar3D/Radar/" + line_id);
-        GameObject[] polylines = createPolylineObjects(line_id);
+        Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
 
         for (int i = 0; i < meshes.Length; i++)
         {
-            // Select mesh
-            GameObject meshForward = Instantiate(meshes[i] as GameObject);
-            GameObject meshBackward = Instantiate(meshes[i] as GameObject);
-            GameObject line = polylines[i];
+            // Create radargram objects
+            GameObject[] meshBoth = createRadargramObjects(meshes[i]);
+            GameObject meshForward = meshBoth[0];
+            GameObject meshBackward = meshBoth[1];
 
-            // Texture the other side of the mesh
-            MeshFilter meshFilter = meshBackward.GetComponent<MeshFilter>();
-            Mesh meshUnderlying = meshFilter.mesh;
-            int[] triangles = meshUnderlying.triangles;
-            for (int j = 0; j < triangles.Length; j += 3)
-            {
-                int temp = triangles[j];
-                triangles[j] = triangles[j + 1];
-                triangles[j + 1] = temp;
-            }
-            meshUnderlying.triangles = triangles;
-
-            // Naming stuff
-            meshForward.name = meshForward.name.Replace("(Clone)", "");
-            meshBackward.name = "_" + meshForward.name;
+            // Select and name line
+            GameObject line = polylines[meshForward.name.Substring(meshForward.name.Length - 4)];
             line.name = $"FL_{meshForward.name.Substring(5)}";
 
-            // Create a parent to use for RadarEvents3D
+            // Create a parent for all the new objects to associate with RadarEvents3D
             GameObject parent = new GameObject("GRP_" + meshForward.name);
             parent.transform.SetParent(Container);
             parent.AddComponent<RadarEvents3D>();
-            parent.AddComponent<BoxCollider>();
-            //parent.AddComponent<BoundsControl>();
             parent.transform.localScale = new Vector3(1, 1, 1);
             parent.transform.localPosition = new Vector3(0, 0, 0);
             parent.transform.rotation = Quaternion.identity;
+            parent.AddComponent<BoundsControl>();
 
-            // Create a parent to group both radargram object
+            // Create a parent to group both radargram objects
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
+            MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
+            radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
+            radargram.AddComponent<BoundsControl>();
+            radargram.AddComponent<ObjectManipulator>();
 
-            // Set the children
+            // Organize the children
             line.transform.parent = parent.transform;
             radargram.transform.parent = parent.transform;
             meshForward.transform.parent = radargram.transform;
             meshBackward.transform.parent = radargram.transform;
 
-            // Place children properly in relation to the DEM
-            Quaternion q = line.transform.rotation;
+            // Place polyline properly in relation to the DEM
             line.transform.rotation = Quaternion.Euler(-90f, 0, 180f);
 
             // Create and place the radar mark for the minimap
             Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
             GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
-
         }
     }
 
-    public GameObject[] createPolylineObjects(string line_id)
+    public GameObject[] createRadargramObjects(UnityEngine.Object obj)
+    {
+        // Select mesh
+        GameObject meshForward = Instantiate(obj as GameObject);
+        GameObject meshBackward = Instantiate(obj as GameObject);
+
+        // Texture the other side of the mesh
+        MeshFilter meshFilter = meshBackward.GetComponent<MeshFilter>();
+        Mesh meshUnderlying = meshFilter.mesh;
+        int[] triangles = meshUnderlying.triangles;
+        for (int j = 0; j < triangles.Length; j += 3)
+        {
+            int temp = triangles[j];
+            triangles[j] = triangles[j + 1];
+            triangles[j + 1] = temp;
+        }
+        meshUnderlying.triangles = triangles;
+
+        // Name meshes
+        meshForward.name = meshForward.name.Replace("(Clone)", "");
+        meshBackward.name = "_" + meshForward.name;
+
+        // Return meshes
+        GameObject[] meshes = new GameObject[2];
+        meshes[0] = meshForward;
+        meshes[1] = meshBackward;
+        return meshes;
+    }
+
+    public Dictionary<string, GameObject> createPolylineObjects(string line_id)
     {
         // Load the file
         string filename = "FlightLine_" + line_id + ".obj";
@@ -85,9 +103,9 @@ public class LoadFlightLines : MonoBehaviour
         string allText = File.ReadAllText(path);
 
         // Split up the text by object definition
-        GameObject[] polylines = new GameObject[Regex.Matches(allText, "o ").Count];
-        int p = 0;
+        Dictionary<string, GameObject> polylines = new Dictionary<string, GameObject>();
         string[] objects = allText.Split("\no ");
+        string key = null;
 
         foreach (string objectText in objects) {
 
@@ -106,6 +124,13 @@ public class LoadFlightLines : MonoBehaviour
             for (int i = 0; i < text.Length; i++)
             {
                 string textline = text[i];
+
+                // Set the key
+                if (key is null)
+                {
+                    key = textline.Substring(textline.Length - 4);
+                    continue;
+                }
 
                 // Vertex
                 if (textline.StartsWith("v "))
@@ -127,20 +152,26 @@ public class LoadFlightLines : MonoBehaviour
             lineRenderer.positionCount = vertices.Length;
             lineRenderer.SetPositions(vertices);
 
-            // Add colors
-            lineRenderer.startColor = new Color(1.0f, 0.5f, 0f);
-            lineRenderer.endColor = lineRenderer.startColor;
-            lineRenderer.startWidth = 0.05f;
-            lineRenderer.endWidth = 0.05f;
+            // Add material
             lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
 
+            // Create collider
+            Bounds bounds = new Bounds(vertices[0], Vector3.zero);
+            Array.ForEach(vertices, point => bounds.Encapsulate(point));
+            BoxCollider boxCollider = line.AddComponent<BoxCollider>();
+            boxCollider.size = bounds.size;
+            boxCollider.center = bounds.center;
+
             // Store the polyline
-            polylines[p++] = line;
+            polylines.Add(key, line);
+
+            // Reset the key
+            key = null;
 
         }
 
+        // Finish up
         Destroy(gridLine);
-        
         return polylines;
     }
 

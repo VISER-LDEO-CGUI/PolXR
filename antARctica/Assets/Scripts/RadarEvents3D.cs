@@ -26,7 +26,7 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     private Vector3 position;
     private Vector3 rotation;
 
-    // The 3D stuff
+    // The scientific objects
     public GameObject radargrams;
     public GameObject flightline;
 
@@ -34,6 +34,10 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     public GameObject radarMark;
     private Vector3 newPointPos;
     private Color markColor;
+
+    // Object state
+    private bool loaded = false;
+    private bool selected = false;
 
     // Start is called before the first frame update
     void Start()
@@ -45,52 +49,74 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
         position = this.transform.localPosition;
         rotation = this.transform.eulerAngles;
 
-        // Initialize children properly
-        flightline = this.transform.GetChild(0).gameObject;
-        radargrams = this.transform.GetChild(1).gameObject;
-        radarMark = this.transform.GetChild(2).gameObject;
+        // Grab relevant objects
+        flightline = this.transform.GetChild(1).gameObject;
+        radargrams = this.transform.GetChild(2).gameObject;
+        radarMark = this.transform.GetChild(3).gameObject;
 
+        // Set objects to their starting states
         radarMark.SetActive(false);
-        TogglePolyline(true, false);
-        radargrams.SetActive(false);
+        TogglePolyline(true);
+        ToggleRadar(false);
     }
 
-    public void TogglePolyline(bool toggle, bool selected)
+    public void TogglePolyline(bool toggle)
     {
-        flightline.gameObject.SetActive(toggle);
-        LineRenderer lineRenderer = flightline.gameObject.GetComponent<LineRenderer>();
-        lineRenderer.startColor = selected ? new Color(1f, 0f, 0f) : new Color(1f, .5f, 0f);
-        lineRenderer.endColor = lineRenderer.startColor;
+        // Actually toggle the polyline
+        flightline.SetActive(toggle);
+        if (!toggle)
+        {
+            loaded = false;
+            return;
+        }
+
+        // Render line based on inputs
+        LineRenderer lineRenderer = flightline.GetComponent<LineRenderer>();
+
+        // Set color based on selection
+        lineRenderer.startColor = lineRenderer.endColor = loaded ?
+            selected ? 
+                new Color(1f, 0f, 0f)       // loaded and selected
+                : new Color(1f, .4f, 0f)    // loaded, not selected
+            : new Color(1f, 1f, 0f);        // not loaded
+
+        // Set width based on highlight
+        //lineRenderer.startWidth = lineRenderer.endWidth = highlight ? 0.1f : 0.05f;
     }
 
-    // Turn on/off the 3D surface
+    // Turn on/off the 3D surfaces and associated colliders
     public void ToggleRadar(bool toggle)
     {
         this.transform.GetComponent<BoxCollider>().enabled = toggle;
-        //this.transform.GetComponent<BoundsControl>().enabled = toggle;
-        radargrams.gameObject.SetActive(toggle);
+        this.transform.GetComponent<BoundsControl>().enabled = toggle;
+        radargrams.SetActive(toggle);
+        loaded = toggle;
         //MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
     }
 
     // Show the menu and mark and update the variables
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
-        Debug.Log("Triggered OnPointerDown!");
-        SychronizeMenu();
+        // Select the 
+        Debug.Log("Clicked " + flightline.name);
+        if (loaded) selected = true;
+
+        // Update the menu
+        //SychronizeMenu();
 
         // Only load the images when selected
         ToggleRadar(true);
 
-        // Highlight the flightline portion
-        TogglePolyline(true, true);
+        // Select the flightline portion
+        TogglePolyline(true);
 
         // Measurement
         
     }
 
     // Unused functions
-    public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
     public void OnPointerUp(MixedRealityPointerEventData eventData) { }
+    public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
     public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
     private void LateUpdate() { }
 
@@ -98,32 +124,45 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     public void SetAlpha(float newAlpha, bool onlyLower=false)
     {
         if ((onlyLower && alpha > newAlpha) || !onlyLower) alpha = newAlpha;
-        transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
-        transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
+        for (int i = 0; i < 2; i++)
+        {
+            radargrams.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
+        }
     }
 
     // Reset the radar shape
     public void ResetRadar(bool whiten)
     {
-        this.transform.localPosition = position;
-        this.transform.localRotation = Quaternion.Euler(rotation);
-        this.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
+        // Return the radargrams to their original position
+        radargrams.transform.localPosition = position;
+        radargrams.transform.localRotation = Quaternion.Euler(rotation);
+        radargrams.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
 
-        SetAlpha(1);
+        // Unselect the object
+        selected = false;
+
+        // Turn the radargrams off
         ToggleRadar(false);
-        TogglePolyline(true, false);
 
+        // Ensure the flightline is still on
+        TogglePolyline(true);
+
+        // Turn off the radar mark
         radarMark.SetActive(false);
     }
 
     // Sychronize the parameters for the main/radar menu
     public void SychronizeMenu()
     {
-        // The menu.
+        // Snap the menu to in front of the user
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.6f;
+
+        // Set the buttons
         Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
         Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
         Menu.transform.GetComponent<MenuEvents>().syncScaleSlider();
+
+        // Turn on the radar mark
         radarMark.SetActive(true);
     }
 }
