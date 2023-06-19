@@ -1,10 +1,15 @@
 ﻿using UnityEngine;
+using UnityEngine.XR;
+using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+using System.Reflection;
 
 public class LoadFlightLines : MonoBehaviour
 {
@@ -23,6 +28,7 @@ public class LoadFlightLines : MonoBehaviour
         // Load the data
         UnityEngine.Object[] meshes = Resources.LoadAll("Radar3D/Radar/" + line_id);
         Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
+        GameObject prefab = Instantiate(Resources.Load("Radar3D/Radar/RadarContainer") as GameObject);
 
         for (int i = 0; i < meshes.Length; i++)
         {
@@ -48,8 +54,17 @@ public class LoadFlightLines : MonoBehaviour
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
             MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
             radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
-            radargram.AddComponent<BoundsControl>();
-            radargram.AddComponent<ObjectManipulator>();
+
+            // Deal with object manipulation
+            BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
+            boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
+            BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
+            Bounds meshBounds = meshForward.GetComponent<Renderer>().bounds; // cuz we need bounds in world coords
+            boxCollider.center = meshBounds.center;
+            boxCollider.size = meshBounds.size;
+            boundsControl.BoundsOverride = boxCollider;
+
+            radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
 
             // Organize the children
             line.transform.parent = parent.transform;
@@ -97,9 +112,9 @@ public class LoadFlightLines : MonoBehaviour
 
     public Dictionary<string, GameObject> createPolylineObjects(string line_id)
     {
-        // Load the file
+        // Load the polyline file
         string filename = "FlightLine_" + line_id + ".obj";
-        string path = Path.Combine(Application.dataPath, "Resources/Radar3D/Polylines", filename).Replace('\\', '/');
+        string path = Path.Combine(Application.dataPath, "Resources/Radar3D/FlightLines", filename).Replace('\\', '/');
         string allText = File.ReadAllText(path);
 
         // Split up the text by object definition
@@ -107,7 +122,8 @@ public class LoadFlightLines : MonoBehaviour
         string[] objects = allText.Split("\no ");
         string key = null;
 
-        foreach (string objectText in objects) {
+        foreach (string objectText in objects) 
+        {
 
             // Ensure we're looking at an object definition
             if (Regex.Matches(objectText, "\nv ").Count == 0) continue;
@@ -115,7 +131,7 @@ public class LoadFlightLines : MonoBehaviour
             // Instantiate the Game Object
             GameObject line = Instantiate(gridLine);
 
-            // Create arrays to store the vertices as per the .obj specification
+            // Create an array to store the vertices as per the .obj specification
             Vector3[] vertices = new Vector3[Regex.Matches(objectText, "v ").Count];
             int v = 0;
 
@@ -156,11 +172,24 @@ public class LoadFlightLines : MonoBehaviour
             lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
 
             // Create collider
-            Bounds bounds = new Bounds(vertices[0], Vector3.zero);
-            Array.ForEach(vertices, point => bounds.Encapsulate(point));
-            BoxCollider boxCollider = line.AddComponent<BoxCollider>();
-            boxCollider.size = bounds.size;
-            boxCollider.center = bounds.center;
+            for (int i = 1; i < vertices.Length; i++)
+            {
+                // Calculate the line segment
+                Vector3 a = vertices[i - 1];
+                Vector3 b = vertices[i];
+
+                // Add the collider
+                BoxCollider collider = line.AddComponent<BoxCollider>();
+                collider.isTrigger = true;
+
+                // Set the collider bounds
+                collider.center = (a + b) / 2f;
+                collider.size = new Vector3(
+                    Math.Max(Mathf.Abs(a.x - b.x), 0.2f),
+                    Math.Max(Mathf.Abs(a.y - b.y), 0.2f),
+                    Math.Max(Mathf.Abs(a.z - b.z), 0.2f)
+                );
+            }
 
             // Store the polyline
             polylines.Add(key, line);
