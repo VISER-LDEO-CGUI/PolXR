@@ -2,41 +2,13 @@
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using UnityEngine;
 
-public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
+public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 {
-
-    // Pop up menu and the mark object
-    public GameObject Menu;
-    public GameObject MarkObj;
-
-    // Measurement tool
-    public GameObject MeasureObj;
-    public GameObject line;
-
-    // The transparency value
-    private float alpha = 1.0f;
-
-    // Keep the original scale
-    private float scaleX, scaleY, scaleZ;
-
-    // Return the original scale
-    public Vector3 GetScale() { return new Vector3(scaleX, scaleY, scaleZ); }
-
-    // The original transform
-    private Vector3 position;
-    private Vector3 rotation;
 
     // The scientific objects
     public GameObject radargrams;
     public GameObject flightline;
 
-    // The minimap objects
-    public GameObject radarMark;
-    private Vector3 newPointPos;
-    private Color markColor;
-
-    // Object state
-    private bool loaded = false;
     private bool selected = false;
 
     // Start is called before the first frame update
@@ -85,7 +57,7 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     }
 
     // Turn on/off the 3D surfaces and associated colliders
-    public void ToggleRadar(bool toggle)
+    public new void ToggleRadar(bool toggle)
     {
         this.transform.GetComponent<BoxCollider>().enabled = toggle;
         this.transform.GetComponent<BoundsControl>().enabled = toggle;
@@ -121,7 +93,7 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     private void LateUpdate() { }
 
     // Change the transparancy of the radar images. "onlyLower" used for setting radar only to more transparent level
-    public void SetAlpha(float newAlpha, bool onlyLower=false)
+    public new void SetAlpha(float newAlpha, bool onlyLower=false)
     {
         if ((onlyLower && alpha > newAlpha) || !onlyLower) alpha = newAlpha;
         for (int i = 0; i < 2; i++)
@@ -131,7 +103,7 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
     }
 
     // Reset the radar shape
-    public void ResetRadar(bool whiten)
+    public new void ResetRadar(bool whiten)
     {
         // Return the radargrams to their original position
         radargrams.transform.localPosition = position;
@@ -151,18 +123,4 @@ public class RadarEvents3D : MonoBehaviour, IMixedRealityPointerHandler
         radarMark.SetActive(false);
     }
 
-    // Sychronize the parameters for the main/radar menu
-    public void SychronizeMenu()
-    {
-        // Snap the menu to in front of the user
-        Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.6f;
-
-        // Set the buttons
-        Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
-        Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
-        Menu.transform.GetComponent<MenuEvents>().syncScaleSlider();
-
-        // Turn on the radar mark
-        radarMark.SetActive(true);
-    }
 }

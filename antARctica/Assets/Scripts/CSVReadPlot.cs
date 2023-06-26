@@ -101,7 +101,7 @@ public class CSVReadPlot : MonoBehaviour
     public void AddPSLine(Transform radarImage)
     {
         ParticleSystem newLine = Instantiate(PSLine, Parent);
-        radarImage.GetComponent<RadarEvents>().SetLine(newLine.transform, 0);
+        radarImage.GetComponent<RadarEvents2D>().SetLine(newLine.transform, 0);
     }
 
     private void SetParticles(ParticleSystem line, TextAsset file)
@@ -145,7 +145,7 @@ public class CSVReadPlot : MonoBehaviour
         // Assign corredponding CSV line to radar images.
         Transform radarImage = RadarImages.Find(label);
         if (radarImage != null) 
-            radarImage.GetComponent<RadarEvents>().SetLine(line.transform, inRange);
+            radarImage.GetComponent<RadarEvents2D>().SetLine(line.transform, inRange);
         else line.name = label;
     }
 

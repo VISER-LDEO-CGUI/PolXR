@@ -14,6 +14,7 @@ public class MenuEvents : MonoBehaviour
     private bool isMainMenu;
     public Transform SubMenuRadar;
     public Transform SubMenuMain;
+    public int workflow;
 
     // Initially set to an empty object to avoid null reference.
     private Transform radargram = null;
@@ -92,6 +93,9 @@ public class MenuEvents : MonoBehaviour
         Minimap.GetComponent<BoxCollider>().enabled = false;
         MarkObj.transform.parent = Antarctica.transform;
         MarkObj.SetActive(false);
+
+        // Find out which scene we're in. <-- need to fix so we don't have RadarEvents on every object
+        workflow = radargram.GetComponent<RadarEvents>().GetScene();
     }
 
     // Update is called once per frame
@@ -228,7 +232,7 @@ public class MenuEvents : MonoBehaviour
             RadarToggle.IsToggled = true;
             CSVPicksToggle.IsToggled = true;
             radargram.GetComponent<RadarEvents>().ResetRadar(false);
-            radargram.GetComponent<RadarEvents>().ToggleLine(true);
+            if (workflow == 2) radargram.GetComponent<RadarEvents2D>().ToggleLine(true);
         }
     }
 
@@ -240,27 +244,31 @@ public class MenuEvents : MonoBehaviour
         if (isMainMenu) Antarctica.GetComponent<CSVReadPlot>().SaveScene();
         else
         {
-            RadarToggle.IsToggled = true;
-            RadarToggling();
-            CSVPicksToggle.IsToggled = true;
-            CSVToggling();
-
-            /*if (File.Exists(SelectionDialog))
+            if (workflow == 2)
             {
-                List<string> tempList = new List<string> { MarkTMP.text };
-                File.AppendAllLines(SelectionDialog, tempList);
+                RadarToggle.IsToggled = true;
+                RadarToggling();
+                CSVPicksToggle.IsToggled = true;
+                CSVToggling();
+
+                /*if (File.Exists(SelectionDialog))
+                {
+                    List<string> tempList = new List<string> { MarkTMP.text };
+                    File.AppendAllLines(SelectionDialog, tempList);
+                }
+                else
+                {
+                    var sr = File.CreateText(SelectionDialog);
+                    sr.WriteLine(MarkTMP.text);
+                    sr.Close();
+                }*/
+
+                // Trying to find or add a new particle system for the radar image.
+            
+                if (radargram.Find("Line") == null) Antarctica.GetComponent<CSVReadPlot>().AddPSLine(radargram);
+
+                radargram.GetComponent<RadarEvents2D>().AddNewPoint(MarkColor);
             }
-            else
-            {
-                var sr = File.CreateText(SelectionDialog);
-                sr.WriteLine(MarkTMP.text);
-                sr.Close();
-            }*/
-
-            // Trying to find or add a new particle system for the radar image.
-            if (radargram.Find("Line") == null) Antarctica.GetComponent<CSVReadPlot>().AddPSLine(radargram);
-
-            radargram.GetComponent<RadarEvents>().AddNewPoint(MarkColor);
         }
     }
 
@@ -330,7 +338,7 @@ public class MenuEvents : MonoBehaviour
         CSVPicksToggle.IsToggled = AllCSVPicksToggle.IsToggled;
         foreach (Transform child in CSVPicksContainer) child.localScale = newScale;
         foreach (Transform child in RadarImageContainer)
-            child.GetComponent<RadarEvents>().ToggleLine(AllCSVPicksToggle.IsToggled);
+            child.GetComponent<RadarEvents2D>().ToggleLine(AllCSVPicksToggle.IsToggled);
     }
 
     public void MainRadarToggling()
@@ -340,7 +348,7 @@ public class MenuEvents : MonoBehaviour
     }
 
     // Single radar toggling.
-    public void CSVToggling() { radargram.GetComponent<RadarEvents>().ToggleLine(CSVPicksToggle.IsToggled); }
+    public void CSVToggling() { radargram.GetComponent<RadarEvents2D>().ToggleLine(CSVPicksToggle.IsToggled); }
     public void RadarToggling() { radargram.GetComponent<RadarEvents>().ToggleRadar(RadarToggle.IsToggled); }
 
     // Find the dem according to name.
@@ -475,7 +483,7 @@ public class MenuEvents : MonoBehaviour
         }
         else if (keyword == "delete one" || keyword == "delete all")
         {
-            if (radargram) radargram.GetComponent<RadarEvents>().UndoAddPoint(keyword == "delete all");
+            if (radargram && workflow == 2) radargram.GetComponent<RadarEvents2D>().UndoAddPoint(keyword == "delete all");
         }
     }
 
