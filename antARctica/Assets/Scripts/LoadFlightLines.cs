@@ -39,7 +39,7 @@ public class LoadFlightLines : MonoBehaviour
 
             // Select and name line
             GameObject line = polylines[meshForward.name.Substring(meshForward.name.Length - 4)];
-            line.name = $"FL_{meshForward.name.Substring(5)}";
+            line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
 
             // Create a parent for all the new objects to associate with RadarEvents3D
             GameObject parent = new GameObject("GRP_" + meshForward.name);
@@ -144,7 +144,7 @@ public class LoadFlightLines : MonoBehaviour
                 // Set the key
                 if (key is null)
                 {
-                    key = textline.Substring(textline.Length - 4);
+                    key = textline.Trim().Substring(textline.Length - 4);
                     continue;
                 }
 

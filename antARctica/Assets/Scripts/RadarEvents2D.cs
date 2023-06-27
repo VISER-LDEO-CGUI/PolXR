@@ -20,6 +20,7 @@ public class RadarEvents2D : RadarEvents, IMixedRealityPointerHandler
         // Get and set the texture of the radar image object.
         defaultText = Resources.Load<Texture2D>(fileRoot + "/white");
         loadImage(defaultText);
+        // https://docs.unity3d.com/ScriptReference/Component.GetComponents.html
     }
 
     public void OnPointerUp(MixedRealityPointerEventData eventData) { }

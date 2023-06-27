@@ -40,6 +40,9 @@ public class RadarEvents : MonoBehaviour
     {
         GetScene();
         radarEventsScript = "RadarEvents" + (char)workflow + "D";
+        scaleX = this.transform.localScale.x;
+        scaleY = this.transform.localScale.y;
+        scaleZ = this.transform.localScale.z;
     }
 
     // Figure out which other script to call
@@ -59,7 +62,7 @@ public class RadarEvents : MonoBehaviour
     }
 
     // Return the original scale.
-    public Vector3 GetScale() { return new Vector3(scaleX, scaleY, scaleZ); }
+    public Vector3 GetScale() { return new Vector3(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z); }
 
     // Turn on/off the image itself.
     public void ToggleRadar(bool toggle) { }
