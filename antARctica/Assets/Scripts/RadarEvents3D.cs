@@ -59,7 +59,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     // Turn on/off the 3D surfaces and associated colliders
     public new void ToggleRadar(bool toggle)
     {
-        this.transform.GetComponent<BoxCollider>().enabled = toggle;
+        this.transform.GetComponent<BoxCollider>().enabled = false;
         this.transform.GetComponent<BoundsControl>().enabled = toggle;
         radargrams.SetActive(toggle);
         loaded = toggle;

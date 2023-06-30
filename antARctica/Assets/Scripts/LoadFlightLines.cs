@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.XR;
-//using UnityEngine.Physics;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
@@ -18,8 +17,6 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject radarMark;
     public GameObject DEM;
     public GameObject gridLine;
-    //public Layer FlightlinesLayer;
-    //public Layer RadargramsLayer;
 
     public void Start()
     {
@@ -51,7 +48,7 @@ public class LoadFlightLines : MonoBehaviour
             parent.transform.localScale = new Vector3(1, 1, 1);
             parent.transform.localPosition = new Vector3(0, 0, 0);
             parent.transform.rotation = Quaternion.identity;
-            parent.AddComponent<BoundsControl>();
+            BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
 
             // Create a parent to group both radargram objects
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
@@ -75,6 +72,14 @@ public class LoadFlightLines : MonoBehaviour
             boxCollider.center = meshBounds.center;
             boxCollider.size = meshBounds.size;
             boundsControl.BoundsOverride = boxCollider;
+
+            // Set the parent's BoxCollider to have the same bounds
+            BoxCollider parentCollider = parent.GetComponent<BoxCollider>();
+            /*
+            parentCollider.center = meshBounds.center;
+            parentCollider.size = meshBounds.size;
+            parentBoundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
+            parentBoundsControl.BoundsOverride = boxCollider;*/
 
             // Add the correct Object Manipulator so users can grab the radargrams
             radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
@@ -189,7 +194,6 @@ public class LoadFlightLines : MonoBehaviour
                 // Add the collider
                 BoxCollider collider = line.AddComponent<BoxCollider>();
                 collider.isTrigger = true;
-                //collider.layer = FlightlinesLayer;
 
                 // Set the collider bounds
                 collider.center = (a + b) / 2f;
