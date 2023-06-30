@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.XR;
+//using UnityEngine.Physics;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
@@ -17,6 +18,8 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject radarMark;
     public GameObject DEM;
     public GameObject gridLine;
+    //public Layer FlightlinesLayer;
+    //public Layer RadargramsLayer;
 
     public void Start()
     {
@@ -38,7 +41,7 @@ public class LoadFlightLines : MonoBehaviour
             GameObject meshBackward = meshBoth[1];
 
             // Select and name line
-            GameObject line = polylines[meshForward.name.Substring(meshForward.name.Length - 4)];
+            GameObject line = polylines[meshForward.name.Substring(meshForward.name.Length - 3)];
             line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
 
             // Create a parent for all the new objects to associate with RadarEvents3D
@@ -55,7 +58,16 @@ public class LoadFlightLines : MonoBehaviour
             MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
             radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
 
-            // Deal with object manipulation
+            // Organize the children
+            line.transform.parent = parent.transform;
+            radargram.transform.parent = parent.transform;
+            meshForward.transform.parent = radargram.transform;
+            meshBackward.transform.parent = radargram.transform;
+
+            // Place polyline properly in relation to the DEM
+            line.transform.rotation = Quaternion.Euler(-90f, 0f, 180f);
+
+            // Add the correct Bounds Control so that MRTK knows where the objects are
             BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
             boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
             BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
@@ -64,21 +76,17 @@ public class LoadFlightLines : MonoBehaviour
             boxCollider.size = meshBounds.size;
             boundsControl.BoundsOverride = boxCollider;
 
+            // Add the correct Object Manipulator so users can grab the radargrams
             radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-
-            // Organize the children
-            line.transform.parent = parent.transform;
-            radargram.transform.parent = parent.transform;
-            meshForward.transform.parent = radargram.transform;
-            meshBackward.transform.parent = radargram.transform;
-
-            // Place polyline properly in relation to the DEM
-            line.transform.rotation = Quaternion.Euler(-90f, 0, 180f);
 
             // Create and place the radar mark for the minimap
             Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
             GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
         }
+
+        // Drop everything onto the DEM -- this should correlate with the DEM position
+        Container.transform.localPosition = new Vector3(-10f, -10f, 10f);
+
     }
 
     public GameObject[] createRadargramObjects(UnityEngine.Object obj)
@@ -100,7 +108,7 @@ public class LoadFlightLines : MonoBehaviour
         meshUnderlying.triangles = triangles;
 
         // Name meshes
-        meshForward.name = meshForward.name.Replace("(Clone)", "");
+        meshForward.name = meshForward.name.Replace("(Clone)", "").Trim();
         meshBackward.name = "_" + meshForward.name;
 
         // Return meshes
@@ -144,7 +152,7 @@ public class LoadFlightLines : MonoBehaviour
                 // Set the key
                 if (key is null)
                 {
-                    key = textline.Trim().Substring(textline.Length - 4);
+                    key = textline.Trim().Substring(textline.Length - 3);
                     continue;
                 }
 
@@ -181,6 +189,7 @@ public class LoadFlightLines : MonoBehaviour
                 // Add the collider
                 BoxCollider collider = line.AddComponent<BoxCollider>();
                 collider.isTrigger = true;
+                //collider.layer = FlightlinesLayer;
 
                 // Set the collider bounds
                 collider.center = (a + b) / 2f;
