@@ -52,14 +52,12 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
                 : new Color(1f, .4f, 0f)    // loaded, not selected
             : new Color(1f, 1f, 0f);        // not loaded
 
-        // Set width based on highlight
-        //lineRenderer.startWidth = lineRenderer.endWidth = highlight ? 0.1f : 0.05f;
     }
 
     // Turn on/off the 3D surfaces and associated colliders
     public new void ToggleRadar(bool toggle)
     {
-        this.transform.GetComponent<BoxCollider>().enabled = false;
+        this.transform.GetComponent<BoxCollider>().enabled = !loaded;
         this.transform.GetComponent<BoundsControl>().enabled = toggle;
         radargrams.SetActive(toggle);
         loaded = toggle;
@@ -74,7 +72,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         if (loaded) selected = true;
 
         // Update the menu
-        //SychronizeMenu();
+        SychronizeMenu();
 
         // Only load the images when selected
         ToggleRadar(true);

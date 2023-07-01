@@ -95,7 +95,7 @@ public class MenuEvents : MonoBehaviour
         MarkObj.SetActive(false);
 
         // Find out which scene we're in. <-- need to fix so we don't have RadarEvents on every object
-        workflow = radargram.GetComponent<RadarEvents>().GetScene();
+        //workflow = radargram.GetComponent<RadarEvents>().GetScene();
     }
 
     // Update is called once per frame

@@ -38,7 +38,8 @@ public class LoadFlightLines : MonoBehaviour
             GameObject meshBackward = meshBoth[1];
 
             // Select and name line
-            GameObject line = polylines[meshForward.name.Substring(meshForward.name.Length - 3)];
+            string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
+            GameObject line = polylines[key];
             line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
 
             // Create a parent for all the new objects to associate with RadarEvents3D
@@ -75,11 +76,6 @@ public class LoadFlightLines : MonoBehaviour
 
             // Set the parent's BoxCollider to have the same bounds
             BoxCollider parentCollider = parent.GetComponent<BoxCollider>();
-            /*
-            parentCollider.center = meshBounds.center;
-            parentCollider.size = meshBounds.size;
-            parentBoundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
-            parentBoundsControl.BoundsOverride = boxCollider;*/
 
             // Add the correct Object Manipulator so users can grab the radargrams
             radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
@@ -90,7 +86,7 @@ public class LoadFlightLines : MonoBehaviour
         }
 
         // Drop everything onto the DEM -- this should correlate with the DEM position
-        Container.transform.localPosition = new Vector3(-10f, -10f, 10f);
+        Container.transform.localPosition = new Vector3(-10f, 0f, 10f);
 
     }
 
@@ -157,7 +153,7 @@ public class LoadFlightLines : MonoBehaviour
                 // Set the key
                 if (key is null)
                 {
-                    key = textline.Trim().Substring(textline.Length - 3);
+                    key = textline.Trim().Substring(textline.IndexOf('_', textline.Length - 5));
                     continue;
                 }
 
