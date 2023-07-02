@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
 {
     // The position information of the scene and user.
-    public Transform Antarctica;
+    public Transform Location;
     public Transform User;
     public Camera MinimapCamera;
     public Vector3 MapCamPosition = new Vector3(-12.5f, 100f, -90f);
@@ -27,17 +28,19 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
     void Start()
     {
         PositionObj.SetActive(true);
+        string sceneName = SceneManager.GetActiveScene().name == "antarctica" ? "Antarctica" : "Petermann";
+        Location = GameObject.Find(sceneName).transform;
     }
 
     // Update is called once per frame
     void Update()
     {
         // Set the camera position to capture the correct view.
-        MinimapCamera.transform.eulerAngles = new Vector3(90, Antarctica.transform.eulerAngles.y, 0);
-        Vector3 OffsetScaled = MapCamPosition * Antarctica.localScale.x;
+        MinimapCamera.transform.eulerAngles = new Vector3(90, Location.transform.eulerAngles.y, 0);
+        Vector3 OffsetScaled = MapCamPosition * Location.localScale.x;
         OffsetScaled.y = MapCamPosition.y;
-        MinimapCamera.transform.position = Antarctica.transform.position + Quaternion.Euler(0, Antarctica.transform.eulerAngles.y, 0) * OffsetScaled;
-        MinimapCamera.orthographicSize = ViewSize * Antarctica.localScale.x;
+        MinimapCamera.transform.position = Location.transform.position + Quaternion.Euler(0, Location.transform.eulerAngles.y, 0) * OffsetScaled;
+        MinimapCamera.orthographicSize = ViewSize * Location.localScale.x;
 
         // Make sure the dot does not go out of the bounding area.
         if (this.GetComponent<BoxCollider>().enabled) PositionObj.GetComponent<MeshRenderer>().material = Translate;
@@ -45,7 +48,7 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
 
         // Setting the height of the mark.
         Vector3 newPosition = PositionObj.transform.parent.position;
-        newPosition.y = Antarctica.position.y + MapCamPosition.y * 0.9f;
+        newPosition.y = Location.position.y + MapCamPosition.y * 0.9f;
         PositionObj.transform.position = newPosition;
         PositionObj.transform.eulerAngles = new Vector3(90, 0, 0);
     }

@@ -54,7 +54,11 @@ public class MarkObj : MonoBehaviour
     {
         // Adjust the scale according to new parent.
         Vector3 Global_Scale = this.transform.parent.transform.lossyScale;
-        this.transform.localScale = new Vector3(Original_Scale.x / Global_Scale.x, Original_Scale.y / Global_Scale.y, Original_Scale.z / Global_Scale.z);
+        this.transform.localScale = new Vector3(
+            Original_Scale.x / Global_Scale.x, 
+            Original_Scale.y / Global_Scale.y, 
+            Original_Scale.z / Global_Scale.z
+        );
 
         if (showAxis) updateAxis();
     }
@@ -93,14 +97,24 @@ public class MarkObj : MonoBehaviour
                 {
                     GameObject newLabel = Instantiate(xyAxisLabel, labels);
                     // Change "gap * 1.5f" to change where the physical axis is placed
-                    newLabel.GetComponent<DynamicLabel>().Initialize(true, i * intervalXY.x / radarOriginalScale.x / 10 - 0.5f, gap * 1.5f, (i * intervalXY.x).ToString() + " km");
+                    newLabel.GetComponent<DynamicLabel>().Initialize(
+                        true, 
+                        i * intervalXY.x / radarOriginalScale.x / 10 - 0.5f, 
+                        gap * 1.5f, 
+                        (i * intervalXY.x).ToString() + " km"
+                    );
                     
                 }
 
                 for (int j = 0; (j - 1) * intervalXY.y < radarOriginalScale.y * 100; j++)
                 {
                     GameObject newLabel = Instantiate(xyAxisLabel, labels);
-                    newLabel.GetComponent<DynamicLabel>().Initialize(false, j * intervalXY.y / radarOriginalScale.y / 100 - 0.5f, gap * 1.5f, (j * intervalXY.y).ToString() + " m");
+                    newLabel.GetComponent<DynamicLabel>().Initialize(
+                        false, 
+                        j * intervalXY.y / radarOriginalScale.y / 100 - 0.5f, 
+                        gap * 1.5f, 
+                        (j * intervalXY.y).ToString() + " m"
+                    );
                 }
             }
         }

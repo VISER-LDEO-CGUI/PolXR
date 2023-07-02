@@ -14,17 +14,18 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     // Start is called before the first frame update
     void Start()
     {
-        // Store initial values
-        scaleX = this.transform.localScale.x;
-        scaleY = this.transform.localScale.y;
-        scaleZ = this.transform.localScale.z;
-        position = this.transform.localPosition;
-        rotation = this.transform.eulerAngles;
 
         // Grab relevant objects
         flightline = this.transform.GetChild(1).gameObject;
         radargrams = this.transform.GetChild(2).gameObject;
         radarMark = this.transform.GetChild(3).gameObject;
+
+        // Store initial values
+        scaleX = radargrams.transform.localScale.x;
+        scaleY = radargrams.transform.localScale.y;
+        scaleZ = radargrams.transform.localScale.z;
+        position = radargrams.transform.localPosition;
+        rotation = radargrams.transform.eulerAngles;
 
         // Set objects to their starting states
         radarMark.SetActive(false);

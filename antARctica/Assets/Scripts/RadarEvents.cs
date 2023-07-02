@@ -5,9 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class RadarEvents : MonoBehaviour
 {
-    // Variables for determining which workflow is used (2D or 3D)
-    int workflow;
-    string radarEventsScript;
 
     // Pop up menu and the mark object.
     public GameObject Menu;
@@ -38,31 +35,15 @@ public class RadarEvents : MonoBehaviour
 
     void Start()
     {
-        GetScene();
-        radarEventsScript = "RadarEvents" + (char)workflow + "D";
         scaleX = this.transform.localScale.x;
         scaleY = this.transform.localScale.y;
         scaleZ = this.transform.localScale.z;
     }
 
-    // Figure out which other script to call
-    public int GetScene()
-    {
-        workflow = 0;
-        switch (SceneManager.GetActiveScene().ToString())
-        {
-            case "antarctica":
-                workflow = 2;
-                break;
-            case "greenland":
-                workflow = 3;
-                break;
-        }
-        return workflow;
-    }
-
     // Return the original scale.
-    public Vector3 GetScale() { return new Vector3(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z); }
+    public Vector3 GetScale() { 
+        return new Vector3(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z); 
+    }
 
     // Turn on/off the image itself.
     public void ToggleRadar(bool toggle) { }

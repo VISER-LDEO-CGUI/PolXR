@@ -43,9 +43,10 @@ public class LoadFlightLines : MonoBehaviour
             line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
 
             // Create a parent for all the new objects to associate with RadarEvents3D
-            GameObject parent = new GameObject("GRP_" + meshForward.name);
+            string parentName = "#" + key; //"GRP_" + meshForward.name;
+            GameObject parent = new GameObject(parentName);
             parent.transform.SetParent(Container);
-            parent.AddComponent<RadarEvents3D>();
+            RadarEvents3D script = parent.AddComponent<RadarEvents3D>();
             parent.transform.localScale = new Vector3(1, 1, 1);
             parent.transform.localPosition = new Vector3(0, 0, 0);
             parent.transform.rotation = Quaternion.identity;
@@ -79,6 +80,9 @@ public class LoadFlightLines : MonoBehaviour
 
             // Add the correct Object Manipulator so users can grab the radargrams
             radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+
+            // Link the parent to the menu
+            script.Menu = GameObject.Find("Menu");
 
             // Create and place the radar mark for the minimap
             Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
