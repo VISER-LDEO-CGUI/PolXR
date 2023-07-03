@@ -49,7 +49,7 @@ public class MenuEvents : MonoBehaviour
 
     // Text objects
     public TextMeshPro Title;
-    public TextMeshPro YTMP;
+    public TextMeshPro YTMP; // TMP stands for TextMeshPro
     public TextMeshPro XTMP;
     public TextMeshPro ZTMP;
     public TextMeshPro RotationDegreeTMP;
@@ -368,10 +368,11 @@ public class MenuEvents : MonoBehaviour
     // Main Menu Vertical Exaggeration Slider
     public void OnVerticalExaggerationSliderUpdated(SliderEventData eventData)
     {
-        Debug.Log("Vertical exaggeration!");
         foreach (Transform child in DEMs)
         {
-            child.localScale = new Vector3(child.localScale[0], 0.1f + (4.9f * eventData.NewValue), child.localScale[2]);
+            if (workflow == 2) child.localScale = new Vector3(child.localScale[0], 0.1f + (4.9f * eventData.NewValue), child.localScale[2]);
+            else child.localScale = new Vector3(child.localScale.x, 0.1f + (4.9f * eventData.NewValue), child.localScale.z);
+            Debug.Log(child.localScale);
         }
     }
 
@@ -381,14 +382,20 @@ public class MenuEvents : MonoBehaviour
         Vector3 newScale = AllCSVPicksToggle.IsToggled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
         CSVPicksToggle.IsToggled = AllCSVPicksToggle.IsToggled;
         foreach (Transform child in CSVPicksContainer) child.localScale = newScale;
-        foreach (Transform child in RadarImageContainer)
-            child.GetComponent<RadarEvents2D>().ToggleLine(AllCSVPicksToggle.IsToggled);
+        if (workflow == 2)
+        {
+            foreach (Transform child in RadarImageContainer)
+                child.GetComponent<RadarEvents2D>().ToggleLine(AllCSVPicksToggle.IsToggled);
+        }
     }
 
     public void MainRadarToggling()
     {
         foreach (Transform child in RadarImageContainer)
-            child.GetComponent<RadarEvents>().ToggleRadar(AllRadarToggle.IsToggled);
+        { 
+            if (workflow == 2) child.GetComponent<RadarEvents2D>().ToggleRadar(AllRadarToggle.IsToggled);
+            else child.GetComponent<RadarEvents3D>().ToggleRadar(AllRadarToggle.IsToggled);
+        }
     }
 
     // Single radar toggling.

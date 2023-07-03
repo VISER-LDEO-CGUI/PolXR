@@ -1947,7 +1947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &108321655
 Transform:
   m_ObjectHideFlags: 0
@@ -2348,7 +2348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &140567121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19367,7 +19367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43a471828ca6c7541890e7e72dad99d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Antarctica: {fileID: 469521222}
+  Location: {fileID: 0}
   User: {fileID: 1695783475}
   MinimapCamera: {fileID: 1727482072}
   MapCamPosition: {x: -12.5, y: 100, z: -90}
@@ -36617,7 +36617,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290736268}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -48695,7 +48695,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767597428}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -57713,20 +57713,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SubMenuRadar: {fileID: 853555539}
   SubMenuMain: {fileID: 608409566}
-  workflow: 2
   RadarImageContainer: {fileID: 24549645}
   DEMs: {fileID: 518494631}
   CSVPicksContainer: {fileID: 288208385}
   Location: {fileID: 469521222}
-  horizontalSlider: {fileID: 226041448}
-  verticalSlider: {fileID: 7508367012290142209}
+  XSlider: {fileID: 0}
+  YSlider: {fileID: 0}
+  ZSlider: {fileID: 0}
   rotationSlider: {fileID: 1138500061}
   transparencySlider: {fileID: 65786697}
   verticalExaggerationSlider: {fileID: 1269909559}
   scale: 1000
   Title: {fileID: 2708467136126536640}
-  VerticalTMP: {fileID: 1235458174}
-  HorizontalTMP: {fileID: 1477341106}
+  YTMP: {fileID: 0}
+  XTMP: {fileID: 0}
+  ZTMP: {fileID: 0}
   RotationDegreeTMP: {fileID: 622703451}
   TransparencyTMP: {fileID: 1960516734}
   MarkTMP: {fileID: 1053454514}
