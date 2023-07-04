@@ -15,11 +15,12 @@ public class MenuEvents : MonoBehaviour
     public Transform SubMenuRadar;
     public Transform SubMenuMain;
 
-    // The workflow used for the current radargram.
+    // The workflow used for the current radarParent.
     private int workflow;
 
-    // Initially set to an empty object to avoid null reference.
-    private Transform radargram = null;
+    // Initially set to empty objects to avoid null reference.
+    private Transform radarParent = null;
+    private Transform radargram = null; // this is the same as radarParent in workflow 2
     public Transform RadarImageContainer;
     public Transform DEMs;
     public Transform CSVPicksContainer; // only for workflow 2
@@ -95,7 +96,7 @@ public class MenuEvents : MonoBehaviour
         HomeButton(true);
         BoundingBoxToggle();
         MeasureLine.SetActive(false);
-        Minimap.SetActive(false); // fix later
+        if (SceneManager.GetActiveScene().name == "greenland") Minimap.SetActive(false); // fix later
         Minimap.GetComponent<BoxCollider>().enabled = false;
         MarkObj.transform.parent = Location.transform;
         MarkObj.SetActive(false);
@@ -115,8 +116,8 @@ public class MenuEvents : MonoBehaviour
 
         if (!isMainMenu)
         {
-            // Determine what the active object is
-            workflow = (radargram.GetComponent<RadarEvents2D>() is null) ? 3 : 2;
+            // Determine what the active object workflow is
+            workflow = (radarParent.GetComponent<RadarEvents2D>() is null) ? 3 : 2;
 
             // Update the rotation slider value accordingly.
             float rounded_angle = (float)(radargram.localRotation.eulerAngles.y / 360.0f);
@@ -141,6 +142,7 @@ public class MenuEvents : MonoBehaviour
                 (originalScale.x * scale).ToString(),
                 (radargram.localScale.x * scale).ToString(),
                 (Math.Abs(originalScale.x - radargram.localScale.x) * scale).ToString());
+
             if (workflow == 3)
             {
                 ZTMP.text = string.Format(
@@ -198,16 +200,33 @@ public class MenuEvents : MonoBehaviour
     {
         targetPosition = newPosition;
 
-        if (radargram != newRadar)
+        if (radarParent != newRadar)
         {
-            // Switch to new radar and reset the values.
-            radargram = newRadar;
-            originalScale = (workflow == 2) ? 
-                radargram.GetComponent<RadarEvents2D>().GetScale() :
-                radargram.GetComponent<RadarEvents3D>().GetScale();
+            // Switch to new radar 
+            radarParent = newRadar;
+
+            // Reset the values.
+            if (workflow == 2)
+            {
+                radargram = newRadar;
+                originalScale = radarParent.GetComponent<RadarEvents2D>().GetScale();
+            }
+            else
+            {
+                // In 3D, we want to transform the radar parent, not the whole group
+                radargram = newRadar.transform.GetChild(1);
+                originalScale = radarParent.GetComponent<RadarEvents3D>().GetScale();
+
+                // Update the flightline colors
+                foreach (Transform child in RadarImageContainer)
+                {
+                    child.GetComponent<RadarEvents3D>().TogglePolyline(true, false);
+                }
+                radarParent.GetComponent<RadarEvents3D>().TogglePolyline(true, true);
+            }
 
             // Set the title of the menu to the current radar.
-            Title.text = radargram.name;
+            Title.text = radarParent.name;
         }
 
         isMainMenu = false;
@@ -216,7 +235,13 @@ public class MenuEvents : MonoBehaviour
         SubMenuMain.gameObject.SetActive(false);
     }
 
-    // The reset button for the radargram transform.
+    // Just resets the radar to its original transform but leaves it selected
+    public void ResetRadarTransform()
+    {
+        radarParent.GetComponent<RadarEvents3D>().ResetTransform();
+    }
+
+    // The reset button for the radarParent transform; resets all radar.
     public void ResetButton()
     {
         if (isMainMenu)
@@ -230,7 +255,11 @@ public class MenuEvents : MonoBehaviour
             }
             else
             {
-                foreach (Transform child in RadarImageContainer) child.GetComponent<RadarEvents3D>().ResetRadar(true);
+                foreach (Transform child in RadarImageContainer)
+                {
+                    child.GetComponent<RadarEvents3D>().ResetRadar();
+                    child.GetComponent<RadarEvents3D>().TogglePolyline(true, false);
+                }
             }
             MarkObj.transform.parent = Location.transform;
             MarkObj.SetActive(false);
@@ -263,12 +292,16 @@ public class MenuEvents : MonoBehaviour
             if (workflow == 2)
             {
                 CSVPicksToggle.IsToggled = true;
-                radargram.GetComponent<RadarEvents2D>().ResetRadar(false);
-                radargram.GetComponent<RadarEvents2D>().ToggleLine(true);
+                radarParent.GetComponent<RadarEvents2D>().ResetRadar(false);
+                radarParent.GetComponent<RadarEvents2D>().ToggleLine(true);
             }
             else
             {
-                radargram.GetComponent<RadarEvents3D>().ResetRadar(false);
+                foreach (Transform child in RadarImageContainer)
+                {
+                    child.GetComponent<RadarEvents3D>().ResetRadar();
+                    child.GetComponent<RadarEvents3D>().TogglePolyline(true, false);
+                }
             }
         }
     }
@@ -302,9 +335,9 @@ public class MenuEvents : MonoBehaviour
 
                 // Trying to find or add a new particle system for the radar image.
             
-                if (radargram.Find("Line") == null) Location.GetComponent<CSVReadPlot>().AddPSLine(radargram);
+                if (radarParent.Find("Line") == null) Location.GetComponent<CSVReadPlot>().AddPSLine(radarParent);
 
-                radargram.GetComponent<RadarEvents2D>().AddNewPoint(MarkColor);
+                radarParent.GetComponent<RadarEvents2D>().AddNewPoint(MarkColor);
             }
         }
     }
@@ -328,7 +361,7 @@ public class MenuEvents : MonoBehaviour
         isMainMenu = home;
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = string.Concat(currentScene.name[0].ToString().ToUpper(), currentScene.name.Substring(1));
-        Title.text = home || (radargram == null) ? sceneName: radargram.name;
+        Title.text = home || (radarParent == null) ? sceneName: radarParent.name;
         SubMenuRadar.gameObject.SetActive(!home);
         SubMenuMain.gameObject.SetActive(home);
     }
@@ -336,43 +369,78 @@ public class MenuEvents : MonoBehaviour
     // The four slider update interface.
     public void OnYSliderUpdated(SliderEventData eventData)
     {
-        if (radargram && YSlider.gameObject.tag == "Active")
-            radargram.localScale = new Vector3(radargram.localScale.x, originalScale.y * scaleY * (0.5f + eventData.NewValue), radargram.localScale.z);
+        if (radarParent && YSlider.gameObject.tag == "Active")
+            radargram.localScale = new Vector3(
+                radargram.localScale.x, 
+                originalScale.y * scaleY * (0.5f + eventData.NewValue),
+                radargram.localScale.z
+            );
     }
 
     public void OnXSliderUpdated(SliderEventData eventData)
     {
-        if (radargram && XSlider.gameObject.tag == "Active")
-            radargram.localScale = new Vector3(originalScale.x * scaleX * (0.5f + eventData.NewValue), radargram.localScale.y, radargram.localScale.z);
+        if (radarParent && XSlider.gameObject.tag == "Active")
+            radargram.localScale = new Vector3(
+                originalScale.x * scaleX * (0.5f + eventData.NewValue),
+                radargram.localScale.y,
+                radargram.localScale.z
+            );
     }
 
     public void OnZSliderUpdated(SliderEventData eventData)
     {
-        if (radargram && ZSlider.gameObject.tag == "Active")
-            radargram.localScale = new Vector3(radargram.localScale.x, radargram.localScale.y, originalScale.z * scaleZ * (0.5f + eventData.NewValue));
+        if (radarParent && ZSlider.gameObject.tag == "Active")
+            radargram.localScale = new Vector3(
+                radargram.localScale.x,
+                radargram.localScale.y, 
+                originalScale.z * scaleZ * (0.5f + eventData.NewValue)
+            );
     }
 
     public void OnRotateSliderUpdated(SliderEventData eventData)
     {
         float rotate = (float)(360.0f * eventData.NewValue);
-        if (radargram) radargram.localRotation = Quaternion.Euler(0, rotate, 0);
+        if (radarParent) radargram.localRotation = Quaternion.Euler(0, rotate, 0);
     }
 
     public void OnTransparencySliderUpdated(SliderEventData eventData)
     {
         //Round the result to nearest levels.
         transparencySlider.SliderValue = Mathf.Round(eventData.NewValue * 4) / 4;
-        if (radargram) radargram.GetComponent<RadarEvents>().SetAlpha(1 - eventData.NewValue);
+
+        // Set the transparency
+        if (radarParent)
+        {
+            if (workflow == 2) radarParent.GetComponent<RadarEvents2D>().SetAlpha(1 - eventData.NewValue);
+            else radarParent.GetComponent<RadarEvents3D>().SetAlpha(1 - eventData.NewValue);
+        }
     }
 
     // Main Menu Vertical Exaggeration Slider
     public void OnVerticalExaggerationSliderUpdated(SliderEventData eventData)
     {
-        foreach (Transform child in DEMs)
+        if (workflow == 2)
         {
-            if (workflow == 2) child.localScale = new Vector3(child.localScale[0], 0.1f + (4.9f * eventData.NewValue), child.localScale[2]);
-            else child.localScale = new Vector3(child.localScale.x, 0.1f + (4.9f * eventData.NewValue), child.localScale.z);
-            Debug.Log(child.localScale);
+            foreach (Transform child in DEMs)
+            {
+                child.localScale = new Vector3(
+                    child.localScale[0],
+                    0.1f + (4.9f * eventData.NewValue),
+                    child.localScale[2]
+                );
+            }
+        }
+        else
+        {
+            foreach (Transform child in DEMs)
+            {
+                child.localScale = new Vector3(
+                    child.localScale.x,
+                    child.localScale.y,
+                    250f + (500f * eventData.NewValue) // need to reupload DEM at 1,1,1 scale to avoid hardcoding
+                );
+            }
+            RadarImageContainer.transform.localScale = new Vector3(1f, 0.5f + eventData.NewValue, 1f);
         }
     }
 
@@ -382,27 +450,24 @@ public class MenuEvents : MonoBehaviour
         Vector3 newScale = AllCSVPicksToggle.IsToggled ? new Vector3(1, 1, 1) : new Vector3(0, 0, 0);
         CSVPicksToggle.IsToggled = AllCSVPicksToggle.IsToggled;
         foreach (Transform child in CSVPicksContainer) child.localScale = newScale;
-        if (workflow == 2)
-        {
-            foreach (Transform child in RadarImageContainer)
-                child.GetComponent<RadarEvents2D>().ToggleLine(AllCSVPicksToggle.IsToggled);
-        }
+        foreach (Transform child in RadarImageContainer)
+            child.GetComponent<RadarEvents2D>().ToggleLine(AllCSVPicksToggle.IsToggled);
     }
 
     public void MainRadarToggling()
     {
         foreach (Transform child in RadarImageContainer)
-        { 
+        {
             if (workflow == 2) child.GetComponent<RadarEvents2D>().ToggleRadar(AllRadarToggle.IsToggled);
             else child.GetComponent<RadarEvents3D>().ToggleRadar(AllRadarToggle.IsToggled);
         }
     }
 
     // Single radar toggling.
-    public void CSVToggling() { radargram.GetComponent<RadarEvents2D>().ToggleLine(CSVPicksToggle.IsToggled); } // nullref
+    public void CSVToggling() { radarParent.GetComponent<RadarEvents2D>().ToggleLine(CSVPicksToggle.IsToggled); } // nullref
     public void RadarToggling() {
-        if (workflow == 2) radargram.GetComponent<RadarEvents2D>().ToggleRadar(RadarToggle.IsToggled);
-        else radargram.GetComponent<RadarEvents3D>().ToggleRadar(RadarToggle.IsToggled); 
+        if (workflow == 2) radarParent.GetComponent<RadarEvents2D>().ToggleRadar(RadarToggle.IsToggled);
+        else radarParent.GetComponent<RadarEvents3D>().ToggleRadar(RadarToggle.IsToggled);
     }
 
     // Find the dem according to name.
@@ -460,7 +525,7 @@ public class MenuEvents : MonoBehaviour
     // Synchronize the sliders.
     public void syncScaleSlider()
     {
-        if (radargram)
+        if (radarParent)
         {
             scaleX = radargram.localScale.x / originalScale.x;
             scaleY = radargram.localScale.y / originalScale.y;
@@ -538,7 +603,7 @@ public class MenuEvents : MonoBehaviour
         }
         else if (keyword == "delete one" || keyword == "delete all")
         {
-            if (radargram && workflow == 2) radargram.GetComponent<RadarEvents2D>().UndoAddPoint(keyword == "delete all");
+            if (radarParent && workflow == 2) radarParent.GetComponent<RadarEvents2D>().UndoAddPoint(keyword == "delete all");
         }
     }
 

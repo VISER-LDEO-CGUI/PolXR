@@ -1892,7 +1892,7 @@ GameObject:
   - component: {fileID: 38309290}
   - component: {fileID: 38309289}
   m_Layer: 0
-  m_Name: DEM Toggle Text
+  m_Name: Axes Toggle Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1938,7 +1938,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TOGGLE DEM
+  m_text: TOGGLE AXES
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a84f857bec7e7345843ae29404c57ce, type: 2}
   m_sharedMaterial: {fileID: 21202819797275496, guid: 6a84f857bec7e7345843ae29404c57ce,
@@ -5069,7 +5069,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 154288521}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11572,7 +11572,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351565127}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -13396,7 +13396,7 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 1
-  sliderStartDistance: -0.03579061
+  sliderStartDistance: -0.03579087
   sliderEndDistance: 0.035774786
   OnValueUpdated:
     m_PersistentCalls:
@@ -16031,7 +16031,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479867584}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -20198,7 +20198,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 657473401}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -21524,7 +21524,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 703029173}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -22070,7 +22070,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 712915497}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -23654,7 +23654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &772011766
 Transform:
   m_ObjectHideFlags: 0
@@ -24604,7 +24604,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 812182678}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -24834,21 +24834,21 @@ MonoBehaviour:
   verticalExaggerationSlider: {fileID: 1416671942}
   scale: 1000
   Title: {fileID: 825911551}
-  YTMP: {fileID: 1129510872}
-  XTMP: {fileID: 671694362}
+  YTMP: {fileID: 671694362}
+  XTMP: {fileID: 1129510872}
   ZTMP: {fileID: 1930589233}
-  RotationDegreeTMP: {fileID: 1767290853}
-  TransparencyTMP: {fileID: 1208772172}
+  RotationDegreeTMP: {fileID: 399470999}
+  TransparencyTMP: {fileID: 703876779}
   MarkTMP: {fileID: 1061419672}
   MeasureModeText: {fileID: 1948096786}
-  RadarToggle: {fileID: 383241450}
-  CSVPicksToggle: {fileID: 246619605}
-  AllRadarToggle: {fileID: 383241450}
+  RadarToggle: {fileID: 539143238}
+  CSVPicksToggle: {fileID: 0}
+  AllRadarToggle: {fileID: 1592712124}
   AllCSVPicksToggle: {fileID: 0}
-  MeasurementToggle: {fileID: 1062190944}
-  SecondMeasurementToggle: {fileID: 1488597226}
+  MeasurementToggle: {fileID: 1818146004}
+  SecondMeasurementToggle: {fileID: 1270332945}
   SurfaceToggle: {fileID: 240425175}
-  BedToggle: {fileID: 240425175}
+  BedToggle: {fileID: 933695010}
   BoxToggle: {fileID: 2133385044}
   MarkObj: {fileID: 1940026542}
   MarkColor: {r: 1, g: 0, b: 0, a: 1}
@@ -24856,7 +24856,7 @@ MonoBehaviour:
   MeasureLine: {fileID: 3142387958233365571}
   SelectionDialog: Assets/dialog.txt
   Minimap: {fileID: 2112128881}
-  PSLine: {fileID: 5570378949377832428, guid: 3c004ad714ddd264e87e8ef5a18f66b7, type: 3}
+  PSLine: {fileID: 0}
   scenePaths:
   - Assets/Scenes/homescreen.unity
   audioSource: {fileID: 0}
@@ -27762,7 +27762,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: BEDMACHINE_DEM_IDBMG4
           m_BoolArgument: 0
         m_CallState: 2
   Events:
@@ -32739,7 +32739,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078110975}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -32930,6 +32930,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7381833320669417250}
+  - {fileID: 1151388028730063987}
   m_Father: {fileID: 469521222}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -34536,7 +34537,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 812634070}
         m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
-        m_MethodName: TeleportationButton
+        m_MethodName: ResetRadarTransform
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -39837,8 +39838,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 1
-  sliderStartDistance: -0.036130555
-  sliderEndDistance: 0.03597027
+  sliderStartDistance: -0.036130633
+  sliderEndDistance: 0.03597033
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -40189,7 +40190,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1447589771}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -41306,8 +41307,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 1
-  sliderStartDistance: -0.0358285
-  sliderEndDistance: 0.035716128
+  sliderStartDistance: -0.035829693
+  sliderEndDistance: 0.03571732
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -41324,8 +41325,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 812634070}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnHorizontalSliderUpdated
+        m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+        m_MethodName: OnZSliderUpdated
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -44869,8 +44870,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 1
-  sliderStartDistance: -0.035829734
-  sliderEndDistance: 0.035717357
+  sliderStartDistance: -0.035830658
+  sliderEndDistance: 0.03571828
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -44887,8 +44888,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 812634070}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnHorizontalSliderUpdated
+        m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+        m_MethodName: OnXSliderUpdated
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -47731,7 +47732,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1727108774}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -48711,7 +48712,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1764720835
 Transform:
   m_ObjectHideFlags: 0
@@ -49283,7 +49284,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776229977}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -52808,7 +52809,7 @@ GameObject:
   - component: {fileID: 1987493101}
   - component: {fileID: 1987493100}
   m_Layer: 0
-  m_Name: DEM Toggle
+  m_Name: Axes Toggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53017,14 +53018,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 812634070}
         m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
-        m_MethodName: CSVToggling
-        m_Mode: 1
+        m_MethodName: DemToggle
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MEASURES_NSIDC-0715-002
           m_BoolArgument: 0
         m_CallState: 2
   Events:
@@ -54996,8 +54997,8 @@ MonoBehaviour:
   tickMarks: {fileID: 0}
   thumbVisuals: {fileID: 0}
   sliderAxis: 1
-  sliderStartDistance: -0.035832644
-  sliderEndDistance: 0.03575762
+  sliderStartDistance: -0.035834283
+  sliderEndDistance: 0.03575926
   OnValueUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -55014,8 +55015,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 812634070}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnVerticalSliderUpdated
+        m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+        m_MethodName: OnYSliderUpdated
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -55449,7 +55450,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2112203522}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -56734,6 +56735,63 @@ MonoBehaviour:
   radarMark: {fileID: 529000978}
   DEM: {fileID: 0}
   gridLine: {fileID: 2049385536}
+--- !u!4 &1151388028730063987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164078558919634760}
+  m_LocalRotation: {x: -0, y: 0.186524, z: -0, w: 0.9824504}
+  m_LocalPosition: {x: -10, y: 0, z: -130}
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1083601298}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1587545474336203181
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164078558919634760}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 6317243759ba40f43a2bf4a90c9e95d8, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1001 &2249673740873608522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56824,6 +56882,14 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2249673742089275078, guid: 4a336c5f27269bf4ca64bf1623a23006, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4a336c5f27269bf4ca64bf1623a23006, type: 3}
+--- !u!33 &2823090746204456249
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164078558919634760}
+  m_Mesh: {fileID: -2432090755550338912, guid: bde6f732aba2bac43a31553d611d4770, type: 3}
 --- !u!1001 &3142387958233365570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57034,6 +57100,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9189260757652488642}
   m_Mesh: {fileID: 7107633710438236949, guid: a2410c8a9a86a9d4e89b4ac34b4ed080, type: 3}
+--- !u!1 &8164078558919634760
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1151388028730063987}
+  - component: {fileID: 2823090746204456249}
+  - component: {fileID: 1587545474336203181}
+  m_Layer: 0
+  m_Name: BEDMACHINE_DEM_IDBMG4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1001 &8326082214626112602
 PrefabInstance:
   m_ObjectHideFlags: 0

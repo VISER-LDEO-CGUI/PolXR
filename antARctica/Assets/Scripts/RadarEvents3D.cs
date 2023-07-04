@@ -9,8 +9,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     public GameObject radargrams;
     public GameObject flightline;
 
-    private bool selected = false;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -29,11 +27,11 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
         // Set objects to their starting states
         radarMark.SetActive(false);
-        TogglePolyline(true);
+        TogglePolyline(true, false);
         ToggleRadar(false);
     }
 
-    public void TogglePolyline(bool toggle)
+    public void TogglePolyline(bool toggle, bool selectRadar)
     {
         // Actually toggle the polyline
         flightline.SetActive(toggle);
@@ -48,7 +46,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
         // Set color based on selection
         lineRenderer.startColor = lineRenderer.endColor = loaded ?
-            selected ? 
+            selectRadar ? 
                 new Color(1f, 0f, 0f)       // loaded and selected
                 : new Color(1f, .4f, 0f)    // loaded, not selected
             : new Color(1f, 1f, 0f);        // not loaded
@@ -65,24 +63,30 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         //MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
     }
 
-    // Show the menu and mark and update the variables
-    public void OnPointerDown(MixedRealityPointerEventData eventData)
+    public void Select()
     {
-        // Select the 
-        Debug.Log("Clicked " + flightline.name);
-        if (loaded) selected = true;
-
         // Update the menu
         SychronizeMenu();
 
+        // Select the flightline portion
+        foreach (RadarEvents3D sibling in this.transform.parent.gameObject.GetComponentsInChildren<RadarEvents3D>())
+        {
+            sibling.TogglePolyline(true, false);
+        }
+        TogglePolyline(true, true);
+    }
+
+    // Show the menu and mark and update the variables
+    public void OnPointerDown(MixedRealityPointerEventData eventData)
+    {
         // Only load the images when selected
         ToggleRadar(true);
 
-        // Select the flightline portion
-        TogglePolyline(true);
+        // Show that the object has been selected
+        Select();
 
         // Measurement
-        
+
     }
 
     // Unused functions
@@ -91,32 +95,42 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
     private void LateUpdate() { }
 
-    // Change the transparancy of the radar images. "onlyLower" used for setting radar only to more transparent level
+    // Gets the scale of the radargram
+    public new Vector3 GetScale()
+    {
+        return new Vector3(radargrams.transform.localScale.x, radargrams.transform.localScale.y, radargrams.transform.localScale.z);
+    }
+
+    // Change the transparency of the radar images. "onlyLower" used for setting radar only to more transparent level
     public new void SetAlpha(float newAlpha, bool onlyLower=false)
     {
         if ((onlyLower && alpha > newAlpha) || !onlyLower) alpha = newAlpha;
         for (int i = 0; i < 2; i++)
         {
-            radargrams.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, newAlpha);
+            Color color = radargrams.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
+            color.a = newAlpha;
         }
     }
 
-    // Reset the radar shape
-    public new void ResetRadar(bool whiten)
+    // Just resets the radar transform
+    public void ResetTransform()
     {
-        // Return the radargrams to their original position
         radargrams.transform.localPosition = position;
         radargrams.transform.localRotation = Quaternion.Euler(rotation);
         radargrams.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
+    }
 
-        // Unselect the object
-        selected = false;
+    // Reset the radar as if it had not been loaded
+    public void ResetRadar()
+    {
+        // Return the radargrams to their original position
+        ResetTransform();
 
         // Turn the radargrams off
         ToggleRadar(false);
 
         // Ensure the flightline is still on
-        TogglePolyline(true);
+        TogglePolyline(true, false);
 
         // Turn off the radar mark
         radarMark.SetActive(false);
