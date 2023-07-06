@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.XR;
+using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
@@ -80,6 +81,7 @@ public class LoadFlightLines : MonoBehaviour
 
             // Add the correct Object Manipulator so users can grab the radargrams
             radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+            radargram.AddComponent<NearInteractionGrabbable>();
 
             // Link the parent to the menu
             script.Menu = GameObject.Find("Menu");

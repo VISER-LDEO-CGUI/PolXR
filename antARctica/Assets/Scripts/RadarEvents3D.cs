@@ -1,4 +1,5 @@
 ﻿using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using UnityEngine;
 
@@ -24,6 +25,9 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         scaleZ = radargrams.transform.localScale.z;
         position = radargrams.transform.localPosition;
         rotation = radargrams.transform.eulerAngles;
+
+        // Add manipulation listeners to the radargrams
+        radargrams.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().OnManipulationStarted.AddListener(Select);
 
         // Set objects to their starting states
         radarMark.SetActive(false);
@@ -74,6 +78,10 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
             sibling.TogglePolyline(true, false);
         }
         TogglePolyline(true, true);
+    }
+    private void Select(ManipulationEventData eventData)
+    {
+        Select();
     }
 
     // Show the menu and mark and update the variables
