@@ -37,6 +37,7 @@ public class LoadFlightLines : MonoBehaviour
             GameObject[] meshBoth = createRadargramObjects(meshes[i]);
             GameObject meshForward = meshBoth[0];
             GameObject meshBackward = meshBoth[1];
+            Bounds meshBounds = meshForward.GetComponent<Renderer>().bounds; // cuz we need bounds in world coords
 
             // Select and name line
             string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
@@ -71,7 +72,6 @@ public class LoadFlightLines : MonoBehaviour
             BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
             boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
             BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
-            Bounds meshBounds = meshForward.GetComponent<Renderer>().bounds; // cuz we need bounds in world coords
             boxCollider.center = meshBounds.center;
             boxCollider.size = meshBounds.size;
             boundsControl.BoundsOverride = boxCollider;

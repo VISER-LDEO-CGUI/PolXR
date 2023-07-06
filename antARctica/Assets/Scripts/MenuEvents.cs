@@ -438,7 +438,7 @@ public class MenuEvents : MonoBehaviour
                 child.localScale = new Vector3(
                     child.localScale.x,
                     child.localScale.y,
-                    250f + (500f * eventData.NewValue) // need to reupload DEM at 1,1,1 scale to avoid hardcoding
+                    (child.localScale.x / 2) + (child.localScale.x * eventData.NewValue)
                 );
             }
             RadarImageContainer.transform.localScale = new Vector3(1f, 0.5f + eventData.NewValue, 1f);
