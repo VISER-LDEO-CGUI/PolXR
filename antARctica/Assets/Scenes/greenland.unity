@@ -1892,7 +1892,7 @@ GameObject:
   - component: {fileID: 38309290}
   - component: {fileID: 38309289}
   m_Layer: 0
-  m_Name: Axes Toggle Text
+  m_Name: DEM Toggle Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -50,12 +50,13 @@ public class LoadFlightLines : MonoBehaviour
             parent.transform.SetParent(Container);
             RadarEvents3D script = parent.AddComponent<RadarEvents3D>();
             parent.transform.localScale = new Vector3(1, 1, 1);
-            parent.transform.localPosition = new Vector3(0, 0, 0);
+            parent.transform.localPosition = meshBounds.center;
             parent.transform.rotation = Quaternion.identity;
             BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
 
             // Create a parent to group both radargram objects
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
+            radargram.transform.localPosition = meshBounds.center;
             MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
             radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
 
