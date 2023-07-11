@@ -108,7 +108,7 @@ public class LoadFlightLines : MonoBehaviour
         GameObject meshForward = Instantiate(obj as GameObject);
         GameObject meshBackward = Instantiate(obj as GameObject);
 
-        // Generate a reverse mesh to texture the other side
+        // Texture the other side of the mesh
         MeshFilter meshFilter = meshBackward.GetComponent<MeshFilter>();
         Mesh meshUnderlying = meshFilter.mesh;
         int[] triangles = meshUnderlying.triangles;
@@ -123,10 +123,6 @@ public class LoadFlightLines : MonoBehaviour
         // Name meshes
         meshForward.name = meshForward.name.Replace("(Clone)", "").Trim();
         meshBackward.name = "_" + meshForward.name;
-
-        // Enable transparency
-        ToFadeMode(meshForward.GetComponent<Renderer>().material);
-        ToFadeMode(meshBackward.GetComponent<Renderer>().material);
 
         // Return meshes
         GameObject[] meshes = new GameObject[2];
@@ -227,18 +223,6 @@ public class LoadFlightLines : MonoBehaviour
         // Finish up
         Destroy(gridLine);
         return polylines;
-    }
-
-    public static void ToFadeMode(Material material)
-    { // https://forum.unity.com/threads/change-rendering-mode-via-script.476437/
-        material.SetOverrideTag("RenderType", "Transparent");
-        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        material.SetInt("_ZWrite", 0);
-        material.DisableKeyword("_ALPHATEST_ON");
-        material.EnableKeyword("_ALPHABLEND_ON");
-        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-        material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
     }
 
 }

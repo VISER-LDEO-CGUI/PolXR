@@ -117,7 +117,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         {
             Color color = radargrams.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color;
             color.a = newAlpha;
-            Debug.Log($"Set {radargrams.transform.GetChild(i).gameObject.name} to alpha={color.a}");
         }
     }
 
