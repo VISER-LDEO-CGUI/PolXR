@@ -51,7 +51,7 @@ public class LoadFlightLines : MonoBehaviour
             parent.transform.SetParent(Container);
             RadarEvents3D script = parent.AddComponent<RadarEvents3D>();
             parent.transform.localScale = new Vector3(1, 1, 1);
-            parent.transform.localPosition = meshBounds.center;
+            parent.transform.localPosition = new Vector3(0, 0, 0);
             parent.transform.rotation = Quaternion.identity;
             BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
 
@@ -74,7 +74,7 @@ public class LoadFlightLines : MonoBehaviour
             BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
             boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
             BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
-            boxCollider.center = meshBounds.center;
+            boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
             boxCollider.size = meshBounds.size;
             boundsControl.BoundsOverride = boxCollider;
 
