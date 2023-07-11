@@ -214,7 +214,7 @@ public class MenuEvents : MonoBehaviour
             }
             else
             {
-                // In 3D, we want to transform the radar parent, not the whole group
+                // In workflow 3, we want to transform the radar parent, not the whole group.
                 radargram = newRadar.transform.GetChild(1);
                 originalScale = radarParent.GetComponent<RadarEvents3D>().GetScale();
 
@@ -406,14 +406,17 @@ public class MenuEvents : MonoBehaviour
 
     public void OnTransparencySliderUpdated(SliderEventData eventData)
     {
-        //Round the result to nearest levels.
-        transparencySlider.SliderValue = Mathf.Round(eventData.NewValue * 4) / 4;
+        // Round the result to nearest quarter
+        float roundedSliderValue = Mathf.Round(eventData.NewValue * 4) / 4;
+        
+        // Set the slider
+        transparencySlider.SliderValue = roundedSliderValue;
 
         // Set the transparency
         if (radarParent)
         {
-            if (workflow == 2) radarParent.GetComponent<RadarEvents2D>().SetAlpha(1 - eventData.NewValue);
-            else radarParent.GetComponent<RadarEvents3D>().SetAlpha(1 - eventData.NewValue);
+            if (workflow == 2) radarParent.GetComponent<RadarEvents2D>().SetAlpha(1 - roundedSliderValue);
+            else radarParent.GetComponent<RadarEvents3D>().SetAlpha(1 - roundedSliderValue);
         }
     }
 
