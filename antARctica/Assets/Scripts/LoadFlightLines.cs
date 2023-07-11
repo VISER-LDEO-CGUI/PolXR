@@ -4,6 +4,7 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -76,6 +77,10 @@ public class LoadFlightLines : MonoBehaviour
             boxCollider.center = meshBounds.center;
             boxCollider.size = meshBounds.size;
             boundsControl.BoundsOverride = boxCollider;
+
+            // Constrain the rotation axes
+            RotationAxisConstraint rotationConstraint = radargram.AddComponent<RotationAxisConstraint>();
+            rotationConstraint.ConstraintOnRotation = AxisFlags.XAxis | AxisFlags.ZAxis;
 
             // Set the parent's BoxCollider to have the same bounds
             BoxCollider parentCollider = parent.GetComponent<BoxCollider>();
