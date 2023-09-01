@@ -38,7 +38,7 @@ The application contains three scenes.
 * Petermann Glacier
 
 The Home Menu scene is mostly empty except for an XR menu that allows users to load one of the other scenes.
-<img src="https://github.com/qaziashikin/polAR/images/blob/Summer/home_menu.png"      alt="Home Menu"      style="float: left; margin-right: 10px;" />
+<img src="https://github.com/qaziashikin/polAR/blob/Summer/images/homeMenu.png?raw=true"      alt="Home Menu"      style="float: left; margin-right: 10px;" />
 <br />
 
 ### Ross Ice Shelf Scene
@@ -52,8 +52,7 @@ The Home Menu scene is mostly empty except for an XR menu that allows users to l
 
 This is the oldest extant scene. Radar images are textured on planar objects. Only plots from where the plane was flying relatively straight are shown. [Expand!]
 
-<img src="https://github.com/qaziashikin/polAR/images/blob/Summer/ris_sceneMenu.png"      alt="RIS Scene Menu"      style="float: left; margin-right: 10px;" />
-<br />
+<img src="https://github.com/qaziashikin/polAR/blob/Summer/images/ris_sceneMenu.png?raw=true"      alt="RIS Scene Menu"      style="float: left; margin-right: 10px;" />
 <br />
 
 ### Petermann Glacier Scene
@@ -65,12 +64,14 @@ This is the oldest extant scene. Radar images are textured on planar objects. On
 | Flightlines | CReSiS | Polylines corresponding to where the plane flying the radar system went above the surface |
 | Radargram meshes | CReSiS | Triangle meshes with radargrams mapped as texture |
 
+<img src="https://github.com/qaziashikin/polAR/images/blob/Summer/petermann_sceneMenu.png?raw=true"      alt="Petermann Scene Menu"      style="float: left; margin-right: 10px;" />
+<br />
+
 This scene includes the path of the plane carrying the radar sensor (known as its flightline). The flightlines are modeled as polylines and are broken up into segments during preprocessing. Each radar object is modeled as a triangle mesh, textured with a radargram, and linked to the associated flightline portion. Users can select a flightline portion to load a mesh. The flightline coordinates are accurate within the projected coordinate system, but the vertical coordinate is snapped to the surface DEM for ease of viewing.
 
 Using meshes enables the entire flightline to be modeled. Vertices in each mesh correspond to the location from which a pixel on the plot would correspond in the real world. This is evident wherever a radar object intersects with a DEM.
 
-<img src="https://github.com/qaziashikin/polAR/images/blob/Summer/petermann_sceneMenu.png"      alt="Petermann DEM-Radar Intersection"      style="float: left; margin-right: 10px;" />
-<br />
+<img src="https://github.com/qaziashikin/polAR/images/blob/Summer/petermann_screenshot.png?raw=true"      alt="Petermann DEM-Radar Intersection"      style="float: left; margin-right: 10px;" />
 <br />
 
 The radargram objects are generated in the following way. In preprocessing, the plots are generated in MATLAB and converted into the three separate files by the _greenland_obj.m_ script.
@@ -80,10 +81,6 @@ The radargram objects are generated in the following way. In preprocessing, the 
 * .png (the radargram; this is mapped onto the mesh)
 
 The .obj files then need to be decimated in order to improve performance. This is done in Blender and currently requires manual attention to ensure that the meshes do not deform significantly at the boundaries. These simplified .obj files, along with the .mtl and .png files, are added to the Assets folder. Upon loading the scene, the _LoadFlightlines.cs_ script programmatically generates meshes from the file triples and associates each textured mesh with the corresponding flightline polyline. 
-
-<img src="https://github.com/qaziashikin/polAR/images/blob/Summer/petermann_sceneMenu.png"      alt="Petermann Scene Menu"      style="float: left; margin-right: 10px;" />
-<br />
-<br />
 
 ### Code files
 
@@ -140,7 +137,7 @@ Here is a list of interactions available with the main menu. All of these intera
 
 Because the Ross Ice Shelf scene uses a different workflow than the Petermann Glacier scene, some of the controls are different. Here are the menu options that are only available in the RIS scene.
 
-<img src="https://github.com/qaziashikin/polAR/images/blob/Summer/ris_radarMenu.png"      alt="Markdown Monster icon"      style="float: left; margin-right: 10px;" />
+<img src="https://github.com/qaziashikin/polAR/blob/Summer/images/ris_radarMenu.png?raw=true"      alt="RIS Radar Menu"      style="float: left; margin-right: 10px;" />
 <br />
 
 | Main Menu Interaction Title | Description |
@@ -173,7 +170,7 @@ The line menu has a unique sidebar.
 
 ### Petermann Scene Controls
 
-<img src="https://github.com/qaziashikin/polAR/images/blob/Summer/petermann_radarMenu.png"      alt="Markdown Monster icon"      style="float: left; margin-right: 10px;" />
+<img src="https://github.com/qaziashikin/polAR/blob/Summer/images/petermann_radarMenu.png?raw=true"      alt="Petermann Radar Menu"      style="float: left; margin-right: 10px;" />
 <br />
 
 | Main Menu Interaction Title | Description |
@@ -195,6 +192,8 @@ Here is a list of interactions available with the radar menu. These are all spec
 | Surface DEM | Checking this button turns the Surface DEM on/off |
 
 The radar menu has a unique sidebar.
+| Radar Menu Title | Description |
+| :-----------: | ----------- |
 | Measurement Mode | Turns measurent mode on/off (allows user to place two marks on the same image and measure the distance between); currently non-functional |
 | Sidebar "X" | Closes the menu |
 | Sidebar "Home" | Opens the main menu |
