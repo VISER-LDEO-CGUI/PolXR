@@ -171,6 +171,8 @@ Here is a list of interactions available with the line menu. All of these intera
 | View CSV Picks | Checking this button turns the selected CSV Picks on/off |
 
 The line menu has a unique sidebar.
+| Main Menu Interaction Title | Description |
+| :-----------: | ----------- |
 | Measurement Mode | Turns measurent mode on/off (allows user to place two marks on the same image and measure the distance between) |
 | Sidebar "X" | Closes the menu |
 | Sidebar "Home" | Opens the main menu |
