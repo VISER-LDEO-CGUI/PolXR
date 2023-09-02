@@ -1,6 +1,6 @@
 # VISER: XR scientific visualization tool for ice-penetrating radar data in Antarctica and Greenland
 
-This application facilitates the analysis of radar data for polar geophysicists by using Extended Reality (XR) technology to visualize radar returns in an accurate 3D geospatial context. Radargrams are modeled as meshes and placed precisely within a digital twin of the ice shelf from which the data were collected. Users can manipulate these and other scientific data models with various XR interaction techniques that are outlined below.
+This application facilitates the analysis of radar data for polar geophysicists by using Extended Reality (XR) technology to visualize radar returns in an accurate 3D geospatial context.
 
 Project Website: https://pgg.ldeo.columbia.edu/projects/VISER
 
