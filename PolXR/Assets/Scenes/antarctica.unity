@@ -1947,7 +1947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &108321655
 Transform:
   m_ObjectHideFlags: 0
@@ -2348,7 +2348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &140567121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5115,8 +5115,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 683731866665012620}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnHorizontalSliderUpdated
+        m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+        m_MethodName: OnXSliderUpdated
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11448,7 +11448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &469521222
 Transform:
   m_ObjectHideFlags: 0
@@ -32717,12 +32717,12 @@ GameObject:
   - component: {fileID: 1170656336}
   - component: {fileID: 1170656335}
   m_Layer: 0
-  m_Name: MixedRealityToolkit (Inactive)
+  m_Name: MixedRealityToolkit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1170656335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36617,7 +36617,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290736268}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -48695,7 +48695,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767597428}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -57717,16 +57717,16 @@ MonoBehaviour:
   DEMs: {fileID: 518494631}
   CSVPicksContainer: {fileID: 288208385}
   Location: {fileID: 469521222}
-  XSlider: {fileID: 0}
-  YSlider: {fileID: 0}
+  XSlider: {fileID: 226041448}
+  YSlider: {fileID: 7508367012290142209}
   ZSlider: {fileID: 0}
   rotationSlider: {fileID: 1138500061}
   transparencySlider: {fileID: 65786697}
   verticalExaggerationSlider: {fileID: 1269909559}
   scale: 1000
   Title: {fileID: 2708467136126536640}
-  YTMP: {fileID: 0}
-  XTMP: {fileID: 0}
+  YTMP: {fileID: 648168767}
+  XTMP: {fileID: 1391079886}
   ZTMP: {fileID: 0}
   RotationDegreeTMP: {fileID: 622703451}
   TransparencyTMP: {fileID: 1960516734}
@@ -61331,8 +61331,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 683731866665012620}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnVerticalSliderUpdated
+        m_TargetAssemblyTypeName: MenuEvents, Assembly-CSharp
+        m_MethodName: OnYSliderUpdated
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
