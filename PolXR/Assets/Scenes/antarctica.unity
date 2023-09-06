@@ -57713,6 +57713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SubMenuRadar: {fileID: 853555539}
   SubMenuMain: {fileID: 608409566}
+  workflow: 2
   RadarImageContainer: {fileID: 24549645}
   DEMs: {fileID: 518494631}
   CSVPicksContainer: {fileID: 288208385}

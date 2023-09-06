@@ -16,7 +16,7 @@ public class MenuEvents : MonoBehaviour
     public Transform SubMenuMain;
 
     // The workflow used for the current radarParent.
-    private int workflow;
+    public int workflow;
 
     // Initially set to empty objects to avoid null reference.
     private Transform radarParent = null;
@@ -117,8 +117,6 @@ public class MenuEvents : MonoBehaviour
 
         if (!isMainMenu)
         {
-            // Determine what the active object workflow is
-            workflow = (radarParent.GetComponent<RadarEvents2D>() is null) ? 3 : 2;
 
             // Update the rotation slider value accordingly.
             float rounded_angle = (float)(radargram.localRotation.eulerAngles.y / 360.0f);
@@ -206,7 +204,7 @@ public class MenuEvents : MonoBehaviour
             // Switch to new radar 
             radarParent = newRadar;
 
-            // Reset the values.
+            // Reset the values
             if (workflow == 2)
             {
                 radargram = newRadar;
@@ -214,7 +212,8 @@ public class MenuEvents : MonoBehaviour
             }
             else
             {
-                // In 3D, we want to transform the radar parent, not the whole group
+                // In 3D, we want to transform the radar parent, not the whole grouprkflow
+
                 radargram = newRadar.transform.GetChild(1);
                 originalScale = radarParent.GetComponent<RadarEvents3D>().GetScale();
 
@@ -455,12 +454,18 @@ public class MenuEvents : MonoBehaviour
             child.GetComponent<RadarEvents2D>().ToggleLine(AllCSVPicksToggle.IsToggled);
     }
 
+    // Toggles all radar.
     public void MainRadarToggling()
     {
         foreach (Transform child in RadarImageContainer)
         {
             if (workflow == 2) child.GetComponent<RadarEvents2D>().ToggleRadar(AllRadarToggle.IsToggled);
-            else child.GetComponent<RadarEvents3D>().ToggleRadar(AllRadarToggle.IsToggled);
+            else
+            {
+                bool isLoaded = child.GetComponent<RadarEvents3D>().isLoaded();
+                child.GetComponent<RadarEvents3D>().ToggleRadar(AllRadarToggle.IsToggled && isLoaded); // TODO: fix turning on
+                child.GetComponent<RadarEvents3D>().TogglePolyline(true, isLoaded);
+            }
         }
     }
 

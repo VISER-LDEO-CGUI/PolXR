@@ -67,6 +67,12 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         //MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
     }
 
+    // Checks if the radargram is currently loaded
+    public bool isLoaded()
+    {
+        return flightline.GetComponent<LineRenderer>().startColor != new Color(1f, 1f, 0f);
+    }
+
     public void Select()
     {
         // Update the menu
