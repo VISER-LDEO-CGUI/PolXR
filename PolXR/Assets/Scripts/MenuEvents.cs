@@ -459,13 +459,7 @@ public class MenuEvents : MonoBehaviour
     {
         foreach (Transform child in RadarImageContainer)
         {
-            if (workflow == 2) child.GetComponent<RadarEvents2D>().ToggleRadar(AllRadarToggle.IsToggled);
-            else
-            {
-                bool isLoaded = child.GetComponent<RadarEvents3D>().isLoaded();
-                child.GetComponent<RadarEvents3D>().ToggleRadar(AllRadarToggle.IsToggled && isLoaded); // TODO: fix turning on
-                child.GetComponent<RadarEvents3D>().TogglePolyline(true, isLoaded);
-            }
+            child.GetComponent<RadarEvents2D>().ToggleRadar(AllRadarToggle.IsToggled);
         }
     }
 
