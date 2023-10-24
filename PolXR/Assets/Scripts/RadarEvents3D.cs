@@ -10,6 +10,8 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     public GameObject radargrams;
     public GameObject flightline;
 
+    //public GameObject MarkObj3D;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         flightline = this.transform.GetChild(1).gameObject;
         radargrams = this.transform.GetChild(2).gameObject;
         radarMark = this.transform.GetChild(3).gameObject;
+        MarkObj3D = this.transform.GetChild(4).gameObject;
 
         // Store initial values
         scaleX = radargrams.transform.localScale.x;
@@ -33,6 +36,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         radarMark.SetActive(false);
         TogglePolyline(true, false);
         ToggleRadar(false);
+        
     }
 
     public void TogglePolyline(bool toggle, bool selectRadar)
@@ -64,6 +68,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         this.transform.GetComponent<BoundsControl>().enabled = toggle;
         radargrams.SetActive(toggle);
         loaded = toggle;
+        MarkObj3D.SetActive(true);
         //MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
     }
 
@@ -88,6 +93,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     private void Select(ManipulationEventData eventData)
     {
         Select();
+        //Debug.Log(eventData.Pointer.Result.Details.Point);
     }
 
     // Show the menu and mark and update the variables
@@ -100,6 +106,30 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         Select();
 
         // Measurement
+        Debug.Log(eventData.Pointer.Result.Details.Point);
+
+        // if (MarkObj3D != null)
+        // {
+        //     // Instantiate the crosshair
+        //     GameObject crosshair = Instantiate(MarkObj3D);
+
+        //     // Set the crosshair's parent to the selected radargram
+        //     crosshair.transform.SetParent(transform);  // Or set the appropriate parent object
+
+        //     // You can adjust the position, rotation, and scale of the crosshair as needed
+        //     // Example: you can make it appear at the center of the radargram
+        //     crosshair.transform.localPosition = Vector3.zero;
+        //     crosshair.transform.localRotation = Quaternion.identity;
+
+        //     // Measurement
+        //     Debug.Log(eventData.Pointer.Result.Details.Point);
+        // }
+        // The mark.
+        
+        MarkObj3D.transform.rotation = this.transform.rotation;
+        MarkObj3D.transform.SetParent(this.transform);
+        MarkObj3D.transform.position = eventData.Pointer.Result.Details.Point;
+        Debug.Log(eventData.Pointer.Result.Details.Point);
 
     }
 

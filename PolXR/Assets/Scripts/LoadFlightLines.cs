@@ -20,6 +20,7 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject DEM;
     public GameObject gridLine;
 
+    public GameObject MarkObj3D;
     public void Start()
     {
         LoadFlightLine("20100324_01"); // TODO: replace with menu option
@@ -94,7 +95,9 @@ public class LoadFlightLines : MonoBehaviour
 
             // Create and place the radar mark for the minimap
             Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
-            GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
+            //GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
+
+            GameObject markObj3D = Instantiate(MarkObj3D, position, Quaternion.identity, parent.transform);
         }
 
         // Drop everything onto the DEM -- this should correlate with the DEM position
