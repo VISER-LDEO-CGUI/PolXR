@@ -1,7 +1,11 @@
-﻿using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 {
@@ -9,6 +13,9 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     // The scientific objects
     public GameObject radargrams;
     public GameObject flightline;
+
+    public GameObject meshForward;
+    public GameObject meshBackward;
 
     //public GameObject MarkObj3D;
 
@@ -20,7 +27,10 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         flightline = this.transform.GetChild(1).gameObject;
         radargrams = this.transform.GetChild(2).gameObject;
         radarMark = this.transform.GetChild(3).gameObject;
-        MarkObj3D = this.transform.GetChild(4).gameObject;
+
+        meshForward = radargrams.transform.GetChild(1).gameObject;
+        meshBackward = radargrams.transform.GetChild(2).gameObject;
+        MarkObj3D = radargrams.transform.GetChild(3).gameObject;
 
         // Store initial values
         scaleX = radargrams.transform.localScale.x;
@@ -30,7 +40,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         rotation = radargrams.transform.eulerAngles;
 
         // Add manipulation listeners to the radargrams
-        radargrams.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().OnManipulationStarted.AddListener(Select);
+        //radargrams.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().OnManipulationStarted.AddListener(Select);
 
         // Set objects to their starting states
         radarMark.SetActive(false);
@@ -38,6 +48,38 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         ToggleRadar(false);
         
     }
+
+    // void Update()
+    // {
+    //     foreach(var source in CoreServices.InputSystem.DetectedInputSources)
+    //     {
+    //         // Ignore anything that is not a hand because we want articulated hands
+    //         if (source.SourceType == Microsoft.MixedReality.Toolkit.Input.InputSourceType.Hand)
+    //         {
+    //             foreach (var p in source.Pointers)
+    //             {
+    //                 if (p is IMixedRealityNearPointer)
+    //                 {
+    //                     // Ignore near pointers, we only want the rays
+    //                     continue;
+    //                 }
+    //                 if (p.Result != null)
+    //                 {
+    //                     var startPoint = p.Position;
+    //                     var endPoint = p.Result.Details.Point;
+    //                     var hitObject = p.Result.Details.Object;
+    //                     if (hitObject)
+    //                     {
+    //                         // var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+    //                         // sphere.transform.localScale = Vector3.one * 0.01f;
+    //                         // sphere.transform.position = endPoint;
+    //                     }
+    //                 }
+
+    //             }
+    //         }
+    //     }
+    // }
 
     public void TogglePolyline(bool toggle, bool selectRadar)
     {
@@ -106,37 +148,131 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         Select();
 
         // Measurement
-        Debug.Log(eventData.Pointer.Result.Details.Point);
+        //Debug.Log(eventData.Pointer.Result.Details.Point);
 
-        // if (MarkObj3D != null)
-        // {
-        //     // Instantiate the crosshair
-        //     GameObject crosshair = Instantiate(MarkObj3D);
-
-        //     // Set the crosshair's parent to the selected radargram
-        //     crosshair.transform.SetParent(transform);  // Or set the appropriate parent object
-
-        //     // You can adjust the position, rotation, and scale of the crosshair as needed
-        //     // Example: you can make it appear at the center of the radargram
-        //     crosshair.transform.localPosition = Vector3.zero;
-        //     crosshair.transform.localRotation = Quaternion.identity;
-
-        //     // Measurement
-        //     Debug.Log(eventData.Pointer.Result.Details.Point);
-        // }
-        // The mark.
+        Debug.Log("on pointer down is firing");
+        // new ray shooting
+        Ray ray = new Ray(eventData.Pointer.Result.Details.Point, -eventData.Pointer.Result.Details.Normal);
+        RaycastHit hit;
+        RaycastHit[] hits;
+       
+        Debug.DrawRay(ray.origin, ray.direction*2000);
+        hits = Physics.RaycastAll(ray);
+        Debug.Log("number of items hit: "+hits.Length);
+         if (hits.Length >0)
+        {
+            Debug.Log("ray fired and hit something, names: ");
         
-        MarkObj3D.transform.rotation = this.transform.rotation;
-        MarkObj3D.transform.SetParent(this.transform);
-        MarkObj3D.transform.position = eventData.Pointer.Result.Details.Point;
-        Debug.Log(eventData.Pointer.Result.Details.Point);
+            //sort hits list by distance closest to furthest
+            Array.Sort(hits, (RaycastHit x, RaycastHit y) => x.distance.CompareTo(y.distance));
+            // Check if the hit object is the meshBackward
+
+            foreach(RaycastHit obj in hits)
+            {
+                Debug.Log(obj.collider.gameObject.name);
+                if (obj.transform.name.StartsWith("Data")){ //if it hits mesh forward first
+                    Debug.Log("hit mesh forward");
+                    Vector3 localPosition = radargrams.transform.InverseTransformPoint(obj.point);
+                    Debug.Log("Local Coordinates of meshBackward: " + localPosition);
+                    Debug.Log("original position"+MarkObj3D.transform.position);
+
+                    MarkObj3D.SetActive(true);
+                    MarkObj3D.transform.rotation = radargrams.transform.rotation;
+                    //MarkObj3D.transform.SetParent(radargrams.transform, true);
+                    MarkObj3D.transform.localPosition = localPosition;
+                    Debug.Log("curr markobj position: "+MarkObj3D.transform.position);
+
+                    //draw a sphere at the point of intersection
+                    var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    sphere.transform.localScale = Vector3.one * 0.01f;
+                    sphere.transform.position = obj.point;
+                    Debug.Log("sphere dot position: "+sphere.transform.position);
+
+                    //radargrams.GetComponent<MeshCollider>().GetComponent<MeshFilter>().mesh;
+                    // Mesh mesh = meshForward.GetComponent<MeshCollider>().sharedMesh;
+                    // List <Vector2> uv = new List <Vector2>();
+                    // mesh.GetUVs(0,uv);
+                    // Debug.Log(uv); 
+                    Vector2 uvCoordinates = obj.textureCoord;
+                    Debug.Log("UV Coordinates: " + uvCoordinates);
+
+                    break;
+                // } else if(obj.transform == meshBackward.transform){
+                } else if(obj.transform.name.StartsWith("_Data")){ //if ray hits mesh backward
+                    Vector3 localPosition = radargrams.transform.InverseTransformPoint(obj.point);
+                    Debug.Log("Local Coordinates of meshBackward: " + localPosition);
+                    Debug.Log("original position"+MarkObj3D.transform.position);
+
+                    //none of this is working and i don't know why
+                    MarkObj3D.SetActive(true);
+                    MarkObj3D.transform.rotation = radargrams.transform.rotation;
+                    //MarkObj3D.transform.SetParent(radargrams.transform, true);
+                    MarkObj3D.transform.localPosition = localPosition;
+                    Debug.Log("curr markobj position: "+MarkObj3D.transform.position);
+
+                    //draw a sphere at the point of intersection
+                    var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    sphere.transform.localScale = Vector3.one * 0.01f;
+                    sphere.transform.position = obj.point;
+                    Debug.Log("sphere dot position: "+sphere.transform.position);
+
+                    //radargrams.GetComponent<MeshCollider>().GetComponent<MeshFilter>().mesh;
+                    Mesh mesh = meshForward.GetComponent<MeshCollider>().sharedMesh;
+                    List <Vector2> uv = new List <Vector2>();
+                    mesh.GetUVs(0,uv);
+                    Debug.Log(uv); 
+                    
+                    break;
+                }
+            }
+                // Get the local coordinates of the hit point on the mesh
+        }
+        // Debug.Log("Current position of MarkObj3D: " + MarkObj3D.transform.position);
+
+        // MarkObj3D.transform.rotation = radargrams.transform.rotation;
+        // MarkObj3D.transform.SetParent(radargrams.transform);
+        // MarkObj3D.transform.position = eventData.Pointer.Result.Details.Point;
+        // Debug.Log(eventData.Pointer.Result.Details.Point);
 
     }
+    // void OnMouseDown()
+    // {
+    //     Debug.Log("on mouse down is firing");
+    //     // new ray shooting
+    //     Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+    //     RaycastHit hit;
+    //     RaycastHit[] hits;
+       
+    //     Debug.Log(radargrams);
+    //     Debug.DrawRay(ray.origin, ray.direction*20);
+    //     hits = Physics.RaycastAll(ray);
+
+    //      if (hits.Length >0)
+    //     {
+    //         Debug.Log("ray fired and hit something");
+        
+    //         Array.Sort(hits, (RaycastHit x, RaycastHit y) => x.distance.CompareTo(y.distance));
+    //         // Check if the hit object is the meshBackward
+
+    //         foreach(RaycastHit obj in hits)
+    //         {
+    //             Debug.Log(obj.collider.gameObject.name);
+    //             if (obj.transform == radargrams.transform){
+    //                 Vector3 localPosition = radargrams.transform.InverseTransformPoint(obj.point);
+    //                 Debug.Log("Local Coordinates of meshBackward: " + localPosition);
+    //             }
+    //         }
+    //             // Get the local coordinates of the hit point on the mesh
+    //     }
+        
+    // }
 
     // Unused functions
     public void OnPointerUp(MixedRealityPointerEventData eventData) { }
     public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
-    public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
+    public void OnPointerClicked(MixedRealityPointerEventData eventData) {
+
+     }
     private void LateUpdate() { }
 
     // Gets the scale of the radargram
