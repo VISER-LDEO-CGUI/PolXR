@@ -9,6 +9,7 @@ public class RadarEvents : MonoBehaviour
     // Pop up menu and the mark object.
     public GameObject Menu;
     public GameObject MarkObj;
+    public GameObject MarkObj3D;
 
     // Measurement tool
     public GameObject MeasureObj;

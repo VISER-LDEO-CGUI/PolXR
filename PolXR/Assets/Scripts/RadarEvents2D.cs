@@ -67,7 +67,7 @@ public class RadarEvents2D : RadarEvents, IMixedRealityPointerHandler
     public void OnPointerDown(MixedRealityPointerEventData eventData)
     {
         SychronizeMenu();
-
+        Debug.Log(eventData.Pointer.Result.Details.Point);
         // Only load the images when selected.
         Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
         loadImage(content);
@@ -96,6 +96,7 @@ public class RadarEvents2D : RadarEvents, IMixedRealityPointerHandler
             MarkObj.transform.rotation = this.transform.rotation;
             MarkObj.transform.SetParent(this.transform);
             MarkObj.transform.position = eventData.Pointer.Result.Details.Point;
+            Debug.Log(eventData.Pointer.Result.Details.Point);
         }
     }
 

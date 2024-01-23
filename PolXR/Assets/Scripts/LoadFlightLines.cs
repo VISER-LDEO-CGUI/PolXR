@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.XR;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI;
@@ -20,6 +20,7 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject DEM;
     public GameObject gridLine;
 
+    public GameObject MarkObj3D;
     public void Start()
     {
         LoadFlightLine("20100324_01"); // TODO: replace with menu option
@@ -58,8 +59,17 @@ public class LoadFlightLines : MonoBehaviour
             // Create a parent to group both radargram objects
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
             radargram.transform.localPosition = meshBounds.center;
-            MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
-            radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
+            // MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
+            // radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
+            
+            // add mesh colliders to each of the mesh forward and backward
+            MeshCollider meshForwardCollider = meshForward.AddComponent<MeshCollider>();
+            meshForwardCollider.sharedMesh = meshForward.GetComponent<MeshFilter>().mesh;
+
+            MeshCollider meshBackwardCollider = meshBackward.AddComponent<MeshCollider>();
+            meshBackwardCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
+            
+            
 
             // Organize the children
             line.transform.parent = parent.transform;
@@ -88,6 +98,8 @@ public class LoadFlightLines : MonoBehaviour
             // Add the correct Object Manipulator so users can grab the radargrams
             radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
             radargram.AddComponent<NearInteractionGrabbable>();
+            Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+            objectManipulator.enabled = false;
 
             // Link the parent to the menu
             script.Menu = GameObject.Find("Menu");
@@ -95,6 +107,10 @@ public class LoadFlightLines : MonoBehaviour
             // Create and place the radar mark for the minimap
             Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
             GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
+
+            //GameObject markObj3D = Instantiate(MarkObj3D, position, Quaternion.identity, radargram.transform);
+            GameObject markObj3D = Instantiate(MarkObj3D, radargram.transform);
+            markObj3D.transform.localPosition = Vector3.zero;
         }
 
         // Drop everything onto the DEM -- this should correlate with the DEM position

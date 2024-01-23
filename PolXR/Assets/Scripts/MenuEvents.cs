@@ -164,9 +164,13 @@ public class MenuEvents : MonoBehaviour
             // Update the selected point coordinates
             float maxX = radargram.localScale.x * scale; // converting to radar image x in scene coords
             float maxY = radargram.localScale.y * scale;
+            //Debug.Log("maxX and maxY:" + maxX);
+            //Debug.Log(maxY);
             //float maxZ = radargram.localScale.z * scale;
             float radarX = (MarkObj.transform.localPosition.x + 0.5f) * maxX;
             float radarY = (MarkObj.transform.localPosition.y - yOrigin) * maxY;
+            //Debug.Log("radarX" + radarX);
+            //Debug.Log(radarY);
             //float radarZ = (MarkObj.transform.localPosition.z - zOrigin) * maxZ;
 
             Vector3 MarkObjFromSceneOrigin = MarkObj.transform.parent.position;
