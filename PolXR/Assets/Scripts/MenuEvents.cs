@@ -411,10 +411,12 @@ public class MenuEvents : MonoBehaviour
     {
         //Round the result to nearest levels.
         transparencySlider.SliderValue = Mathf.Round(eventData.NewValue * 4) / 4;
+        Debug.Log("DATA " + eventData.NewValue);
 
         // Set the transparency
         if (radarParent)
         {
+            Debug.Log("WE HERE!! : " + radarParent.GetComponent<RadarEvents3D>().GetType());
             if (workflow == 2) radarParent.GetComponent<RadarEvents2D>().SetAlpha(1 - eventData.NewValue);
             else radarParent.GetComponent<RadarEvents3D>().SetAlpha(1 - eventData.NewValue);
         }
