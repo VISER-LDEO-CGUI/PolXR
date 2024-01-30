@@ -106,7 +106,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     private void Select(ManipulationEventData eventData)
     {
         Select();
-        //Debug.Log(eventData.Pointer.Result.Details.Point);
     }
 
     // Show the menu and mark and update the variables
@@ -133,32 +132,15 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
             foreach (RaycastHit obj in hits)
             {
-                if (obj.transform.name.StartsWith("Data"))
+                if (obj.transform.name.StartsWith("Data") || obj.transform.name.StartsWith("_Data"))
                 { //if it hits mesh forward first
-                    //Debug.Log("hit mesh forward");
 
                     DrawMarkObj(obj);
                     Vector2 uvCoordinates = obj.textureCoord;
-                    //Debug.Log("UV Coordinates: " + uvCoordinates);
 
                     Vector3[] worldcoords = GetLinePickingPoints(uvCoordinates, meshForward, obj.transform.name);
                     //draw line
                     DrawPickedPointsAsLine(worldcoords);
-                    break;
-                }
-                else if (obj.transform.name.StartsWith("_Data"))
-                { //if ray hits mesh backward
-                    // Debug.Log("hit mesh backward");
-                    DrawMarkObj(obj);
-                    Vector2 uvCoordinates = obj.textureCoord;
-
-                    //for some reason, the uv coordinates for the backwards mesh is not completely reversed, hence the below operation
-                    
-                    uvCoordinates = new Vector2(uvCoordinates.x, uvCoordinates.y);
-
-                    Vector3[] worldcoords = GetLinePickingPoints(uvCoordinates, meshForward, obj.transform.name);
-                    DrawPickedPointsAsLine(worldcoords);
-                    //Debug.Log("UV Coordinates: " + uvCoordinates);
                     break;
                 }
             }
@@ -272,10 +254,10 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
         //read in image
         //these ones are horizontal
+        // the reason why we don't just directly use the images for the radargram mesh textures is because they are rotated
         string path = Path.Combine(Application.dataPath, "Resources/Radar3D/HorizontalRadar", imgname).Replace('\\', '/');
         
-        //vertical pics because rotating uv coordinates was a nightmare
-        //string path = Path.Combine(Application.dataPath, "Resources/Materials/Radar3D/20100324_01", imgname).Replace('\\', '/');
+        // Note to future self: do cost benefit analysis of using texture maps vs bitmaps to read in images
         byte[] fileData = System.IO.File.ReadAllBytes(path);
         Texture2D texture = new Texture2D(2, 2); 
         texture.LoadImage(fileData);
@@ -286,10 +268,9 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
         int h = (int)texture.height;
         int w = (int)texture.width;
-        //Debug.Log("image height and width " + h + " " +w);
 
         // Line picking
-        //Bitmap finalImg = new Bitmap(bwImage);
+        
         int windowSize = 21;
         int halfWin = (int)windowSize / 2;
 
@@ -301,9 +282,10 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         int prevX = beginX;
         int prevY = h - beginY;
 
-        Debug.Log("image beginX and beginY " + beginX + " " +beginY);
-
-        //for debugging reasons we have 2 arrays, we only need the uv one
+        //for debugging reasons we have 2 arrays, but linecoordsxy doesn't really get used
+        //it stores the x,y, coordinates of the picked points
+        //linecoordsxy will be important for exporting the coordinates
+        //we use the uvs array one to draw the line in 3d in Unity
 
         int[,] linecoordsxy = new int[w, 2];
         Vector2[] uvs = new Vector2[w];
@@ -330,11 +312,9 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
             }
             linecoordsxy[j, 0] = col; // setting x
             linecoordsxy[j, 1] = h - maxlocaly; //setting y, transformed back to origin in top left
-            //Debug.Log("brightest pixel value in every column" + maxlocalval);
             prevY = maxlocaly;
             uvs[j] = new Vector2((float)linecoordsxy[j, 1]/h, (float)linecoordsxy[j, 0]/w); 
             maxlocalval = 0;
-            // Debug.Log("pixel coords x" +uvs[j].x +"  " +uvs[j].y);
             j++;
         }
         
@@ -356,11 +336,9 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
             }
             linecoordsxy[j, 0] = col; // setting x
             linecoordsxy[j, 1] = h - maxlocaly; //setting y, transformed back to origin in top left
-            //Debug.Log("brightest pixel value in every column" + maxlocalval);
             prevY = maxlocaly;
             uvs[j] = new Vector2((float)linecoordsxy[j, 1]/h, (float)linecoordsxy[j, 0]/w); 
             maxlocalval = 0;
-            // Debug.Log("pixel coords x" +uvs[j].x +"  " +uvs[j].y);
             j--;
         }
 
@@ -371,7 +349,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         {
             worldcoords[i] = UvTo3D(uvs[i], curmesh.GetComponent<MeshFilter>().mesh, curmesh.transform);
         }
-        Debug.Log("worldcoords calculated" + worldcoords.Length);
         return worldcoords;
     }
 
@@ -427,10 +404,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
     public void DrawPickedPointsAsLine(Vector3[] worldcoords)
     {
-        //might need to group line with radargram as parent so that it'll tranform with the mesh?
-        //will deal with later
-        //currently the line is rendered with world coordinates and no parent
-
         List<Vector3> filteredCoords = worldcoords.Where(coord => coord != Vector3.zero).ToList();
         GameObject lineObject = new GameObject("Polyline");
         LineRenderer lineRenderer = lineObject.AddComponent<LineRenderer>();
@@ -444,21 +417,14 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         lineRenderer.SetPositions(filteredCoords.ToArray());
 
         // Set the color of the line using the Unlit/Color shader
-        //lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
-        //lineRenderer.material = new Material (Shader.Find("Particles/Additive"));
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         Color lineColor = new Color(0.2f, 0.2f, 1f);
         lineRenderer.SetColors(lineColor,lineColor);
-        
-        // lineRenderer.startColor = lineColor;
-        // lineRenderer.endColor = lineColor;
 
-        // Disable shadows
-        lineRenderer.material.SetInt("_ReceiveShadows", 0);
-        lineRenderer.material.SetInt("_CastShadows", 0);
-        
-
-
+        // after drawing the line in world space, we now give it a parent (the corresponding radargram)
+        // we also turn useWorldSpace to false so that it will move alongside the radargram
+        lineRenderer.transform.SetParent(radargrams.transform, true);
+        lineRenderer.useWorldSpace = false;
 
 
 
@@ -490,8 +456,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Vector3[] positions = filteredCoords.ToArray();
         // Debug.Log("After conversion: " + string.Join(", ", positions.Select(coord => coord.ToString()).ToArray()));
         // trailRenderer.AddPositions(positions);
-
-
 
 
 

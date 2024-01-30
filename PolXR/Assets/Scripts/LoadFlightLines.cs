@@ -99,7 +99,7 @@ public class LoadFlightLines : MonoBehaviour
             radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
             radargram.AddComponent<NearInteractionGrabbable>();
             Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-            objectManipulator.enabled = false;
+            objectManipulator.enabled = true;
 
             // Link the parent to the menu
             script.Menu = GameObject.Find("Menu");
