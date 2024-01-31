@@ -68,9 +68,9 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Set color based on selection
         lineRenderer.startColor = lineRenderer.endColor = loaded ?
             selectRadar ?
-                new Color(1f, 0f, 0f)       // loaded and selected
-                : new Color(1f, .4f, 0f)    // loaded, not selected
-            : new Color(1f, 1f, 0f);        // not loaded
+                new Color(0.1098f, 0.8196f, 0.0588f)       // loaded and selected - Light Green
+                : new Color(0.1098f, 0.2705f, 0.0980f)    // loaded, not selected - Dark Green
+            : new Color(0.1647f, 0.1647f, 0.1647f);        // not loaded - Dark Gray
 
     }
 
