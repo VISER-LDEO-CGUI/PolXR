@@ -22,6 +22,11 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
     //public GameObject MarkObj3D;
 
+    // this is used to store all the picked lines for every radargram. 
+    //  it will be used for exporting the picked lines along with the radargram
+    //private List<int[,]> linecoordsxyList = new List<int[,]>();
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -117,8 +122,15 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Show that the object has been selected
         Select();
 
+        if (Menu.transform.GetComponent<MenuEvents>().isLinePickingMode){
+            doLinePicking(eventData);
+        }
+
         Debug.Log("on pointer down is firing");
-        
+
+    }
+    private void doLinePicking(MixedRealityPointerEventData eventData)
+    {
         //maybe try commenting out this line
         Ray ray = new Ray(eventData.Pointer.Result.Details.Point, -eventData.Pointer.Result.Details.Normal);
         RaycastHit hit;
@@ -145,9 +157,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
                 }
             }
         }
-        // Get the local coordinates of the hit point on the mesh
-
-
     }
 
     // Unused functions
@@ -349,6 +358,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         {
             worldcoords[i] = UvTo3D(uvs[i], curmesh.GetComponent<MeshFilter>().mesh, curmesh.transform);
         }
+        //linecoordsxyList.Add(linecoordsxy);
         return worldcoords;
     }
 
@@ -467,6 +477,10 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         //     sphere.transform.position = worldcoord;
         // }
         
+    }
+
+    public void saveRadargram(){
+
     }
     
 
