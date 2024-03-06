@@ -56,6 +56,13 @@ public class LoadFlightLines : MonoBehaviour
             parent.transform.rotation = Quaternion.identity;
             BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
 
+            //turns off gizmos and bounding boxes
+            parentBoundsControl.LinksConfig.ShowWireFrame = false;
+            parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+            parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+
             // Create a parent to group both radargram objects
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
             radargram.transform.localPosition = meshBounds.center;
@@ -83,6 +90,14 @@ public class LoadFlightLines : MonoBehaviour
             // Add the correct Bounds Control so that MRTK knows where the objects are
             BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
             boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
+
+            //turns off gizmos and bounding boxes
+            boundsControl.LinksConfig.ShowWireFrame = false;
+            boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+            boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+            
             BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
             boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
             boxCollider.size = meshBounds.size;

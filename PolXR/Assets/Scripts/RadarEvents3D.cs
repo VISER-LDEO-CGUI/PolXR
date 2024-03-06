@@ -24,7 +24,9 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
     // this is used to store all the picked lines for every radargram. 
     //  it will be used for exporting the picked lines along with the radargram
-    //private List<int[,]> linecoordsxyList = new List<int[,]>();
+    private List<int[,]> linecoordsxyList = new List<int[,]>();
+    private Dictionary<int, int[,]> linecoordsxyDict = new Dictionary<int, int[,]>();
+    private int radargramNumber = 0;
 
 
     // Start is called before the first frame update
@@ -359,6 +361,8 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
             worldcoords[i] = UvTo3D(uvs[i], curmesh.GetComponent<MeshFilter>().mesh, curmesh.transform);
         }
         //linecoordsxyList.Add(linecoordsxy);
+        linecoordsxyDict.Add(radargramNumber, linecoordsxy);
+        radargramNumber++;
         return worldcoords;
     }
 
@@ -480,6 +484,45 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     }
 
     public void saveRadargram(){
+        string path = Path.Combine(Application.dataPath, "Resources/Radar3D/HorizontalRadar", radargrams.transform.GetChild(0).name).Replace('\\', '/');
+        path = path + ".png";
+
+        byte[] fileData = System.IO.File.ReadAllBytes(path);
+        Texture2D radarimg = new Texture2D(2, 2); 
+        radarimg.LoadImage(fileData);
+        
+        if (radarimg == null){
+            Debug.Log("Couldn't load in radar image");
+        }
+
+        foreach (int key in linecoordsxyDict.Keys){
+            int[,] currentLineCoords = linecoordsxyDict[key];
+            int w = radarimg.height;
+            // Debug.Log(currentLineCoords.GetLength(0));
+            for (int i = 0; i < currentLineCoords.GetLength(0); i++){
+                // Debug.Log("x, y: "+ currentLineCoords[i,0] + " " + currentLineCoords[i,1]);
+                radarimg.SetPixel(currentLineCoords[i,0], w - currentLineCoords[i,1], Color.red);
+            }
+        }
+        radarimg.Apply();
+
+        // Encode the texture as PNG
+        byte[] pngBytes = radarimg.EncodeToPNG();
+
+        string outputFolder =  Path.Combine(Application.dataPath, "Radargram_picks");
+
+        // Specify the output file path
+        string outputPath = Path.Combine(outputFolder, radargrams.transform.name + "_picks.png");
+
+        if (!Directory.Exists(outputFolder))
+        {
+            Directory.CreateDirectory(outputFolder);
+        }
+
+        // Write the PNG bytes to a file
+        File.WriteAllBytes(outputPath, pngBytes);
+
+        Debug.Log("Modified radar image exported to: " + outputPath);
 
     }
     
