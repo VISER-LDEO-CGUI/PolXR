@@ -106,15 +106,6 @@ public class MenuEvents : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        // The starting animation for menu.
-        if (Vector3.Distance(targetPosition, this.transform.position) > 1) updatePosition = true;
-        else if (Vector3.Distance(targetPosition, this.transform.position) < 0.01f) updatePosition = false;
-        if (updatePosition) this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, 0.5f);
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Camera.main.transform.rotation, 0.02f);
-        this.transform.localScale = Vector3.Lerp(this.transform.localScale, targetScale, 0.5f);
-        if (this.transform.localScale.x < 0.1f) this.gameObject.SetActive(false);
-
         if (!isMainMenu)
         {
 
