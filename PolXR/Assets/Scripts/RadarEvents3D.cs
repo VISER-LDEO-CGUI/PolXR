@@ -35,7 +35,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Grab relevant objects
         flightline = this.transform.GetChild(1).gameObject;
         radargrams = this.transform.GetChild(2).gameObject;
-        radarMark = this.transform.GetChild(3).gameObject;
+        //radarMark = this.transform.GetChild(3).gameObject;
 
         meshForward = radargrams.transform.GetChild(0).gameObject;
         meshBackward = radargrams.transform.GetChild(1).gameObject;
@@ -52,7 +52,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         //radargrams.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().OnManipulationStarted.AddListener(Select);
 
         // Set objects to their starting states
-        radarMark.SetActive(false);
+        //SetActive(false);
         TogglePolyline(true, false);
         ToggleRadar(false);
 
@@ -236,7 +236,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         TogglePolyline(true, false);
 
         // Turn off the radar mark
-        radarMark.SetActive(false);
+        //radarMark.SetActive(false);
     }
 
     public void DrawMarkObj(RaycastHit obj)
