@@ -68,6 +68,6 @@ public class RadarEvents : MonoBehaviour
         Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
         Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
         Menu.transform.GetComponent<MenuEvents>().syncScaleSlider();
-        radarMark.SetActive(true);
+        //radarMark.SetActive(true);
     }
 }

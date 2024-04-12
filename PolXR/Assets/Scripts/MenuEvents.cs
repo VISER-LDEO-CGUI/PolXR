@@ -381,7 +381,9 @@ public class MenuEvents : MonoBehaviour
     // Switch to line picking sub menu
     public void LinePickingMode(bool linePicking)
     {
+        Debug.Log("Line Picking Mode turned on in menu");
         isLinePickingMode = linePicking;
+
         // turn on line picking sub menu
         SubMenuLinePicking.gameObject.SetActive(isLinePickingMode);
 
