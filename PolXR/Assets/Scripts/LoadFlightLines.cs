@@ -24,14 +24,16 @@ public class LoadFlightLines : MonoBehaviour
     public void Start()
     {
         LoadFlightLine("20100324_01"); // TODO: replace with menu option
+        Debug.Log("Loaded flight line");
     }
 
     public void LoadFlightLine(string line_id)
     {
-        // Load the data
-        UnityEngine.Object[] meshes = Resources.LoadAll("Radar3D/Radar/" + line_id);
+        // // Load the data
+        UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
         Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
-        GameObject prefab = Instantiate(Resources.Load("Radar3D/Radar/RadarContainer") as GameObject);
+        GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
+
 
         for (int i = 0; i < meshes.Length; i++)
         {
@@ -166,7 +168,9 @@ public class LoadFlightLines : MonoBehaviour
     {
         // Load the polyline file
         string filename = "FlightLine_" + line_id + ".obj";
-        string path = Path.Combine(Application.dataPath, "Resources/Radar3D/FlightLines", filename).Replace('\\', '/');
+        //string path = Path.Combine(Application.dataPath, "Resources/Radar3D/FlightLines", filename).Replace('\\', '/');
+        string path = Path.Combine(Application.dataPath, "Resources", "Radar3D", "FlightLines", filename);
+
         string allText = File.ReadAllText(path);
 
         // Split up the text by object definition

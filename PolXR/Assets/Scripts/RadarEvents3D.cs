@@ -272,7 +272,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         //read in image
         //these ones are horizontal
         // the reason why we don't just directly use the images for the radargram mesh textures is because they are rotated
-        string path = Path.Combine(Application.dataPath, "Resources/Radar3D/HorizontalRadar", imgname).Replace('\\', '/');
+       string path = Path.Combine(Application.dataPath, "Resources", "Radar3D", "HorizontalRadar", imgname);
 
         // Note to future self: do cost benefit analysis of using texture maps vs bitmaps to read in images
         byte[] fileData = System.IO.File.ReadAllBytes(path);
