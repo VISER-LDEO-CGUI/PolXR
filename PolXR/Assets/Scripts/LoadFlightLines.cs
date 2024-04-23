@@ -50,6 +50,9 @@ public class LoadFlightLines : MonoBehaviour
             }
             catch (Exception e)
             {
+                Debug.Log("Polyline not found: '" + key + "'");
+                Destroy(meshForward);
+                Destroy(meshBackward);
                 continue;
             }
             line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
