@@ -2870,7 +2870,7 @@ MonoBehaviour:
     description: Grip Press
     axisConstraint: 3
   multiplier: 1
-  delay: 1
+  delay: 3
 --- !u!4 &1911864067
 Transform:
   m_ObjectHideFlags: 0
