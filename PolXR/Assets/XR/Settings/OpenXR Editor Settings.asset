@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Keys: 010000000e000000
   Values:
-  - featureSets: []
+  - featureSets:
+    - com.microsoft.openxr.featureset.wmr
   - featureSets: []
