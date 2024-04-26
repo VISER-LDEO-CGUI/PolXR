@@ -149,7 +149,7 @@ MonoBehaviour:
   focusIndividualCompoundCollider: 0
   inputActionsProfile: {fileID: 11400000, guid: 3f60679de8d520849a4c74289d688200,
     type: 2}
-  inputActionRulesProfile: {fileID: 11400000, guid: 03945385d89102f41855bc8f5116b199,
+  inputActionRulesProfile: {fileID: 11400000, guid: be4e357340bc74bccb11f28eff0befbe,
     type: 2}
   pointerProfile: {fileID: 11400000, guid: f991880ee4486b8498115b0c700e40cb, type: 2}
   gesturesProfile: {fileID: 11400000, guid: bd7829a9b29409045a745b5a18299291, type: 2}

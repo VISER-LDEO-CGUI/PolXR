@@ -118,7 +118,7 @@ Shader "Mixed Reality Toolkit/Standard"
         Pass
         {
             Name "Main"
-            Tags{ "RenderType" = "Opaque" "LightMode" = "ForwardBase" }
+            Tags{ "RenderType" = "Opaque" "LightMode" = "UniversalForward" }
             LOD 100
             Blend[_SrcBlend][_DstBlend]
             BlendOp[_BlendOp]
@@ -191,7 +191,7 @@ Shader "Mixed Reality Toolkit/Standard"
             #include "MixedRealityShaderUtils.cginc"
 
             // This define will get commented in by the UpgradeShaderForUniversalRenderPipeline method.
-            //#define _RENDER_PIPELINE
+            #define _RENDER_PIPELINE
 
 #if defined(_TRIPLANAR_MAPPING) || defined(_DIRECTIONAL_LIGHT) || defined(_SPHERICAL_HARMONICS) || defined(_REFLECTIONS) || defined(_RIM_LIGHT) || defined(_PROXIMITY_LIGHT) || defined(_ENVIRONMENT_COLORING)
             #define _NORMAL
@@ -772,7 +772,7 @@ Shader "Mixed Reality Toolkit/Standard"
                 return o;
             }
 
-            fixed4 frag(v2f i, fixed facing : VFACE) : SV_Target
+            fixed4 frag(v2f i, bool facing : SV_IsFrontFace) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(i);
 
@@ -953,10 +953,10 @@ Shader "Mixed Reality Toolkit/Standard"
                 worldNormal.x = dot(i.tangentX, tangentNormal);
                 worldNormal.y = dot(i.tangentY, tangentNormal);
                 worldNormal.z = dot(i.tangentZ, tangentNormal);
-                worldNormal = normalize(worldNormal) * facing;
+                worldNormal = normalize(worldNormal) * (facing ? 1.0 : -1.0);
 #endif
 #else
-                worldNormal = normalize(i.worldNormal) * facing;
+                worldNormal = normalize(i.worldNormal) * (facing ? 1.0 : -1.0);
 #endif
 #endif
 
@@ -1195,7 +1195,7 @@ Shader "Mixed Reality Toolkit/Standard"
             #include "UnityMetaPass.cginc"
 
             // This define will get commented in by the UpgradeShaderForUniversalRenderPipeline method.
-            //#define _RENDER_PIPELINE
+            #define _RENDER_PIPELINE
 
             struct v2f
             {

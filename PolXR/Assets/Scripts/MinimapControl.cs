@@ -50,7 +50,7 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
         Vector3 newPosition = PositionObj.transform.parent.position;
         newPosition.y = Location.position.y + MapCamPosition.y * 0.9f;
         PositionObj.transform.position = newPosition;
-        PositionObj.transform.eulerAngles = new Vector3(90, 0, 0);
+        // PositionObj.transform.eulerAngles = new Vector3(90, 0, 0);
     }
 
     // Translate to the target point.
