@@ -23,6 +23,7 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject MarkObj3D;
     public void Start()
     {
+        BetterStreamingAssets.Initialize();
         LoadFlightLine("20100324_01"); // TODO: replace with menu option
         Debug.Log("Loaded flight line");
     }
@@ -169,9 +170,12 @@ public class LoadFlightLines : MonoBehaviour
         // Load the polyline file
         string filename = "FlightLine_" + line_id + ".obj";
         //string path = Path.Combine(Application.dataPath, "Resources/Radar3D/FlightLines", filename).Replace('\\', '/');
-        string path = Path.Combine(Application.dataPath, "Resources", "Radar3D", "FlightLines", filename);
+        string path = Path.Combine("Radar3D", "FlightLines", filename);
+        
+        byte[] data = BetterStreamingAssets.ReadAllBytes(path);
+        string allText = System.Text.Encoding.Default.GetString(data);
 
-        string allText = File.ReadAllText(path);
+        //string allText = File.ReadAllText(path);
 
         // Split up the text by object definition
         Dictionary<string, GameObject> polylines = new Dictionary<string, GameObject>();

@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "f9fb82dbaa73fd209d6565775b57ee6268645ea2"
     },
+    "com.gwiazdorrr.betterstreamingassets": {
+      "version": "https://github.com/gwiazdorrr/BetterStreamingAssets.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "6e39e486962dee2327385b4db424d944c859f48b"
+    },
     "com.microsoft.mixedreality.openxr": {
       "version": "file:MixedReality/com.microsoft.mixedreality.openxr-1.6.0.tgz",
       "depth": 0,
