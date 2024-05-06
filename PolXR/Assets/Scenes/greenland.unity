@@ -12755,12 +12755,12 @@ GameObject:
   - component: {fileID: 332266759}
   - component: {fileID: 332266758}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: DebugCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &332266758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18582,7 +18582,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &487220376
 Transform:
   m_ObjectHideFlags: 0

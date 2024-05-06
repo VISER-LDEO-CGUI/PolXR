@@ -12,6 +12,8 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using GLTFast;
+using Oculus.Platform;
 
 public class LoadFlightLines : MonoBehaviour
 {
@@ -27,14 +29,35 @@ public class LoadFlightLines : MonoBehaviour
         LoadFlightLine("20100324_01"); // TODO: replace with menu option
         Debug.Log("Loaded flight line");
     }
-
-    public void LoadFlightLine(string line_id)
+    // public class YourCustomInstantiator : GLTFast.IInstantiator {
+    // // Your code here
+    // }
+    public async void LoadFlightLine(string line_id)
     {
         // // Load the data
-        UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
+        //UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
         Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
-        GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
+        //GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
 
+        // Load the glTF asset
+        var gltf = new GltfImport();
+        var success = await gltf.Load("file://" + UnityEngine.Application.dataPath + "/Resources/radar.glb");
+        UnityEngine.Object[] meshes;
+
+        if (success)
+        {
+            // Instantiate the main scene of the glTF asset
+            GameObject prefab = new GameObject("RadarContainer");
+            //await gltf.InstantiateGltfScene(gltf, prefab.transform);
+            // Extract meshes and textures
+            meshes = ExtractMeshes(gltf);
+            //Dictionary<string, Texture2D> textures = ExtractTextures(gltf);
+        }
+        else
+        {
+            Debug.LogError("Failed to load glTF asset");
+            return;
+        }
 
         for (int i = 0; i < meshes.Length; i++)
         {
@@ -45,6 +68,7 @@ public class LoadFlightLines : MonoBehaviour
             Bounds meshBounds = meshForward.GetComponent<Renderer>().bounds; // cuz we need bounds in world coords
 
             // Select and name line
+            Debug.Log(meshForward.name);
             string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
             GameObject line = polylines[key];
             line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
@@ -71,15 +95,14 @@ public class LoadFlightLines : MonoBehaviour
             radargram.transform.localPosition = meshBounds.center;
             // MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
             // radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
-            
+
             // add mesh colliders to each of the mesh forward and backward
             MeshCollider meshForwardCollider = meshForward.AddComponent<MeshCollider>();
             meshForwardCollider.sharedMesh = meshForward.GetComponent<MeshFilter>().mesh;
 
             MeshCollider meshBackwardCollider = meshBackward.AddComponent<MeshCollider>();
             meshBackwardCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
-            
-            
+
 
             // Organize the children
             line.transform.parent = parent.transform;
@@ -100,7 +123,7 @@ public class LoadFlightLines : MonoBehaviour
             boundsControl.RotationHandlesConfig.ShowHandleForY = false;
             boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
             boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
-            
+
             BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
             boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
             boxCollider.size = meshBounds.size;
@@ -136,6 +159,37 @@ public class LoadFlightLines : MonoBehaviour
 
     }
 
+    UnityEngine.Object[] ExtractMeshes(GltfImport gltfImport)
+    {
+        // Implement the IInstantiator interface methods to extract meshes
+        // You can use gltfImport.Meshes and gltfImport.MeshResults to access mesh data
+
+        // Loop through mesh results
+        Mesh[] myMeshes = gltfImport.GetMeshes();
+        List<UnityEngine.Object> meshes = new List<UnityEngine.Object>();
+
+        Debug.Log("Number of meshes: " + myMeshes.Length);
+        for (int i = 0; i < myMeshes.Length; i++)
+        {
+            // Example: Instantiate a Unity GameObject for each mesh
+            Mesh mesh = myMeshes[i];
+            Debug.Log("Mesh name: " + mesh.name);
+            if (mesh.name.StartsWith("Data"))
+            {
+                GameObject go = new GameObject(mesh.name);
+                MeshFilter meshFilter = go.AddComponent<MeshFilter>();
+                meshFilter.sharedMesh = mesh;
+                MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
+                meshRenderer.material = gltfImport.GetMaterial(i);
+                // Add more customization as needed
+                meshes.Add(go);
+            }
+        }
+        Debug.Log("Number of radargram meshes: " + meshes.Count);
+
+        return meshes.ToArray();
+    }
+
     public GameObject[] createRadargramObjects(UnityEngine.Object obj)
     {
         // Select mesh
@@ -168,10 +222,10 @@ public class LoadFlightLines : MonoBehaviour
     public Dictionary<string, GameObject> createPolylineObjects(string line_id)
     {
         // Load the polyline file
+        // this works for the streaming assets folder!!
         string filename = "FlightLine_" + line_id + ".obj";
-        //string path = Path.Combine(Application.dataPath, "Resources/Radar3D/FlightLines", filename).Replace('\\', '/');
         string path = Path.Combine("Radar3D", "FlightLines", filename);
-        
+
         byte[] data = BetterStreamingAssets.ReadAllBytes(path);
         string allText = System.Text.Encoding.Default.GetString(data);
 
@@ -182,7 +236,7 @@ public class LoadFlightLines : MonoBehaviour
         string[] objects = allText.Split("\no ");
         string key = null;
 
-        foreach (string objectText in objects) 
+        foreach (string objectText in objects)
         {
 
             // Ensure we're looking at an object definition
