@@ -40,18 +40,20 @@ public class LoadFlightLines : MonoBehaviour
         //GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
 
         // Load the glTF asset
+        byte[] data = BetterStreamingAssets.ReadAllBytes("radar.glb");
+        
         var gltf = new GltfImport();
-        var success = await gltf.Load("file://" + UnityEngine.Application.dataPath + "/Resources/radar.glb");
+        //var success = await gltf.Load("file://" + UnityEngine.Application.dataPath + "/Resources/radar.glb");
+        var success = await gltf.Load(data);
         UnityEngine.Object[] meshes;
 
         if (success)
         {
             // Instantiate the main scene of the glTF asset
             GameObject prefab = new GameObject("RadarContainer");
-            //await gltf.InstantiateGltfScene(gltf, prefab.transform);
+            
             // Extract meshes and textures
             meshes = ExtractMeshes(gltf);
-            //Dictionary<string, Texture2D> textures = ExtractTextures(gltf);
         }
         else
         {
@@ -68,8 +70,9 @@ public class LoadFlightLines : MonoBehaviour
             Bounds meshBounds = meshForward.GetComponent<Renderer>().bounds; // cuz we need bounds in world coords
 
             // Select and name line
-            Debug.Log(meshForward.name);
             string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
+            
+            // the current flightline file is missing 001 for some reason
             if (key == "_001")
             {
                 continue;
@@ -176,12 +179,10 @@ public class LoadFlightLines : MonoBehaviour
         Mesh[] myMeshes = gltfImport.GetMeshes();
         List<UnityEngine.Object> meshes = new List<UnityEngine.Object>();
 
-        Debug.Log("Number of meshes: " + myMeshes.Length);
         for (int i = 0; i < myMeshes.Length; i++)
         {
             // Example: Instantiate a Unity GameObject for each mesh
             Mesh mesh = myMeshes[i];
-            Debug.Log("Mesh name: " + mesh.name);
             int dotIndex = mesh.name.IndexOf('.');
             if (dotIndex != -1)
             {
@@ -236,7 +237,6 @@ public class LoadFlightLines : MonoBehaviour
                 meshes.Add(go);
             }
         }
-        Debug.Log("Number of radargram meshes: " + meshes.Count);
 
         return meshes.ToArray();
     }
@@ -275,9 +275,7 @@ public class LoadFlightLines : MonoBehaviour
         // Load the polyline file
         // this works for the streaming assets folder!!
         string filename = "FlightLine_" + line_id + ".obj";
-        string path = Path.Combine("Radar3D", "FlightLines", filename);
-
-        byte[] data = BetterStreamingAssets.ReadAllBytes(path);
+        byte[] data = BetterStreamingAssets.ReadAllBytes(filename);
         string allText = System.Text.Encoding.Default.GetString(data);
 
         //string allText = File.ReadAllText(path);
@@ -358,7 +356,6 @@ public class LoadFlightLines : MonoBehaviour
 
             // Store the polyline
             polylines.Add(key, line);
-            Debug.Log("Stored polyline: " + key);
 
             // Reset the key
             key = null;
