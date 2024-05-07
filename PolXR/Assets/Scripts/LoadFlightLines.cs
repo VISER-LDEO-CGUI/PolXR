@@ -70,6 +70,10 @@ public class LoadFlightLines : MonoBehaviour
             // Select and name line
             Debug.Log(meshForward.name);
             string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
+            if (key == "_001")
+            {
+                continue;
+            }
             GameObject line = polylines[key];
             line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
 
@@ -156,6 +160,10 @@ public class LoadFlightLines : MonoBehaviour
 
         // Drop everything onto the DEM -- this should correlate with the DEM position
         Container.transform.localPosition = new Vector3(-10f, 0f, 10f);
+        foreach (var obj in meshes)
+        {
+            Destroy(obj);
+        }
 
     }
 
@@ -174,13 +182,56 @@ public class LoadFlightLines : MonoBehaviour
             // Example: Instantiate a Unity GameObject for each mesh
             Mesh mesh = myMeshes[i];
             Debug.Log("Mesh name: " + mesh.name);
-            if (mesh.name.StartsWith("Data"))
+            int dotIndex = mesh.name.IndexOf('.');
+            if (dotIndex != -1)
+            {
+                mesh.name = mesh.name.Substring(0, dotIndex);
+            }
+            if (mesh.name.StartsWith("Data_20100324"))
             {
                 GameObject go = new GameObject(mesh.name);
                 MeshFilter meshFilter = go.AddComponent<MeshFilter>();
                 meshFilter.sharedMesh = mesh;
                 MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
                 meshRenderer.material = gltfImport.GetMaterial(i);
+
+                // // Rotate texture 90 degrees to the left
+                // meshRenderer.material.mainTextureOffset = new Vector2(0.0f, 1.0f);
+                // meshRenderer.material.mainTextureScale = new Vector2(1.0f, -1.0f);
+
+                // // Rotate texture 90 degrees to the left by adjusting UV coordinates
+                // Vector2[] uvs = mesh.uv;
+                // for (int j = 0; j < uvs.Length; j++)
+                // {
+                //     uvs[j] = new Vector2(1 - uvs[j].y, uvs[j].x);
+                // }
+                // mesh.uv = uvs;
+
+                // Rotate texture 90 degrees to the right by adjusting UV coordinates
+                Vector2[] uvs = mesh.uv;
+                for (int j = 0; j < uvs.Length; j++)
+                {
+                    uvs[j] = new Vector2(uvs[j].y, 1 - uvs[j].x);
+                }
+                mesh.uv = uvs;
+
+                // Set the rendering mode to "Opaque" if the material doesn't contain transparency
+                // This is necessary for the radar to render correctly, otherwise materials in the back
+                // will appear in the front probably becuase of some transparency problem
+                if (!meshRenderer.material.shader.name.Contains("Transparent"))
+                {
+                    meshRenderer.material.SetFloat("_Mode", 0);
+                    meshRenderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    meshRenderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    meshRenderer.material.SetInt("_ZWrite", 1);
+                    meshRenderer.material.DisableKeyword("_ALPHATEST_ON");
+                    meshRenderer.material.DisableKeyword("_ALPHABLEND_ON");
+                    meshRenderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                    meshRenderer.material.renderQueue = -1;
+                }
+
+                meshRenderer.receiveShadows = true;
+                meshFilter.sharedMesh.RecalculateNormals();
                 // Add more customization as needed
                 meshes.Add(go);
             }
@@ -307,6 +358,7 @@ public class LoadFlightLines : MonoBehaviour
 
             // Store the polyline
             polylines.Add(key, line);
+            Debug.Log("Stored polyline: " + key);
 
             // Reset the key
             key = null;
