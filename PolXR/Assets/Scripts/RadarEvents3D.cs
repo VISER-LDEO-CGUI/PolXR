@@ -87,8 +87,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         this.transform.GetComponent<BoundsControl>().enabled = toggle;
         radargrams.SetActive(toggle);
         loaded = toggle;
-        MarkObj3D.SetActive(true);
-        //MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
+        MarkObj3D.SetActive(false);
     }
 
     // Checks if the radargram is currently loaded
@@ -149,7 +148,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
                 if (obj.transform.name.StartsWith("Data") || obj.transform.name.StartsWith("_Data"))
                 { 
                     //draw mark at point of intersection
-                    DrawMarkObj(obj);
+                    //DrawMarkObj(obj);
                     Vector2 uvCoordinates = obj.textureCoord;
 
                     //get the world coordinates of the picked points
