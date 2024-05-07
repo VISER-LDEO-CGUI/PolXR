@@ -54,7 +54,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Set objects to their starting states
         //SetActive(false);
         TogglePolyline(true, false);
-        ToggleRadar(false);
+        ToggleRadar(true);
 
     }
 

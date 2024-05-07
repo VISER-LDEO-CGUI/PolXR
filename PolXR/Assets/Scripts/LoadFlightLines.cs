@@ -50,7 +50,7 @@ public class LoadFlightLines : MonoBehaviour
         if (success)
         {
             // Instantiate the main scene of the glTF asset
-            GameObject prefab = new GameObject("RadarContainer");
+            //GameObject prefab = new GameObject("RadarContainer");
             
             // Extract meshes and textures
             meshes = ExtractMeshes(gltf);
@@ -161,7 +161,7 @@ public class LoadFlightLines : MonoBehaviour
             markObj3D.transform.localPosition = Vector3.zero;
         }
 
-        // Drop everything onto the DEM -- this should correlate with the DEM position
+        //Drop everything onto the DEM -- this should correlate with the DEM position
         Container.transform.localPosition = new Vector3(-10f, 0f, 10f);
         foreach (var obj in meshes)
         {
