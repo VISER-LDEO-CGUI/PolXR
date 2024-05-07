@@ -54,7 +54,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Set objects to their starting states
         //SetActive(false);
         TogglePolyline(true, false);
-        ToggleRadar(true);
+        ToggleRadar(false);
 
     }
 
@@ -249,12 +249,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         MarkObj3D.transform.rotation = radargrams.transform.rotation;
         MarkObj3D.transform.localPosition = localPosition;
 
-        //draw a sphere at the point of intersection that doesn't go away
-        //sphere uses world coordinates
-        var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.transform.localScale = Vector3.one * 0.01f;
-        sphere.transform.position = obj.point;
-
     }
 
     public Vector3[] GetLinePickingPoints(Vector2 uv, GameObject curmesh, string imgname)
@@ -272,10 +266,9 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         //read in image
         //these ones are horizontal
         // the reason why we don't just directly use the images for the radargram mesh textures is because they are rotated
-       string path = Path.Combine(Application.dataPath, "Resources", "Radar3D", "HorizontalRadar", imgname);
+        string path = Path.Combine("HorizontalRadar", imgname);
+        byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
 
-        // Note to future self: do cost benefit analysis of using texture maps vs bitmaps to read in images
-        byte[] fileData = System.IO.File.ReadAllBytes(path);
         Texture2D texture = new Texture2D(2, 2);
         texture.LoadImage(fileData);
 
@@ -464,10 +457,11 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     private void saveRadarImg()
     {
         // get path of original radargram image to overlay picked points on
-        string origImgpath = Path.Combine(Application.dataPath, "Resources/Radar3D/HorizontalRadar", radargrams.transform.GetChild(0).name).Replace('\\', '/');
-        origImgpath = origImgpath + ".png";
+        string imgName = radargrams.transform.GetChild(0).name + ".png";
 
-        byte[] fileData = System.IO.File.ReadAllBytes(origImgpath);
+        string path = Path.Combine("HorizontalRadar", imgName);
+        byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
+
         Texture2D radarimg = new Texture2D(2, 2);
         radarimg.LoadImage(fileData);
 

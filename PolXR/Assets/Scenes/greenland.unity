@@ -37695,12 +37695,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1083601297}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8200a044a5affb843ba856b902d9fd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetObject: {fileID: 0}
+  targetObject: {fileID: 1083601297}
   boundsOverride: {fileID: 0}
   boundsCalculationMethod: 0
   activation: 0
@@ -37711,7 +37711,7 @@ MonoBehaviour:
   linksConfiguration: {fileID: 0}
   scaleHandlesConfiguration: {fileID: 0}
   rotationHandlesConfiguration: {fileID: 0}
-  translationHandlesConfiguration: {fileID: 0}
+  translationHandlesConfiguration: {fileID: 1524119055}
   handleProximityEffectConfiguration: {fileID: 0}
   hideElementsInInspector: 1
   smoothingActive: 0
@@ -37719,7 +37719,7 @@ MonoBehaviour:
   scaleLerpTime: 0.001
   translateLerpTime: 0.001
   enableConstraints: 1
-  constraintsManager: {fileID: 0}
+  constraintsManager: {fileID: 1083601301}
   rotateStarted:
     m_PersistentCalls:
       m_Calls: []
@@ -49228,6 +49228,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1524046803}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1524119055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fcb6341cafc3f84994828d3606683d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handleMaterial: {fileID: 0}
+  handleGrabbedMaterial: {fileID: 0}
+  handlePrefab: {fileID: 0}
+  handleSize: 0.016
+  colliderPadding: {x: 0.016, y: 0.016, z: 0.016}
+  drawTetherWhenManipulating: 1
+  handlesIgnoreCollider: {fileID: 0}
+  handlePrefabColliderType: 1
+  showHandleForX: 0
+  showHandleForY: 0
+  showHandleForZ: 0
 --- !u!1 &1529655692
 GameObject:
   m_ObjectHideFlags: 0
@@ -54021,7 +54044,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2147483767
+    m_Bits: 2147516535
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -66288,6 +66311,7 @@ GameObject:
   - component: {fileID: 7381833320669417250}
   - component: {fileID: 7435763830413457377}
   - component: {fileID: 8883454425197957654}
+  - component: {fileID: 9189260757652488643}
   m_Layer: 0
   m_Name: MEASURES_NSIDC-0715-002
   m_TagString: Untagged
@@ -66295,6 +66319,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!64 &9189260757652488643
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9189260757652488642}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 7107633710438236949, guid: a2410c8a9a86a9d4e89b4ac34b4ed080, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

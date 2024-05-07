@@ -34,24 +34,20 @@ public class LoadFlightLines : MonoBehaviour
     // }
     public async void LoadFlightLine(string line_id)
     {
-        // // Load the data
+        // // Load the data // old workflow loading from resources
         //UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
         Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
         //GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
 
-        // Load the glTF asset
+        // Load the glTF asset from streaming assets folder
         byte[] data = BetterStreamingAssets.ReadAllBytes("radar.glb");
-        
+
         var gltf = new GltfImport();
-        //var success = await gltf.Load("file://" + UnityEngine.Application.dataPath + "/Resources/radar.glb");
         var success = await gltf.Load(data);
         UnityEngine.Object[] meshes;
 
         if (success)
         {
-            // Instantiate the main scene of the glTF asset
-            //GameObject prefab = new GameObject("RadarContainer");
-            
             // Extract meshes and textures
             meshes = ExtractMeshes(gltf);
         }
@@ -71,7 +67,7 @@ public class LoadFlightLines : MonoBehaviour
 
             // Select and name line
             string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
-            
+
             // the current flightline file is missing 001 for some reason
             if (key == "_001")
             {
@@ -196,25 +192,27 @@ public class LoadFlightLines : MonoBehaviour
                 MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
                 meshRenderer.material = gltfImport.GetMaterial(i);
 
-                // // Rotate texture 90 degrees to the left
-                // meshRenderer.material.mainTextureOffset = new Vector2(0.0f, 1.0f);
-                // meshRenderer.material.mainTextureScale = new Vector2(1.0f, -1.0f);
 
-                // // Rotate texture 90 degrees to the left by adjusting UV coordinates
+                // Rotate the texture 90 degrees to the left
+                // this is basically swapping out the original .glb texture and using new png images instead
+                string imgName = mesh.name + ".png";
+                string path = Path.Combine("HorizontalRadar", imgName);
+                byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
+                Texture2D radarimg = new Texture2D(meshRenderer.material.mainTexture.width, meshRenderer.material.mainTexture.height,TextureFormat.RGBA32, 1, false);
+                radarimg.LoadImage(fileData);
+                meshRenderer.material.mainTexture = rotateTexture(radarimg, false);
+                radarimg.Apply();
+
+                meshRenderer.material.mainTexture.filterMode = FilterMode.Bilinear;
+
+                // Rotate texture 90 degrees to the right by adjusting UV coordinates
+                // this is easy and quick but BAD because then line picking doesn't work since the uvs are wrong
                 // Vector2[] uvs = mesh.uv;
                 // for (int j = 0; j < uvs.Length; j++)
                 // {
-                //     uvs[j] = new Vector2(1 - uvs[j].y, uvs[j].x);
+                //     uvs[j] = new Vector2(uvs[j].y, 1 - uvs[j].x);
                 // }
                 // mesh.uv = uvs;
-
-                // Rotate texture 90 degrees to the right by adjusting UV coordinates
-                Vector2[] uvs = mesh.uv;
-                for (int j = 0; j < uvs.Length; j++)
-                {
-                    uvs[j] = new Vector2(uvs[j].y, 1 - uvs[j].x);
-                }
-                mesh.uv = uvs;
 
                 // Set the rendering mode to "Opaque" if the material doesn't contain transparency
                 // This is necessary for the radar to render correctly, otherwise materials in the back
@@ -240,6 +238,31 @@ public class LoadFlightLines : MonoBehaviour
 
         return meshes.ToArray();
     }
+    Texture2D rotateTexture(Texture2D originalTexture, bool clockwise)
+    {
+        Color32[] original = originalTexture.GetPixels32();
+        Color32[] rotated = new Color32[original.Length];
+        int w = originalTexture.width;
+        int h = originalTexture.height;
+
+        int iRotated, iOriginal;
+
+        for (int j = 0; j < h; ++j)
+        {
+            for (int i = 0; i < w; ++i)
+            {
+                iRotated = (i + 1) * h - j - 1;
+                iOriginal = clockwise ? original.Length - 1 - (j * w + i) : j * w + i;
+                rotated[iRotated] = original[iOriginal];
+            }
+        }
+
+        Texture2D rotatedTexture = new Texture2D(h, w);
+        rotatedTexture.SetPixels32(rotated);
+        rotatedTexture.Apply();
+        return rotatedTexture;
+    }
+
 
     public GameObject[] createRadargramObjects(UnityEngine.Object obj)
     {
