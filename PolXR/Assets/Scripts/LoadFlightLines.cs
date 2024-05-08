@@ -73,7 +73,18 @@ public class LoadFlightLines : MonoBehaviour
             {
                 continue;
             }
-            GameObject line = polylines[key];
+            GameObject line;
+            try
+            {
+                line = polylines[key];
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Polyline not found: '" + key + "'");
+                Destroy(meshForward);
+                Destroy(meshBackward);
+                continue;
+            }
             line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
 
             // Create a parent for all the new objects to associate with RadarEvents3D
