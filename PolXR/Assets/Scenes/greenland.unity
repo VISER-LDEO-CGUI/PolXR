@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731224, g: 0.38074207, b: 0.35872674, a: 1}
+  m_IndirectSpecularColor: {r: 0.37312186, g: 0.38074157, b: 0.35872602, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -223,12 +223,12 @@ PrefabInstance:
     - target: {fileID: 6368858449070818428, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Positions.Array.data[4].x
-      value: -0.114779234
+      value: -0.11477924
       objectReference: {fileID: 0}
     - target: {fileID: 6368858449070818428, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Positions.Array.data[13].x
-      value: -0.051057637
+      value: -0.05105762
       objectReference: {fileID: 0}
     - target: {fileID: 6368858449406996773, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
@@ -238,12 +238,12 @@ PrefabInstance:
     - target: {fileID: 6368858449406996773, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Positions.Array.data[4].x
-      value: -0.114779204
+      value: -0.11477921
       objectReference: {fileID: 0}
     - target: {fileID: 6368858449406996773, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Positions.Array.data[13].x
-      value: -0.051057607
+      value: -0.051057592
       objectReference: {fileID: 0}
     - target: {fileID: 6368858449816317358, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
@@ -253,12 +253,12 @@ PrefabInstance:
     - target: {fileID: 6368858449816317358, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Positions.Array.data[4].x
-      value: -0.114779234
+      value: -0.11477924
       objectReference: {fileID: 0}
     - target: {fileID: 6368858449816317358, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Positions.Array.data[13].x
-      value: -0.051057637
+      value: -0.05105762
       objectReference: {fileID: 0}
     - target: {fileID: 6368858450108327261, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
@@ -278,12 +278,12 @@ PrefabInstance:
     - target: {fileID: 6368858450155118604, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Positions.Array.data[4].x
-      value: -0.114779234
+      value: -0.11477924
       objectReference: {fileID: 0}
     - target: {fileID: 6368858450155118604, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Positions.Array.data[13].x
-      value: -0.051057637
+      value: -0.05105762
       objectReference: {fileID: 0}
     - target: {fileID: 6368858450254591674, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
@@ -1783,7 +1783,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1091070310}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 7107633710438236949, guid: a2410c8a9a86a9d4e89b4ac34b4ed080, type: 3}
 --- !u!1 &1117377228
 GameObject:
   m_ObjectHideFlags: 0
@@ -2860,7 +2860,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1911864065}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d26613d9e7e314a800653b3dac717c, type: 3}
   m_Name: 
