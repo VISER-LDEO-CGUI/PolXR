@@ -12,8 +12,9 @@ _Note: This project is still in development_.
 
 Developers:
 * [Qazi Ashikin](https://github.com/qaziashikin), Columbia University
-* [Eris Gao](https://github.com/SamIAm2000), Columbia University
+* [Eris Gao](https://github.com/SamIAm2000), Barnard College
 * [Shengyue Guo](https://github.com/guosy1998), Columbia University
+* [Leah Kim](https://github.com/LEAAHKIM), Barnard College
 * [Greg Ou](), Columbia University
 * [Joel Salzman](https://github.com/joelsalzman), Columbia University
 * [Sofia Sanchez-Zarate](https://github.com/sofiasanchez985), Columbia University
@@ -27,8 +28,8 @@ Additional Contributors:
 
 Advisors:
 * Dr. [Alexandra Boghosian](https://alexandraboghosian.com/), Lamont-Doherty Earth Observatory
+* Dr. [Kirsty Tinto](https://pgg.ldeo.columbia.edu/people/kirsty-j-tinto), Lamont-Doherty Earth Observatory
 * Professor [Steven Feiner](http://www.cs.columbia.edu/~feiner/), Columbia University
-* Professor [Kirsty Tinto](https://people.climate.columbia.edu/users/profile/kirsteen-j-tinto), Lamont-Doherty Earth Observatory
 
 <br />
 
