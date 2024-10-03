@@ -67,13 +67,18 @@ public class LoadFlightLines : MonoBehaviour
 
             // Select and name line
             string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
-
-            // the current flightline file is missing 001 for some reason
-            if (key == "_001")
+            GameObject line;
+            try
             {
+                line = polylines[key];
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Polyline not found: '" + key + "'");
+                Destroy(meshForward);
+                Destroy(meshBackward);
                 continue;
             }
-            GameObject line = polylines[key];
             line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
 
             // Create a parent for all the new objects to associate with RadarEvents3D

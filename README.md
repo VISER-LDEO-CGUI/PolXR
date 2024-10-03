@@ -6,15 +6,19 @@ Project Website: https://pgg.ldeo.columbia.edu/projects/VISER
 
 _Note: This project is still in development_.
 
-***Last Updated 09/02/2023.***
+***Last Updated 09/24/2024.***
 
 # Team
 
 Developers:
 * [Qazi Ashikin](https://github.com/qaziashikin), Columbia University
+* [Eris Gao](https://github.com/SamIAm2000), Barnard College
 * [Shengyue Guo](https://github.com/guosy1998), Columbia University
+* [Leah Kim](https://github.com/LEAAHKIM), Barnard College
+* [Greg Ou](), Columbia University
 * [Joel Salzman](https://github.com/joelsalzman), Columbia University
-* [Sofia Sanchez](https://github.com/sofiasanchez985), Columbia University
+* [Sofia Sanchez-Zarate](https://github.com/sofiasanchez985), Columbia University
+* [Jake Torres](https://github.com/JakasaurusRex), Columbia University
 * [Ben Yang](https://github.com/benplus1), Columbia University
   
 Additional Contributors:
@@ -24,8 +28,8 @@ Additional Contributors:
 
 Advisors:
 * Dr. [Alexandra Boghosian](https://alexandraboghosian.com/), Lamont-Doherty Earth Observatory
+* Dr. [Kirsty Tinto](https://pgg.ldeo.columbia.edu/people/kirsty-j-tinto), Lamont-Doherty Earth Observatory
 * Professor [Steven Feiner](http://www.cs.columbia.edu/~feiner/), Columbia University
-* Professor [Kirsty Tinto](https://people.climate.columbia.edu/users/profile/kirsteen-j-tinto), Lamont-Doherty Earth Observatory
 
 <br />
 
@@ -40,8 +44,8 @@ VISER aims to improve interpretability of radargrams using XR. First, we place t
 The application contains three scenes.
 
 * Home Menu
-* Ross Ice Shelf
-* Petermann Glacier
+* Ross Ice Shelf (RIS)
+* Petermann Glacier (PG or Petermann)
 
 The Home Menu scene is mostly empty except for an XR menu that allows users to load one of the other scenes.
 <img src="https://github.com/qaziashikin/polAR/blob/Summer/images/homeMenu.png?raw=true"      alt="Home Menu"      style="float: left; margin-right: 10px;" />
