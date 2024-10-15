@@ -8,6 +8,7 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 {
@@ -20,7 +21,12 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     public GameObject meshBackward;
     public GameObject gridLine;
 
-    //public GameObject MarkObj3D;
+    // this is used to store all the picked lines for every radargram. 
+    //  it will be used for exporting the picked lines along with the radargram
+    private Dictionary<int, int[,]> linecoordsxyDict = new Dictionary<int, int[,]>();
+    private Dictionary<int, Vector3[]> worldcoordsDict = new Dictionary<int, Vector3[]>();
+    public int pickNumber = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +35,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Grab relevant objects
         flightline = this.transform.GetChild(1).gameObject;
         radargrams = this.transform.GetChild(2).gameObject;
-        radarMark = this.transform.GetChild(3).gameObject;
+        //radarMark = this.transform.GetChild(3).gameObject;
 
         meshForward = radargrams.transform.GetChild(0).gameObject;
         meshBackward = radargrams.transform.GetChild(1).gameObject;
@@ -46,7 +52,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         //radargrams.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().OnManipulationStarted.AddListener(Select);
 
         // Set objects to their starting states
-        radarMark.SetActive(false);
+        //SetActive(false);
         TogglePolyline(true, false);
         ToggleRadar(false);
 
@@ -81,8 +87,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         this.transform.GetComponent<BoundsControl>().enabled = toggle;
         radargrams.SetActive(toggle);
         loaded = toggle;
-        MarkObj3D.SetActive(true);
-        //MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);
+        MarkObj3D.SetActive(false);
     }
 
     // Checks if the radargram is currently loaded
@@ -117,14 +122,21 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Show that the object has been selected
         Select();
 
-        Debug.Log("on pointer down is firing");
-        
-        //maybe try commenting out this line
-        Ray ray = new Ray(eventData.Pointer.Result.Details.Point, -eventData.Pointer.Result.Details.Normal);
-        RaycastHit hit;
-        RaycastHit[] hits;
+        if (Menu.transform.GetComponent<MenuEvents>().isLinePickingMode)
+        {
+            doLinePicking(eventData);
+        }
 
+        Debug.Log("on pointer down is firing");
+
+    }
+    private void doLinePicking(MixedRealityPointerEventData eventData)
+    {
+        //create ray, do raycasting
+        Ray ray = new Ray(eventData.Pointer.Result.Details.Point, -eventData.Pointer.Result.Details.Normal);
+        RaycastHit[] hits;
         hits = Physics.RaycastAll(ray);
+
         if (hits.Length > 0)
         {
             //sort hits list by distance closest to furthest
@@ -132,28 +144,28 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
             foreach (RaycastHit obj in hits)
             {
+                // find the first radargram mesh that was hit
                 if (obj.transform.name.StartsWith("Data") || obj.transform.name.StartsWith("_Data"))
-                { //if it hits mesh forward first
-
-                    DrawMarkObj(obj);
+                { 
+                    //draw mark at point of intersection
+                    //DrawMarkObj(obj);
                     Vector2 uvCoordinates = obj.textureCoord;
 
+                    //get the world coordinates of the picked points
                     Vector3[] worldcoords = GetLinePickingPoints(uvCoordinates, meshForward, obj.transform.name);
-                    //draw line
+                    
+                    //draw line using the picked points
                     DrawPickedPointsAsLine(worldcoords);
                     break;
                 }
             }
         }
-        // Get the local coordinates of the hit point on the mesh
-
-
     }
 
     // Unused functions
     public void OnPointerUp(MixedRealityPointerEventData eventData) { }
     public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
-    public void OnPointerClicked(MixedRealityPointerEventData eventData){  }
+    public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
     private void LateUpdate() { }
 
     // Gets the scale of the radargram
@@ -168,7 +180,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         if ((onlyLower && alpha > newAlpha) || !onlyLower) alpha = newAlpha;
         for (int i = 0; i < 2; i++)
         {
-            if(newAlpha == 1)
+            if (newAlpha == 1)
                 ToOpaqueMode(radargrams.transform.GetChild(i).gameObject.GetComponent<MeshRenderer>().material);
             else
                 ToFadeMode(radargrams.transform.GetChild(i).gameObject.GetComponent<MeshRenderer>().material);
@@ -223,30 +235,28 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         TogglePolyline(true, false);
 
         // Turn off the radar mark
-        radarMark.SetActive(false);
+        //radarMark.SetActive(false);
     }
 
     public void DrawMarkObj(RaycastHit obj)
     {
+        // get local position of hit point relative to the radargram
         Vector3 localPosition = radargrams.transform.InverseTransformPoint(obj.point);
 
+        // set the mark object transform to the hit point
         MarkObj3D.SetActive(true);
         MarkObj3D.transform.rotation = radargrams.transform.rotation;
         MarkObj3D.transform.localPosition = localPosition;
-
-        //draw a sphere at the point of intersection
-        //sphere uses world coordinates
-        var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.transform.localScale = Vector3.one * 0.01f;
-        sphere.transform.position = obj.point;
 
     }
 
     public Vector3[] GetLinePickingPoints(Vector2 uv, GameObject curmesh, string imgname)
     {
         bool isForward = true;
+
+        // if the image name starts with an underscore, it means it is a backward facing radargram
         if (imgname.StartsWith("_"))
-        { //is mesh backward
+        { 
             imgname = imgname.Substring(1);
             isForward = false;
         }
@@ -255,14 +265,14 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         //read in image
         //these ones are horizontal
         // the reason why we don't just directly use the images for the radargram mesh textures is because they are rotated
-        string path = Path.Combine(Application.dataPath, "Resources/Radar3D/HorizontalRadar", imgname).Replace('\\', '/');
-        
-        // Note to future self: do cost benefit analysis of using texture maps vs bitmaps to read in images
-        byte[] fileData = System.IO.File.ReadAllBytes(path);
-        Texture2D texture = new Texture2D(2, 2); 
+        string path = Path.Combine("HorizontalRadar", imgname);
+        byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
+
+        Texture2D texture = new Texture2D(2, 2);
         texture.LoadImage(fileData);
-        
-        if (texture == null){
+
+        if (texture == null)
+        {
             Debug.Log("Couldn't load in radar image");
         }
 
@@ -270,7 +280,6 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         int w = (int)texture.width;
 
         // Line picking
-        
         int windowSize = 21;
         int halfWin = (int)windowSize / 2;
 
@@ -313,17 +322,17 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
             linecoordsxy[j, 0] = col; // setting x
             linecoordsxy[j, 1] = h - maxlocaly; //setting y, transformed back to origin in top left
             prevY = maxlocaly;
-            uvs[j] = new Vector2((float)linecoordsxy[j, 1]/h, (float)linecoordsxy[j, 0]/w); 
+            uvs[j] = new Vector2((float)linecoordsxy[j, 1] / h, (float)linecoordsxy[j, 0] / w);
             maxlocalval = 0;
             j++;
         }
-        
+
         //run loop again for pixels on the left of the picked point
         maxlocalval = 0;
         maxlocaly = 0;
         prevY = h - beginY;
-        j = beginX -1;
-        for (int col = beginX -1; col >= 0; col--)
+        j = beginX - 1;
+        for (int col = beginX - 1; col >= 0; col--)
         {
             for (int i = prevY - halfWin; i <= prevY + halfWin; i++)
             {
@@ -337,21 +346,31 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
             linecoordsxy[j, 0] = col; // setting x
             linecoordsxy[j, 1] = h - maxlocaly; //setting y, transformed back to origin in top left
             prevY = maxlocaly;
-            uvs[j] = new Vector2((float)linecoordsxy[j, 1]/h, (float)linecoordsxy[j, 0]/w); 
+            uvs[j] = new Vector2((float)linecoordsxy[j, 1] / h, (float)linecoordsxy[j, 0] / w);
             maxlocalval = 0;
             j--;
         }
 
-
+        // create a list of world coordinates with the same length as the radargram image width
         Vector3[] worldcoords = new Vector3[w];
+
         //convert list of uv coordinates to world coords
-        for (int i = 0; i <w; i++)
+        for (int i = 0; i < w; i++)
         {
             worldcoords[i] = UvTo3D(uvs[i], curmesh.GetComponent<MeshFilter>().mesh, curmesh.transform);
         }
+
+        // add the 2D pixel coordinates and the world coordinates to their respective dictionaries
+        linecoordsxyDict.Add(pickNumber, linecoordsxy);
+        worldcoordsDict.Add(pickNumber, worldcoords);
+
+        // increment the pick number
+        pickNumber++;
+
         return worldcoords;
     }
 
+    //this function is used to convert a single uv coordinate to a world coordinate
     public Vector3 UvTo3D(Vector2 uv, Mesh mesh, Transform transform)
     {
         int[] tris = mesh.triangles;
@@ -360,7 +379,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
 
         for (int i = 0; i < tris.Length; i += 3)
         {
-            Vector2 u1 = uvs[tris[i]];      
+            Vector2 u1 = uvs[tris[i]];
             Vector2 u2 = uvs[tris[i + 1]];
             Vector2 u3 = uvs[tris[i + 2]];
 
@@ -394,6 +413,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         return Vector3.zero;
     }
 
+    //helper function for UvTo3D
     private float Area(Vector2 p1, Vector2 p2, Vector2 p3)
     {
         Vector2 v1 = p1 - p3;
@@ -419,55 +439,103 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         // Set the color of the line using the Unlit/Color shader
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         Color lineColor = new Color(0.2f, 0.2f, 1f);
-        lineRenderer.SetColors(lineColor,lineColor);
+        lineRenderer.SetColors(lineColor, lineColor);
 
-        // after drawing the line in world space, we now give it a parent (the corresponding radargram)
-        // we also turn useWorldSpace to false so that it will move alongside the radargram
+        // Make the drawn line a child of the radargram. World space position, rotation and scale are kept the same as before
         lineRenderer.transform.SetParent(radargrams.transform, true);
+
+        // change useWorldSpace to false so that the line will move alongside the radargram
         lineRenderer.useWorldSpace = false;
-
-
-
-        // //trail renderer for renderering a tube
-        // Debug.Log("Before filtering: " + string.Join(", ", worldcoords.Select(coord => coord.ToString()).ToArray()));
-
-        // List<Vector3> filteredCoords = worldcoords.Where(coord => coord != Vector3.zero).ToList();
-        // // Debug.Log("After filtering: " + string.Join(", ", filteredCoords.Select(coord => coord.ToString()).ToArray()));
-        
-        // GameObject tubeObject = new GameObject("Tube");
-        // TrailRenderer trailRenderer = tubeObject.AddComponent<TrailRenderer>();
-
-        // float tubeWidth = 0.02f;
-        // //Color tubeColor = Color.blue; 
-
-        // // Set TrailRenderer properties
-        // trailRenderer.time = 1000f; // Set a long time to make the trail persistent
-        // trailRenderer.startWidth = tubeWidth; // Set the width of the tube
-        // trailRenderer.endWidth = tubeWidth;
-        // trailRenderer.material = new Material(Shader.Find("Standard")); // You can replace this with your own shader or material
-        // trailRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        // Color tubeColor = new Color(0.2f, 0.2f, 1f);
-        
-        // trailRenderer.startColor = tubeColor;
-        // trailRenderer.endColor = tubeColor;
-
-        // // Set positions for the trail
-        // tubeObject.transform.position = filteredCoords[0];
-        // Vector3[] positions = filteredCoords.ToArray();
-        // Debug.Log("After conversion: " + string.Join(", ", positions.Select(coord => coord.ToString()).ToArray()));
-        // trailRenderer.AddPositions(positions);
-
-
-
-
-        // This draws spheres at each picked point instead of a connected polyline
-        // foreach(Vector3 worldcoord in worldcoords){
-        //     var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        //     sphere.transform.localScale = Vector3.one * 0.01f;
-        //     sphere.transform.position = worldcoord;
-        // }
-        
     }
-    
+
+    public void saveRadargram()
+    {
+        saveRadarImg();
+        saveRadarCoords();
+    }
+    private void saveRadarImg()
+    {
+        // get path of original radargram image to overlay picked points on
+        string imgName = radargrams.transform.GetChild(0).name + ".png";
+
+        string path = Path.Combine("HorizontalRadar", imgName);
+        byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
+
+        Texture2D radarimg = new Texture2D(2, 2);
+        radarimg.LoadImage(fileData);
+
+        if (radarimg == null)
+        {
+            Debug.Log("Couldn't load in radar image");
+        }
+
+        foreach (int key in linecoordsxyDict.Keys)
+        {
+            int[,] currentLineCoords = linecoordsxyDict[key];
+            int w = radarimg.height;
+            // Debug.Log(currentLineCoords.GetLength(0));
+            for (int i = 0; i < currentLineCoords.GetLength(0); i++)
+            {
+                // Debug.Log("x, y: "+ currentLineCoords[i,0] + " " + currentLineCoords[i,1]);
+                radarimg.SetPixel(currentLineCoords[i, 0], w - currentLineCoords[i, 1], Color.red);
+            }
+        }
+        radarimg.Apply();
+
+        // Encode the texture as PNG
+        byte[] pngBytes = radarimg.EncodeToPNG();
+
+        string outputFolder = Path.Combine(Application.dataPath, "Radargram_picks");
+
+        // Specify the output file path
+        string radargramName = radargrams.transform.name.Replace("OBJ_Data_", "");
+        string outputPath = Path.Combine(outputFolder, radargramName + "_picks.png");
+
+        // Create the output folder if it doesn't exist
+        if (!Directory.Exists(outputFolder))
+        {
+            Directory.CreateDirectory(outputFolder);
+        }
+
+        // Write the PNG bytes to a file
+        File.WriteAllBytes(outputPath, pngBytes);
+
+        Debug.Log("Modified radar image exported to: " + outputPath);
+    }
+
+    private void saveRadarCoords()
+    {
+        StringBuilder txtContent = new StringBuilder();
+
+        // Write column headers in the first line
+        txtContent.AppendLine("ESPG_X,ESPG_Y,ESPG_Z"); 
+
+        foreach (int key in worldcoordsDict.Keys)
+        {
+            Vector3[] currentWorldCoords = worldcoordsDict[key];
+            Debug.Log("currentWorldCoords: " + currentWorldCoords.Length);
+            for (int i = 0; i < currentWorldCoords.Length; i++){
+                txtContent.AppendLine(currentWorldCoords[i].x + " " + currentWorldCoords[i].y + " " + currentWorldCoords[i].z);
+            }
+        }
+        string outputFolder = Path.Combine(Application.dataPath, "Radargram_picks");
+
+        // Specify the output file path
+        string radargramName = radargrams.transform.name.Replace("OBJ_Data_", "");
+        string outputPath = Path.Combine(outputFolder, radargramName + "_picks.txt");
+
+        // Create the output folder if it doesn't exist
+        if (!Directory.Exists(outputFolder))
+        {
+            Directory.CreateDirectory(outputFolder);
+        }
+
+        // Write the text content to a .txt file
+        File.WriteAllText(outputPath, txtContent.ToString());
+
+        Debug.Log("Text file exported to: " + outputPath);
+
+    }
+
 
 }

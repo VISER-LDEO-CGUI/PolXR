@@ -12,8 +12,11 @@ public class MenuEvents : MonoBehaviour
 {
     // The current menu type, true stands for main menu.
     private bool isMainMenu;
+    public bool isLinePickingMode;
     public Transform SubMenuRadar;
     public Transform SubMenuMain;
+
+    public Transform SubMenuLinePicking;
 
     // The workflow used for the current radarParent.
     public int workflow;
@@ -100,7 +103,6 @@ public class MenuEvents : MonoBehaviour
         Minimap.GetComponent<BoxCollider>().enabled = false;
         MarkObj.transform.parent = Location.transform;
         MarkObj.SetActive(false);
-
     }
 
     // Update is called once per frame
@@ -226,7 +228,12 @@ public class MenuEvents : MonoBehaviour
 
         isMainMenu = false;
         RadarToggle.IsToggled = true;
-        SubMenuRadar.gameObject.SetActive(true);
+        if (isLinePickingMode){
+            SubMenuRadar.gameObject.SetActive(false);
+        } else {
+            SubMenuRadar.gameObject.SetActive(true);
+        }
+        
         SubMenuMain.gameObject.SetActive(false);
     }
 
@@ -359,6 +366,49 @@ public class MenuEvents : MonoBehaviour
         Title.text = home || (radarParent == null) ? sceneName: radarParent.name;
         SubMenuRadar.gameObject.SetActive(!home);
         SubMenuMain.gameObject.SetActive(home);
+    }
+
+    // Switch to line picking sub menu
+    public void LinePickingMode(bool linePicking)
+    {
+        Debug.Log("Line Picking Mode turned on in menu");
+        isLinePickingMode = linePicking;
+
+        // turn on line picking sub menu
+        SubMenuLinePicking.gameObject.SetActive(isLinePickingMode);
+
+        // turn off other menus
+        SubMenuRadar.gameObject.SetActive(false);
+        SubMenuMain.gameObject.SetActive(false);
+
+        //turn off object manipulators on all radar images
+        foreach (Transform child in RadarImageContainer)
+        {
+            child.GetChild(1).gameObject.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().enabled = false;
+        }
+    }
+
+    // Switch to radar menu
+    public void returnToRadarMode(bool radar)
+    {
+        isLinePickingMode = false;
+        // turn on radar sub menu
+        SubMenuRadar.gameObject.SetActive(radar);
+
+        // turn off other menus
+        SubMenuLinePicking.gameObject.SetActive(false);
+        SubMenuMain.gameObject.SetActive(false);
+
+        //turn on object manipulators on all radar images
+        foreach (Transform child in RadarImageContainer)
+        {
+            child.GetChild(1).gameObject.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>().enabled = true;
+        }
+    }
+
+    public void saveRadargram(bool save)
+    {
+        radarParent.GetComponent<RadarEvents3D>().saveRadargram();
     }
 
     // The four slider update interface.

@@ -12,26 +12,50 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using GLTFast;
+using Oculus.Platform;
 
 public class LoadFlightLines : MonoBehaviour
 {
     public Transform Container;
-    public GameObject radarMark;
+    //public GameObject radarMark;
     public GameObject DEM;
     public GameObject gridLine;
 
     public GameObject MarkObj3D;
     public void Start()
     {
+        BetterStreamingAssets.Initialize();
         LoadFlightLine("20100324_01"); // TODO: replace with menu option
+        Debug.Log("Loaded flight line");
     }
-
-    public void LoadFlightLine(string line_id)
+    // public class YourCustomInstantiator : GLTFast.IInstantiator {
+    // // Your code here
+    // }
+    public async void LoadFlightLine(string line_id)
     {
-        // Load the data
-        UnityEngine.Object[] meshes = Resources.LoadAll("Radar3D/Radar/" + line_id);
+        // // Load the data // old workflow loading from resources
+        //UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
         Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
-        GameObject prefab = Instantiate(Resources.Load("Radar3D/Radar/RadarContainer") as GameObject);
+        //GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
+
+        // Load the glTF asset from streaming assets folder
+        byte[] data = BetterStreamingAssets.ReadAllBytes("radar.glb");
+
+        var gltf = new GltfImport();
+        var success = await gltf.Load(data);
+        UnityEngine.Object[] meshes;
+
+        if (success)
+        {
+            // Extract meshes and textures
+            meshes = ExtractMeshes(gltf);
+        }
+        else
+        {
+            Debug.LogError("Failed to load glTF asset");
+            return;
+        }
 
         for (int i = 0; i < meshes.Length; i++)
         {
@@ -67,20 +91,26 @@ public class LoadFlightLines : MonoBehaviour
             parent.transform.rotation = Quaternion.identity;
             BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
 
+            //turns off gizmos and bounding boxes
+            parentBoundsControl.LinksConfig.ShowWireFrame = false;
+            parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+            parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+
             // Create a parent to group both radargram objects
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
             radargram.transform.localPosition = meshBounds.center;
             // MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
             // radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
-            
+
             // add mesh colliders to each of the mesh forward and backward
             MeshCollider meshForwardCollider = meshForward.AddComponent<MeshCollider>();
             meshForwardCollider.sharedMesh = meshForward.GetComponent<MeshFilter>().mesh;
 
             MeshCollider meshBackwardCollider = meshBackward.AddComponent<MeshCollider>();
             meshBackwardCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
-            
-            
+
 
             // Organize the children
             line.transform.parent = parent.transform;
@@ -94,6 +124,14 @@ public class LoadFlightLines : MonoBehaviour
             // Add the correct Bounds Control so that MRTK knows where the objects are
             BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
             boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
+
+            //turns off gizmos and bounding boxes
+            boundsControl.LinksConfig.ShowWireFrame = false;
+            boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+            boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+
             BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
             boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
             boxCollider.size = meshBounds.size;
@@ -117,17 +155,119 @@ public class LoadFlightLines : MonoBehaviour
 
             // Create and place the radar mark for the minimap
             Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
-            GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
+            //GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
 
             //GameObject markObj3D = Instantiate(MarkObj3D, position, Quaternion.identity, radargram.transform);
             GameObject markObj3D = Instantiate(MarkObj3D, radargram.transform);
             markObj3D.transform.localPosition = Vector3.zero;
         }
 
-        // Drop everything onto the DEM -- this should correlate with the DEM position
+        //Drop everything onto the DEM -- this should correlate with the DEM position
         Container.transform.localPosition = new Vector3(-10f, 0f, 10f);
+        foreach (var obj in meshes)
+        {
+            Destroy(obj);
+        }
 
     }
+
+    UnityEngine.Object[] ExtractMeshes(GltfImport gltfImport)
+    {
+        // Implement the IInstantiator interface methods to extract meshes
+        // You can use gltfImport.Meshes and gltfImport.MeshResults to access mesh data
+
+        // Loop through mesh results
+        Mesh[] myMeshes = gltfImport.GetMeshes();
+        List<UnityEngine.Object> meshes = new List<UnityEngine.Object>();
+
+        for (int i = 0; i < myMeshes.Length; i++)
+        {
+            // Example: Instantiate a Unity GameObject for each mesh
+            Mesh mesh = myMeshes[i];
+            int dotIndex = mesh.name.IndexOf('.');
+            if (dotIndex != -1)
+            {
+                mesh.name = mesh.name.Substring(0, dotIndex);
+            }
+            if (mesh.name.StartsWith("Data_20100324"))
+            {
+                GameObject go = new GameObject(mesh.name);
+                MeshFilter meshFilter = go.AddComponent<MeshFilter>();
+                meshFilter.sharedMesh = mesh;
+                MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
+                meshRenderer.material = gltfImport.GetMaterial(i);
+
+
+                // Rotate the texture 90 degrees to the left
+                // this is basically swapping out the original .glb texture and using new png images instead
+                string imgName = mesh.name + ".png";
+                string path = Path.Combine("HorizontalRadar", imgName);
+                byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
+                Texture2D radarimg = new Texture2D(meshRenderer.material.mainTexture.width, meshRenderer.material.mainTexture.height,TextureFormat.RGBA32, 1, false);
+                radarimg.LoadImage(fileData);
+                meshRenderer.material.mainTexture = rotateTexture(radarimg, false);
+                radarimg.Apply();
+
+                meshRenderer.material.mainTexture.filterMode = FilterMode.Bilinear;
+
+                // Rotate texture 90 degrees to the right by adjusting UV coordinates
+                // this is easy and quick but BAD because then line picking doesn't work since the uvs are wrong
+                // Vector2[] uvs = mesh.uv;
+                // for (int j = 0; j < uvs.Length; j++)
+                // {
+                //     uvs[j] = new Vector2(uvs[j].y, 1 - uvs[j].x);
+                // }
+                // mesh.uv = uvs;
+
+                // Set the rendering mode to "Opaque" if the material doesn't contain transparency
+                // This is necessary for the radar to render correctly, otherwise materials in the back
+                // will appear in the front probably becuase of some transparency problem
+                if (!meshRenderer.material.shader.name.Contains("Transparent"))
+                {
+                    meshRenderer.material.SetFloat("_Mode", 0);
+                    meshRenderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    meshRenderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    meshRenderer.material.SetInt("_ZWrite", 1);
+                    meshRenderer.material.DisableKeyword("_ALPHATEST_ON");
+                    meshRenderer.material.DisableKeyword("_ALPHABLEND_ON");
+                    meshRenderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                    meshRenderer.material.renderQueue = -1;
+                }
+
+                meshRenderer.receiveShadows = true;
+                meshFilter.sharedMesh.RecalculateNormals();
+                // Add more customization as needed
+                meshes.Add(go);
+            }
+        }
+
+        return meshes.ToArray();
+    }
+    Texture2D rotateTexture(Texture2D originalTexture, bool clockwise)
+    {
+        Color32[] original = originalTexture.GetPixels32();
+        Color32[] rotated = new Color32[original.Length];
+        int w = originalTexture.width;
+        int h = originalTexture.height;
+
+        int iRotated, iOriginal;
+
+        for (int j = 0; j < h; ++j)
+        {
+            for (int i = 0; i < w; ++i)
+            {
+                iRotated = (i + 1) * h - j - 1;
+                iOriginal = clockwise ? original.Length - 1 - (j * w + i) : j * w + i;
+                rotated[iRotated] = original[iOriginal];
+            }
+        }
+
+        Texture2D rotatedTexture = new Texture2D(h, w);
+        rotatedTexture.SetPixels32(rotated);
+        rotatedTexture.Apply();
+        return rotatedTexture;
+    }
+
 
     public GameObject[] createRadargramObjects(UnityEngine.Object obj)
     {
@@ -161,16 +301,19 @@ public class LoadFlightLines : MonoBehaviour
     public Dictionary<string, GameObject> createPolylineObjects(string line_id)
     {
         // Load the polyline file
+        // this works for the streaming assets folder!!
         string filename = "FlightLine_" + line_id + ".obj";
-        string path = Path.Combine(Application.dataPath, "Resources/Radar3D/FlightLines", filename).Replace('\\', '/');
-        string allText = File.ReadAllText(path);
+        byte[] data = BetterStreamingAssets.ReadAllBytes(filename);
+        string allText = System.Text.Encoding.Default.GetString(data);
+
+        //string allText = File.ReadAllText(path);
 
         // Split up the text by object definition
         Dictionary<string, GameObject> polylines = new Dictionary<string, GameObject>();
         string[] objects = allText.Split("\no ");
         string key = null;
 
-        foreach (string objectText in objects) 
+        foreach (string objectText in objects)
         {
 
             // Ensure we're looking at an object definition
