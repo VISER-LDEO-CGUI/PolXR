@@ -103,7 +103,6 @@ public class MenuEvents : MonoBehaviour
         Minimap.GetComponent<BoxCollider>().enabled = false;
         MarkObj.transform.parent = Location.transform;
         MarkObj.SetActive(false);
-
     }
 
     // Update is called once per frame
