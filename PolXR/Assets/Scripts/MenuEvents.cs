@@ -97,7 +97,6 @@ public class MenuEvents : MonoBehaviour
     {
         // Deactivate the radar menu before any selection happens; deactivate the bounding box.
         HomeButton(true);
-        BoundingBoxToggle();
         MeasureLine.SetActive(false);
         if (SceneManager.GetActiveScene().name == "greenland") Minimap.SetActive(false); // fix later
         Minimap.GetComponent<BoxCollider>().enabled = false;
@@ -168,7 +167,7 @@ public class MenuEvents : MonoBehaviour
 
             Vector3 MarkObjFromSceneOrigin = MarkObj.transform.parent.position;
             Vector3 MeasureObjFromSceneOrigin = MeasureObj.transform.parent.position;
-            
+
             //DistanceVectorGameUnits
             float measure = Vector3.Distance(MarkObjFromSceneOrigin, MeasureObjFromSceneOrigin);
 
@@ -185,7 +184,7 @@ public class MenuEvents : MonoBehaviour
                 if (measureMode() != 0)
                     MarkTMP.text += string.Format("Distance: {0}m", measure);
             }
-                
+
             else
                 MarkTMP.text = "No selected points.";
         }
@@ -228,12 +227,15 @@ public class MenuEvents : MonoBehaviour
 
         isMainMenu = false;
         RadarToggle.IsToggled = true;
-        if (isLinePickingMode){
+        if (isLinePickingMode)
+        {
             SubMenuRadar.gameObject.SetActive(false);
-        } else {
+        }
+        else
+        {
             SubMenuRadar.gameObject.SetActive(true);
         }
-        
+
         SubMenuMain.gameObject.SetActive(false);
     }
 
@@ -336,7 +338,7 @@ public class MenuEvents : MonoBehaviour
                 }*/
 
                 // Trying to find or add a new particle system for the radar image.
-            
+
                 if (radarParent.Find("Line") == null) Location.GetComponent<CSVReadPlot>().AddPSLine(radarParent);
 
                 radarParent.GetComponent<RadarEvents2D>().AddNewPoint(MarkColor);
@@ -363,7 +365,7 @@ public class MenuEvents : MonoBehaviour
         isMainMenu = home;
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = string.Concat(currentScene.name[0].ToString().ToUpper(), currentScene.name.Substring(1));
-        Title.text = home || (radarParent == null) ? sceneName: radarParent.name;
+        Title.text = home || (radarParent == null) ? sceneName : radarParent.name;
         SubMenuRadar.gameObject.SetActive(!home);
         SubMenuMain.gameObject.SetActive(home);
     }
@@ -416,7 +418,7 @@ public class MenuEvents : MonoBehaviour
     {
         if (radarParent && YSlider.gameObject.tag == "Active")
             radargram.localScale = new Vector3(
-                radargram.localScale.x, 
+                radargram.localScale.x,
                 originalScale.y * scaleY * (0.5f + eventData.NewValue),
                 radargram.localScale.z
             );
@@ -437,7 +439,7 @@ public class MenuEvents : MonoBehaviour
         if (radarParent && ZSlider.gameObject.tag == "Active")
             radargram.localScale = new Vector3(
                 radargram.localScale.x,
-                radargram.localScale.y, 
+                radargram.localScale.y,
                 originalScale.z * scaleZ * (0.5f + eventData.NewValue)
             );
     }
@@ -512,7 +514,8 @@ public class MenuEvents : MonoBehaviour
 
     // Single radar toggling.
     public void CSVToggling() { radarParent.GetComponent<RadarEvents2D>().ToggleLine(CSVPicksToggle.IsToggled); } // nullref
-    public void RadarToggling() {
+    public void RadarToggling()
+    {
         if (workflow == 2) radarParent.GetComponent<RadarEvents2D>().ToggleRadar(RadarToggle.IsToggled);
         else radarParent.GetComponent<RadarEvents3D>().ToggleRadar(RadarToggle.IsToggled);
     }
