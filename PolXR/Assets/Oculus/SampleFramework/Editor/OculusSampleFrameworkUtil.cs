@@ -20,34 +20,48 @@
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine;
 
 [InitializeOnLoadAttribute]
 public class OculusSampleFrameworkUtil
 {
-  static OculusSampleFrameworkUtil()
-  {
-#if UNITY_2017_2_OR_NEWER
-    EditorApplication.playModeStateChanged += HandlePlayModeState;
-#else
-    EditorApplication.playmodeStateChanged += () =>
+    static OculusSampleFrameworkUtil()
     {
-      if (EditorApplication.isPlaying)
-      {
-        OVRPlugin.SendEvent("load", OVRPlugin.wrapperVersion.ToString(), "sample_framework");
-      }
-    };
+#if UNITY_2017_2_OR_NEWER
+        EditorApplication.playModeStateChanged += HandlePlayModeState;
+#else
+        EditorApplication.playmodeStateChanged += () =>
+        {
+            if (EditorApplication.isPlaying)
+            {
+                if (OVRPlugin.wrapperVersion != null)
+                {
+                    OVRPlugin.SendEvent("load", OVRPlugin.wrapperVersion.ToString(), "sample_framework");
+                }
+                else
+                {
+                    Debug.LogWarning("OVRPlugin.wrapperVersion is null, skipping SendEvent call.");
+                }
+            }
+        };
 #endif
-	}
+    }
 
 #if UNITY_2017_2_OR_NEWER
-	private static void HandlePlayModeState(PlayModeStateChange state)
-  {
-    if (state == PlayModeStateChange.EnteredPlayMode)
+    private static void HandlePlayModeState(PlayModeStateChange state)
     {
-      OVRPlugin.SendEvent("load", OVRPlugin.wrapperVersion.ToString(), "sample_framework");
+        if (state == PlayModeStateChange.EnteredPlayMode)
+        {
+            if (OVRPlugin.wrapperVersion != null)
+            {
+                OVRPlugin.SendEvent("load", OVRPlugin.wrapperVersion.ToString(), "sample_framework");
+            }
+            else
+            {
+                Debug.LogWarning("OVRPlugin.wrapperVersion is null, skipping SendEvent call.");
+            }
+        }
     }
-  }
 #endif
 }
-
 #endif
