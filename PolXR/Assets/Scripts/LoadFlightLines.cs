@@ -23,6 +23,7 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject gridLine;
 
     public GameObject MarkObj3D;
+
     public void Start()
     {
         BetterStreamingAssets.Initialize();
@@ -394,5 +395,4 @@ public class LoadFlightLines : MonoBehaviour
         Destroy(gridLine);
         return polylines;
     }
-
 }

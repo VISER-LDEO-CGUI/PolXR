@@ -27,11 +27,12 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     private Dictionary<int, Vector3[]> worldcoordsDict = new Dictionary<int, Vector3[]>();
     public int pickNumber = 0;
 
+    public SnapRadargramManager snapManager;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        snapManager = FindObjectOfType<SnapRadargramManager>();
         // Grab relevant objects
         flightline = this.transform.GetChild(1).gameObject;
         radargrams = this.transform.GetChild(2).gameObject;
@@ -107,6 +108,11 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
             sibling.TogglePolyline(true, false);
         }
         TogglePolyline(true, true);
+
+        if(snapManager != null)
+        {
+            snapManager.OnRadargramSelected(this.gameObject);
+        }
     }
     private void Select(ManipulationEventData eventData)
     {
@@ -126,8 +132,17 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         {
             doLinePicking(eventData);
         }
-
+        
         Debug.Log("on pointer down is firing");
+        
+        if (snapManager != null)
+        {
+            snapManager.OnRadargramSelected(gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("SnapRadargramManager is not assigned.");
+        }
 
     }
     private void doLinePicking(MixedRealityPointerEventData eventData)
