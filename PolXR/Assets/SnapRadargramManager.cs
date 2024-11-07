@@ -40,12 +40,14 @@ public class SnapRadargramManager : MonoBehaviour
         if (currentSelectionIndex == 0)
         {
             snapImage1.sprite = radargramSprite;
+            //snapImage1.preserveAspect = true; --> this displays the full length of radargram
             snapImage1.gameObject.SetActive(true); 
             selectedRadargrams[currentSelectionIndex] = radargram;
         }
         else if (currentSelectionIndex == 1)
         {
             snapImage2.sprite = radargramSprite;
+            //snapImage2.preserveAspect = true;
             snapImage2.gameObject.SetActive(true); 
             selectedRadargrams[currentSelectionIndex] = radargram; 
         }
@@ -94,6 +96,7 @@ public class SnapRadargramManager : MonoBehaviour
         snapImage2.sprite = null;
         snapImage2.gameObject.SetActive(false);  
 
+        selectedRadargrams.Clear();
         Debug.Log("Radargrams deselected");
     }
 }
