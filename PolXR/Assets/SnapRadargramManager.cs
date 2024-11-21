@@ -21,6 +21,11 @@ public class SnapRadargramManager : MonoBehaviour
         if (selectedRadargrams.Count >= maxSelection)
         {
             Debug.Log("Max selection reached");
+            RadarEvents3D radarEvents = radargram.GetComponent<RadarEvents3D>();
+            if(radarEvents != null)
+            {
+                radarEvents.ToggleRadar(false);
+            }
             return;
         }
 
@@ -97,16 +102,19 @@ public class SnapRadargramManager : MonoBehaviour
 
     public void OnRadargramDeselected(GameObject radargramUI, GameObject radargram) 
     {
-        /*
-        Button button = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-        Debug.Log("deselect button clicked!");
-        */
         if(selectedRadargrams.Contains(radargram)) 
         {
             selectedRadargrams.Remove(radargram);
-            Debug.Log($"radargram deselected. remaining selections: {selectedRadargrams.Count}");
+            Debug.Log($"radargram deselected in the UI. remaining selections: {selectedRadargrams.Count}");
         }
         Destroy(radargramUI);
-        //Destroy(button.transform.parent.gameObject);
+
+        RadarEvents3D radarEvents = radargram.GetComponent<RadarEvents3D>();
+        if(radarEvents != null) 
+        {
+            radarEvents.ToggleRadar(false);
+            radarEvents.TogglePolyline(true,false);
+            Debug.Log($"radargram {radargram.name} deselected in the SCENE.");
+        }
     }
 }
