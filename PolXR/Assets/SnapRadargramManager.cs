@@ -10,12 +10,14 @@ public class SnapRadargramManager : MonoBehaviour
     public GameObject radargramPrefab;
     public Transform contentParent;
     public ScrollRect scrollRect;
+    public GameObject StudyButton;
 
     private int maxSelection = 8;
     private List<GameObject> selectedRadargrams = new List<GameObject>();
 
     public void OnRadargramSelected(GameObject radargram)
     {
+        StudyButton.SetActive(true);
         if (selectedRadargrams.Count >= maxSelection)
         {
             Debug.Log("Max selection reached");
@@ -113,6 +115,11 @@ public class SnapRadargramManager : MonoBehaviour
             radarEvents.ToggleRadar(false);
             radarEvents.TogglePolyline(true,false);
             Debug.Log($"radargram {radargram.name} deselected in the SCENE.");
+        }
+
+        if(selectedRadargrams.Count < 1) 
+        {
+            StudyButton.SetActive(false);
         }
     }
 
