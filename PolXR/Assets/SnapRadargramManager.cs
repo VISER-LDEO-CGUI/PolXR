@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SnapRadargramManager : MonoBehaviour
 {
@@ -116,5 +114,10 @@ public class SnapRadargramManager : MonoBehaviour
             radarEvents.TogglePolyline(true,false);
             Debug.Log($"radargram {radargram.name} deselected in the SCENE.");
         }
+    }
+
+    public void loadStudyScene()
+    {
+        SceneManager.LoadSceneAsync("StudyScene");
     }
 }
