@@ -8,22 +8,23 @@ using UnityEngine.UI;
 
 public class SnapRadargramManager : MonoBehaviour
 {
-    public Image snapImage1;  
-    public Image snapImage2;  
 
-    private int maxSelection = 2;
-    private int currentSelectionIndex = 0;
-    private Dictionary<int, GameObject> selectedRadargrams = new Dictionary<int, GameObject>();
+    public GameObject radargramPrefab;
+    public Transform contentParent;
+    public ScrollRect scrollRect;
+
+    private int maxSelection = 8;
+    private List<GameObject> selectedRadargrams = new List<GameObject>();
 
     public void OnRadargramSelected(GameObject radargram)
     {
-        if (currentSelectionIndex >= maxSelection)
+        if (selectedRadargrams.Count >= maxSelection)
         {
             Debug.Log("Max selection reached");
             return;
         }
 
-        if(selectedRadargrams.ContainsValue(radargram))
+        if(selectedRadargrams.Contains(radargram))
         {
             Debug.Log("radargram already selected");
             return;
@@ -36,23 +37,30 @@ public class SnapRadargramManager : MonoBehaviour
             Debug.LogError("Failed to convert radargram to sprite.");
             return;
         }
-
-        if (currentSelectionIndex == 0)
+        
+        selectedRadargrams.Add(radargram);
+        GameObject radargramUI = Instantiate(radargramPrefab, contentParent);
+        Image radargramImage = radargramUI.GetComponent<Image>();
+        
+        if(radargramImage != null) 
         {
-            snapImage1.sprite = radargramSprite;
-            //snapImage1.preserveAspect = true; --> this displays the full length of radargram
-            snapImage1.gameObject.SetActive(true); 
-            selectedRadargrams[currentSelectionIndex] = radargram;
-        }
-        else if (currentSelectionIndex == 1)
-        {
-            snapImage2.sprite = radargramSprite;
-            //snapImage2.preserveAspect = true;
-            snapImage2.gameObject.SetActive(true); 
-            selectedRadargrams[currentSelectionIndex] = radargram; 
+            radargramImage.sprite = radargramSprite;
         }
 
-        currentSelectionIndex++;
+        Button deselectButton = radargramUI.transform.Find("DeselectButton").GetComponent<Button>();
+        if(deselectButton != null) 
+        {
+            deselectButton.onClick.AddListener(() =>
+            {
+                OnRadargramDeselected(radargramUI, radargram);
+            });
+            Debug.Log("deselect button listener added");
+        }
+        else 
+        {
+            Debug.LogError("deselect button not found");
+        }
+        Debug.Log("radargram added");
     }
 
     private Texture2D CreateTextureCopy(Texture2D sourceTexture)
@@ -87,16 +95,18 @@ public class SnapRadargramManager : MonoBehaviour
         return Sprite.Create(textureCopy, new Rect(0, 0, textureCopy.width, textureCopy.height), new Vector2(0.5f, 0.5f));
     }
 
-    public void DeselectRadargrams()
+    public void OnRadargramDeselected(GameObject radargramUI, GameObject radargram) 
     {
-        currentSelectionIndex = 0;
-
-        snapImage1.sprite = null;
-        snapImage1.gameObject.SetActive(false);  
-        snapImage2.sprite = null;
-        snapImage2.gameObject.SetActive(false);  
-
-        selectedRadargrams.Clear();
-        Debug.Log("Radargrams deselected");
+        /*
+        Button button = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+        Debug.Log("deselect button clicked!");
+        */
+        if(selectedRadargrams.Contains(radargram)) 
+        {
+            selectedRadargrams.Remove(radargram);
+            Debug.Log($"radargram deselected. remaining selections: {selectedRadargrams.Count}");
+        }
+        Destroy(radargramUI);
+        //Destroy(button.transform.parent.gameObject);
     }
 }
