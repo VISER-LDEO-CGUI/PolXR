@@ -20,43 +20,20 @@
             This will deal with all communication done with the Photon Cloud
             </summary>
         </member>
-        <member name="F:Fusion.Photon.Realtime.FusionRelayClient.KeepAliveInBackground">
-            <summary>Defines for how long the Fallback Thread should keep the connection, before it may time out as usual.</summary>
-            <remarks>We want to the Client to keep it's connection when an app is in the background (and doesn't call Update / Service Clients should not keep their connection indefinitely in the background, so after some milliseconds, the Fallback Thread should stop keeping it up.</remarks>
-        </member>
-        <member name="F:Fusion.Photon.Realtime.FusionRelayClient._delayBetweenPings">
+        <member name="F:Fusion.Photon.Realtime.FusionRelayClient._connectionHandler">
             <summary>
-            Delay between each ACK/Ping to Photon Cloud
-            </summary>
-        </member>
-        <member name="F:Fusion.Photon.Realtime.FusionRelayClient._ackSent">
-            <summary>
-            Signal if ACK was Sent
-            </summary>
-        </member>
-        <member name="F:Fusion.Photon.Realtime.FusionRelayClient._fallbackThreadId">
-            <summary>
-            Thread ID
+            Reference to the background connection handler
             </summary>
         </member>
         <member name="M:Fusion.Photon.Realtime.FusionRelayClient.StartFallbackSendAck">
             <summary>
-            Starts a new rhread to send ACK to Cloud
+            Starts a new thread to send ACK to Cloud
             </summary>
         </member>
         <member name="M:Fusion.Photon.Realtime.FusionRelayClient.StopFallbackSendAck">
             <summary>
-            Stop the currently running background thread
+            Stops the currently running background thread.
             </summary>
-        </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BackgroundAcksTask">
-            <summary>
-            ACK Thread Action.
-            
-            This will check the last time the LBC sent anything to the Cloud, if it's more than <see cref="F:Fusion.Photon.Realtime.FusionRelayClient._delayBetweenPings"/>,
-            an ACK Msg will be sent, so the Cloud keeps the connection active.
-            </summary>
-            <returns>True if the Thread should keep running, false otherwise.</returns>
         </member>
         <member name="M:Fusion.Photon.Realtime.FusionRelayClient.OnEventHandler(ExitGames.Client.Photon.EventData)">
             <summary>
@@ -100,76 +77,92 @@
             Flag to signal if the Client is Ready to perform cloud action and it is in a Room
             </summary>
         </member>
+        <member name="P:Fusion.Photon.Realtime.FusionRelayClient.IsEncryptionEnabled">
+            <summary>
+            Flag to signal if the Photon Cloud connection is encrypted by default
+            </summary>
+        </member>
         <member name="E:Fusion.Photon.Realtime.FusionRelayClient.OnRoomChanged">
             <summary>
             Signal if some room property has changed
             </summary>
         </member>
+        <member name="P:Fusion.Photon.Realtime.FusionRelayClient.UseDefaultPorts">
+            <summary>
+            Set if the Client should use the Default or Alternative Photon Cloud Ports
+            </summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.LoadPhotonEncryptorType">
+            <summary>
+            Try to load the first implementation of <see cref="T:ExitGames.Client.Photon.Encryption.IPhotonEncryptor"/> found in the current AppDomain
+            </summary>
+            <returns>Type of the first implementation of <see cref="T:ExitGames.Client.Photon.Encryption.IPhotonEncryptor"/> found</returns>
+        </member>
         <member name="M:Fusion.Photon.Realtime.FusionRelayClient.UpdateRoomProperties(System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
             <summary>
             Change the Custom Properties of the current Room
             </summary>
-            <param name="properties">New set of Custom Properties</param>
+            <param name="customProperties">New set of Custom Properties</param>
             <returns>True if the change was made, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.UpdateRoomVisibility(System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.UpdateRoomIsVisible(System.Boolean)">
             <summary>
             Change the IsVisible Property of the current Room
             </summary>
             <param name="value">New value of IsVisible</param>
             <returns>True if the change was made, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.UpdateRoomOpenness(System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.UpdateRoomIsOpen(System.Boolean)">
             <summary>
             Change the IsOpen Property of the current Room
             </summary>
             <param name="value">New value of IsOpen</param>
             <returns>True if the change was made, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.GetRoomProperties">
-            <summary>
-            Get Current Custom Properties of Room
-            </summary>
-            <returns>Custom Properties Dictionary</returns>
-        </member>
         <member name="M:Fusion.Photon.Realtime.FusionRelayClient.Update">
             <summary>
             Used to keep the client communication
             </summary>
         </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildEnterRoomParams(Fusion.Photon.Realtime.TypedLobby,System.String,System.Byte,System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildEnterRoomParams(Fusion.Photon.Realtime.TypedLobby,System.String,System.Int32,System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty},System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Build a new EnterRoomParams ref using the default configs and optional Room Name
             </summary>
             <param name="typedLobby">Which lobby the Room should exits</param>
-            <param name="RoomName">Room Name, if not set, a Random Name will be used</param>
+            <param name="roomName">Room Name, if not set, a Random Name will be used</param>
+            <param name="maxPlayers">Set the max number of players per Session</param>
             <param name="customProperties">Optional Room Custom Properties</param>
+            <param name="isOpen">Signal if the Session should be Open/Closed</param>
+            <param name="isVisible">Signal if the Session should Visible/Invisible</param>
+            <param name="useDefaultEmptyRoomTtl">Signal fi the Default EmptyRoomTTL (0) should be used or a custom one</param>
             <returns>EnterRoomParams reference.</returns>
         </member>
-        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildJoinParams(Fusion.Photon.Realtime.TypedLobby,System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
+        <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildJoinParams(Fusion.Photon.Realtime.TypedLobby,System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty},Fusion.Photon.Realtime.MatchmakingMode)">
             <summary>
             Build a new OpJoinRandomRoomParams that will be used to setup which Room the local peer wants to join
             </summary>
             <param name="typedLobby">Type of Lobby to search rooms</param>
             <param name="customProperties">Optional list of filter parameters</param>
+            <param name="matchmakingMode">Optional Matchmaking Mode</param>
             <returns>OpJoinRandomRoomParams reference</returns>
         </member>
         <member name="M:Fusion.Photon.Realtime.FusionRelayClient.BuildSessionCustomPropertyHolders(System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty},ExitGames.Client.Photon.Hashtable@,System.String[]@)">
             <summary>
-            Convert a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/> into a pair of <see cref="T:ExitGames.Client.Photon.Hashtable"/> and <see cref="!:string[]"/> respectively 
+            Convert a <see cref="T:System.Collections.Generic.Dictionary`2"/> into a pair of <see cref="T:ExitGames.Client.Photon.Hashtable"/> and <see cref="T:System.String"/> respectively 
             representing the custom properties of a session and the property names that will be published on the Lobby
             </summary>
             <param name="customProperties">Dictionary to be converted</param>
             <param name="sessionCustomProperties">Hashtable with all allowed Custom Properties</param>
             <param name="publicSessionProperties">String array with all public key names</param>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.ConnectToMasterAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.AppSettings,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.ConnectUsingSettingsAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.AppSettings,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Connect to master server.
             </summary>
             <param name="client">Client</param>
             <param name="appSettings">App settings</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancellationToken">Optional external cancellation token</param>
             <returns>When connected to master server callback was called.</returns>
             <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Is thrown when the connection terminated</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.AuthenticationFailedException">Is thrown when the authentication failed</exception>
@@ -177,31 +170,34 @@
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Is thrown when the operation completed unsuccessfully</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Is thrown when the operation timed out</exception>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.ReconnectAndRejoinAsync(Fusion.Photon.Realtime.LoadBalancingClient,System.Boolean,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.ReconnectAndRejoinAsync(Fusion.Photon.Realtime.LoadBalancingClient,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
-            Runs reconnect and rejoin.
+            Asynchronously reconnects and rejoins a room.
             </summary>
-            <param name="client">Client object</param>
-            <param name="createServiceTask">Runs client.Service() during the operation</param>
-            <returns>Returns when inside the room</returns>
-            <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Is thrown when the connection terminated</exception>
-            <exception cref="T:Fusion.Photon.Realtime.Async.OperationStartException">Is thrown when the operation could not be started</exception>
-            <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Is thrown when the operation completed unsuccessfully</exception>
-            <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Is thrown when the operation timed out</exception>
+            <param name="client">The client that is reconnecting and rejoining.</param>
+            <param name="throwOnError">Indicates whether to throw an exception on error. Defaults to true.</param>
+            <param name="createServiceTask">Indicates whether to run the client's service during the operation. Defaults to true.</param>
+            <param name="externalCancellationToken">An optional cancellation token that can be used to cancel the operation. Defaults to an empty cancellation token.</param>
+            <returns>A task that represents the asynchronous operation. The task result is a boolean indicating whether the operation was successful.</returns>
+            <exception cref="T:Fusion.Photon.Realtime.Async.OperationStartException">Thrown when the client is still connected or when the reconnecting operation fails to start.</exception>
+            <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Thrown when the connection is terminated during the operation.</exception>
+            <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Thrown when the operation completes unsuccessfully.</exception>
+            <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Thrown when the operation times out.</exception>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.DisconnectAsync(Fusion.Photon.Realtime.LoadBalancingClient,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.DisconnectAsync(Fusion.Photon.Realtime.LoadBalancingClient,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Disconnects the client.
             </summary>
             <param name="client">Client.</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancellationToken">Optional external cancellation token</param>
             <returns>Returns when the client has successfully disconnected</returns>
             <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Is thrown when the connection terminated</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationStartException">Is thrown when the operation could not be started</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Is thrown when the operation completed unsuccessfully</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Is thrown when the operation timed out</exception>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.CreateRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.EnterRoomParams,System.Boolean,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.CreateRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.EnterRoomParams,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Create and join a room.
             </summary>
@@ -209,13 +205,14 @@
             <param name="enterRoomParams">Enter room params</param>
             <param name="throwOnError">Set ErrorCode as result on RoomCreateFailed or RoomJoinFailed</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancellationToken">Optional external cancellation token</param>
             <returns>When the room has been entered</returns>
             <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Is thrown when the connection terminated</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationStartException">Is thrown when the operation could not be started</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Is thrown when the operation completed unsuccessfully</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Is thrown when the operation timed out</exception>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.CreateOrJoinRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.EnterRoomParams,System.Boolean,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.CreateOrJoinRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.EnterRoomParams,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Create or Join a Room.
             </summary>
@@ -223,13 +220,14 @@
             <param name="enterRoomParams">Enter room params</param>
             <param name="throwOnError">Set ErrorCode as result on RoomCreateFailed or RoomJoinFailed</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancellationToken">Optional external cancellation token</param>
             <returns>When the room has been entered</returns>
             <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Is thrown when the connection terminated</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationStartException">Is thrown when the operation could not be started</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Is thrown when the operation completed unsuccessfully</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Is thrown when the operation timed out</exception>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.JoinRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.EnterRoomParams,System.Boolean,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.JoinRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.EnterRoomParams,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Join room.
             </summary>
@@ -237,13 +235,14 @@
             <param name="enterRoomParams">Enter room params</param>
             <param name="throwOnError">Set ErrorCode as result when JoinRoomFailed</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancellationToken">Optional external cancellation token</param>
             <returns>When room has been entered</returns>
             <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Is thrown when the connection terminated</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationStartException">Is thrown when the operation could not be started</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Is thrown when the operation completed unsuccessfully</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Is thrown when the operation timed out</exception>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.JoinRandomOrCreateRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.OpJoinRandomRoomParams,Fusion.Photon.Realtime.EnterRoomParams,System.Boolean,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.JoinRandomOrCreateRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.OpJoinRandomRoomParams,Fusion.Photon.Realtime.EnterRoomParams,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Join random or Create room
             </summary>
@@ -252,13 +251,14 @@
             <param name="enterRoomParams">Enter room params</param>
             <param name="throwOnError">Set ErrorCode as result when operation fails with ErrorCode</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancellationToken">Optional external cancellation token</param>
             <returns>When inside a room</returns>
             <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Is thrown when the connection terminated</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationStartException">Is thrown when the operation could not be started</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Is thrown when the operation completed unsuccessfully</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Is thrown when the operation timed out</exception>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.JoinRandomRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.OpJoinRandomRoomParams,System.Boolean,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.JoinRandomRoomAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.OpJoinRandomRoomParams,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Join a Random Room
             </summary>
@@ -266,13 +266,14 @@
             <param name="joinRandomRoomParams">Join random room params</param>
             <param name="throwOnError">Set ErrorCode as result when operation fails with ErrorCode</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancellationToken">Optional external cancellation token</param>
             <returns>When inside a room</returns>
             <exception cref="T:Fusion.Photon.Realtime.Async.DisconnectException">Is thrown when the connection terminated</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationStartException">Is thrown when the operation could not be started</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationException">Is thrown when the operation completed unsuccessfully</exception>
             <exception cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException">Is thrown when the operation timed out</exception>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.JoinLobbyAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.TypedLobby,System.Boolean,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.JoinLobbyAsync(Fusion.Photon.Realtime.LoadBalancingClient,Fusion.Photon.Realtime.TypedLobby,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Join a Lobby
             </summary>
@@ -280,9 +281,10 @@
             <param name="lobby">Lobby to join</param>
             <param name="throwOnError">Set ErrorCode as result when operation fails with ErrorCode</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancelationToken">Optional external cancellation token</param>
             <returns>When inside a Lobby</returns>
         </member>
-        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.CreateOpHandler(Fusion.Photon.Realtime.LoadBalancingClient,System.Boolean,System.Boolean)">
+        <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.CreateOpHandler(Fusion.Photon.Realtime.LoadBalancingClient,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Create a <see cref="T:Fusion.Photon.Realtime.Async.OperationHandler"/> instance, sets up the Photon callbacks, schedules removing them, create a connection service task.
             The handler will monitor the Photon callbacks and complete, fault accordingly. 
@@ -290,8 +292,9 @@
             <see cref="P:Fusion.Photon.Realtime.Async.OperationHandler.Task"/> can complete with ErrorCode.Ok, exception on errors and a timeout <see cref="T:Fusion.Photon.Realtime.Async.OperationTimeoutException"/>.
             </summary>
             <param name="client">Client</param>
-            <param name="throwOnErrors">The default implementation will throw an exception on every unexpected result, set this to false to return a result <see cref="!:ErrorCode>"/> instead</param>
+            <param name="throwOnErrors">The default implementation will throw an exception on every unexpected result, set this to false to return a result <see cref="T:Fusion.Photon.Realtime.ErrorCode"/> instead</param>
             <param name="createServiceTask">Runs client.Service() during the operation</param>
+            <param name="externalCancellationToken">Optional external cancellation token</param>
             <returns>Photon Connection Handler object</returns>
         </member>
         <member name="M:Fusion.Photon.Realtime.Async.LoadBalancingClientAsyncExtensions.Service_ClientUpdate(Fusion.Photon.Realtime.LoadBalancingClient,System.Threading.CancellationToken,System.Threading.Tasks.TaskCompletionSource{System.Int16})">
@@ -306,12 +309,12 @@
         </member>
         <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_Hashtable.ConvertToDictionaryProperty(ExitGames.Client.Photon.Hashtable)">
             <summary>
-            Convert a <see cref="T:ExitGames.Client.Photon.Hashtable"/> into a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/>
+            Convert a <see cref="T:ExitGames.Client.Photon.Hashtable"/> into a <see cref="T:System.Collections.Generic.Dictionary`2"/>
             </summary>
         </member>
         <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_Hashtable.ConvertToHashtable(System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
             <summary>
-            Convert a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/> into a <see cref="T:ExitGames.Client.Photon.Hashtable"/>
+            Convert a <see cref="T:System.Collections.Generic.Dictionary`2"/> into a <see cref="T:ExitGames.Client.Photon.Hashtable"/>
             </summary>
         </member>
         <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_Hashtable.CalculateTotalSize(ExitGames.Client.Photon.Hashtable)">
@@ -323,14 +326,14 @@
         </member>
         <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_RoomInfo.GetCustomProperties(Fusion.Photon.Realtime.RoomInfo)">
             <summary>
-            Convert the Room Custom Properties into a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/>
+            Convert the Room Custom Properties into a <see cref="T:System.Collections.Generic.Dictionary`2"/>
             </summary>
             <param name="roomInfo">RoomInfo to extract the custom properties</param>
-            <returns><see cref="!:Dictionary&lt;string, SessionProperty&gt;"/> with the data</returns>
+            <returns><see cref="T:System.Collections.Generic.Dictionary`2"/> with the data</returns>
         </member>
         <member name="M:Fusion.Photon.Realtime.Extension.RealtimeExtensions_DictionaryProperties.CalculateTotalSize(System.Collections.Generic.Dictionary{System.String,Fusion.SessionProperty})">
             <summary>
-            Calculate the total size a <see cref="!:Dictionary&lt;string, SessionProperty&gt;"/> would take when serialized
+            Calculate the total size a <see cref="T:System.Collections.Generic.Dictionary`2"/> would take when serialized
             </summary>
             <param name="dictionary">Dictionary to check the size</param>
             <returns>Total size of the Dictionary in serialized format</returns>
@@ -342,6 +345,9 @@
             <remarks>
             This is Serializable for Unity, so it can be included in ScriptableObject instances.
             </remarks>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.AppSettings.AppIdRealtime">
+            <summary>AppId for Realtime or PUN.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.AppSettings.AppIdFusion">
             <summary>AppId for Photon Fusion.</summary>
@@ -363,7 +369,19 @@
             <summary>Can be set to any of the Photon Cloud's region names to directly connect to that region.</summary>
             <remarks>if this IsNullOrEmpty() AND UseNameServer == true, use BestRegion. else, use a server</remarks>
         </member>
-        <!-- Badly formed XML comment ignored for member "F:Fusion.Photon.Realtime.AppSettings.BestRegionSummaryFromStorage" -->
+        <member name="F:Fusion.Photon.Realtime.AppSettings.BestRegionSummaryFromStorage">
+             <summary>Set to a previous BestRegionSummary value before connecting.</summary>
+             <remarks>
+             This is a value used when the client connects to the "Best Region".<br/>
+             If this is null or empty, all regions gets pinged. Providing a previous summary on connect,
+             speeds up best region selection and makes the previously selected region "sticky".<br/>
+            
+             Unity clients should store the BestRegionSummary in the PlayerPrefs.
+             You can store the new result by implementing <see cref="M:Fusion.Photon.Realtime.IConnectionCallbacks.OnConnectedToMaster"/>.
+             If <see cref="F:Fusion.Photon.Realtime.LoadBalancingClient.SummaryToCache"/> is not null, store this string.
+             To avoid storing the value multiple times, you could set SummaryToCache to null.
+             </remarks>
+        </member>
         <member name="F:Fusion.Photon.Realtime.AppSettings.Server">
             <summary>The address (hostname or IP) of the server to connect to.</summary>
         </member>
@@ -372,6 +390,9 @@
         </member>
         <member name="F:Fusion.Photon.Realtime.AppSettings.ProxyServer">
             <summary>The address (hostname or IP and port) of the proxy server.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.AppSettings.Protocol">
+            <summary>The network level protocol to use.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.AppSettings.EnableProtocolFallback">
             <summary>Enables a fallback to another protocol in case a connect to the Name Server fails.</summary>
@@ -419,13 +440,13 @@
             </summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.ConnectionHandler.DisconnectAfterKeepAlive">
-            <summary>Option to let the fallback thread call Disconnect after the KeepAliveInBackground time. Default: false.</summary>
-            <remarks>
-            If set to true, the thread will disconnect the client regularly, should the client not call SendOutgoingCommands / Service.
-            This may happen due to an app being in background (and not getting a lot of CPU time) or when loading assets.
+             <summary>Option to let the fallback thread call Disconnect after the KeepAliveInBackground time. Default: false.</summary>
+             <remarks>
+             If set to true, the thread will disconnect the client regularly, should the client not call SendOutgoingCommands / Service.
+             This may happen due to an app being in background (and not getting a lot of CPU time) or when loading assets.
             
-            If false, a regular timeout time will have to pass (on top) to time out the client.
-            </remarks>
+             If false, a regular timeout time will have to pass (on top) to time out the client.
+             </remarks>
         </member>
         <member name="F:Fusion.Photon.Realtime.ConnectionHandler.KeepAliveInBackground">
             <summary>Defines for how long the Fallback Thread should keep the connection, before it may time out as usual.</summary>
@@ -448,14 +469,26 @@
             Resets statics for Domain Reload
             </summary>
         </member>
-        <member name="M:Fusion.Photon.Realtime.ConnectionHandler.OnApplicationQuit">
-            <summary>Called by Unity when the application gets closed. The UnityEngine will also call OnDisable, which disconnects.</summary>
-        </member>
         <member name="M:Fusion.Photon.Realtime.ConnectionHandler.Awake">
             <summary></summary>
         </member>
         <member name="M:Fusion.Photon.Realtime.ConnectionHandler.OnDisable">
             <summary>Called by Unity when the application gets closed. Disconnects if OnApplicationQuit() was called before.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.ConnectionHandler.OnApplicationQuit">
+            <summary>Called by Unity when the application gets closed. The UnityEngine will also call OnDisable, which disconnects.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.ConnectionHandler.OnApplicationPause(System.Boolean)">
+            <summary>Called by Unity when the application gets paused or resumed.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.ConnectionHandler.OnApplicationFocus(System.Boolean)">
+            <summary>Called by Unity when the application changes focus.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.ConnectionHandler.IsNetworkReachableUnity">
+            <summary>
+            When run in Unity, this returns Application.internetReachability != NetworkReachability.NotReachable.
+            </summary>
+            <returns>Application.internetReachability != NetworkReachability.NotReachable</returns>
         </member>
         <member name="M:Fusion.Photon.Realtime.ConnectionHandler.RealtimeFallbackThread">
             <summary>A thread which runs independent from the Update() calls. Keeps connections online while loading or in background. See <see cref="F:Fusion.Photon.Realtime.ConnectionHandler.KeepAliveInBackground"/>.</summary>
@@ -497,7 +530,12 @@
             <param name="origin">Some Dictionary or Hashtable.</param>
             <returns>String of the content of the IDictionary.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Fusion.Photon.Realtime.Extensions.ToStringFull``1(System.Collections.Generic.List{``0})" -->
+        <member name="M:Fusion.Photon.Realtime.Extensions.ToStringFull``1(System.Collections.Generic.List{``0})">
+            <summary>Helper method for debugging of <see cref="T:System.Collections.Generic.List`1"/> content. Using this is not performant.</summary>
+            <remarks>Should only be used for debugging as necessary.</remarks>
+            <param name="data">Any <see cref="T:System.Collections.Generic.List`1"/> where T implements .ToString().</param>
+            <returns>A comma-separated string containing each value's ToString().</returns>
+        </member>
         <member name="M:Fusion.Photon.Realtime.Extensions.ToStringFull(System.Object[])">
             <summary>Helper method for debugging of object[] content. Using this is not performant.</summary>
             <remarks>Should only be used for debugging as necessary.</remarks>
@@ -660,13 +698,19 @@
             <summary>OnStatusChanged: The server is not available or the address is wrong. Make sure the port is provided and the server is up.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.DisconnectCause.DnsExceptionOnConnect">
-            <summary>OnStatusChanged: Dns resolution for a hostname failed. The exception for this is being catched and logged with error level.</summary>
+            <summary>OnStatusChanged: Dns resolution for a hostname failed. The exception for this is being caught and logged with error level.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.DisconnectCause.ServerAddressInvalid">
             <summary>OnStatusChanged: The server address was parsed as IPv4 illegally. An illegal address would be e.g. 192.168.1.300. IPAddress.TryParse() will let this pass but our check won't.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.DisconnectCause.Exception">
             <summary>OnStatusChanged: Some internal exception caused the socket code to fail. This may happen if you attempt to connect locally but the server is not available. In doubt: Contact Exit Games.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.DisconnectCause.SendException">
+            <summary>Send exception.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.DisconnectCause.ReceiveException">
+            <summary>Receive exception.</summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.DisconnectCause.ServerTimeout">
             <summary>OnStatusChanged: The server disconnected this client due to timing out (missing acknowledgement from the client).</summary>
@@ -708,6 +752,10 @@
         <member name="F:Fusion.Photon.Realtime.DisconnectCause.DisconnectByDisconnectMessage">
             <summary>The client received a "Disconnect Message" from the server. Check the debug logs for details.</summary>
         </member>
+        <member name="F:Fusion.Photon.Realtime.DisconnectCause.ApplicationQuit">
+            <summary>Used in case the application quits. Can be useful to not load new scenes or re-connect in OnDisconnected.</summary>
+            <remarks>ConnectionHandler.OnDisable() will use this, if the Unity engine already called OnApplicationQuit (ConnectionHandler.AppQuits = true).</remarks>
+        </member>
         <member name="T:Fusion.Photon.Realtime.ServerConnection">
             <summary>Available server (types) for internally used field: server.</summary>
             <remarks>Photon uses 3 different roles of servers: Name Server, Master Server and Game Server.</remarks>
@@ -741,16 +789,6 @@
         <member name="F:Fusion.Photon.Realtime.EncryptionMode.PayloadEncryption">
             <summary>
             This is the default encryption mode: Messages get encrypted only on demand (when you send operations with the "encrypt" parameter set to true).
-            </summary>
-        </member>
-        <member name="F:Fusion.Photon.Realtime.EncryptionMode.DatagramEncryption">
-            <summary>
-            With this encryption mode for UDP, the connection gets setup and all further datagrams get encrypted almost entirely. On-demand message encryption (like in PayloadEncryption) is unavailable.
-            </summary>
-        </member>
-        <member name="F:Fusion.Photon.Realtime.EncryptionMode.DatagramEncryptionRandomSequence">
-            <summary>
-            With this encryption mode for UDP, the connection gets setup with random sequence numbers and all further datagrams get encrypted almost entirely. On-demand message encryption (like in PayloadEncryption) is unavailable.
             </summary>
         </member>
         <member name="F:Fusion.Photon.Realtime.EncryptionMode.DatagramEncryptionGCM">
@@ -996,6 +1034,13 @@
             state value which can be used to display (or debug) the cause for disconnection.
             </remarks>
         </member>
+        <member name="F:Fusion.Photon.Realtime.LoadBalancingClient.SystemConnectionSummary">
+            <summary>
+            After a to a connection loss or timeout, this summarizes the most relevant system conditions which might have contributed to the loss.
+            </summary>
+            <remarks>
+            </remarks>
+        </member>
         <member name="P:Fusion.Photon.Realtime.LoadBalancingClient.InLobby">
             <summary>Internal value if the client is in a lobby.</summary>
             <remarks>This is used to re-set this.State, when joining/creating a room fails.</remarks>
@@ -1147,6 +1192,31 @@
             </summary>
             <returns>NameServer Address (with prefix and port).</returns>
         </member>
+        <member name="M:Fusion.Photon.Realtime.LoadBalancingClient.ConnectUsingSettings(Fusion.Photon.Realtime.AppSettings)">
+            <summary>Starts the "process" to connect as defined by the appSettings (AppId, AppVersion, Transport Protocol, Port and more).</summary>
+            <remarks>
+            A typical connection process wraps up these steps:<br/>
+            - Low level connect and init (which establishes a connection that enables operations and responses for the Realtime API).<br/>
+            - GetRegions and select best (unless FixedRegion is being used).<br/>
+            - Authenticate user for a specific region (this provides a Master Server address to go to and a token).<br/>
+            - Disconnect Name Server and connect to Master Server (using the token).<br/>
+            - The callback OnConnectedToMaster gets called.<br/>
+            <br/>
+            Connecting to the servers is a process and this is a non-blocking method.<br/>
+            Implement and register the IConnectionCallbacks interface to get callbacks about success or failing connects.<br/>
+            <br/>
+            Basically all settings for the connection, AppId and servers can be done via the provided parameter.<br/>
+            <br/>
+            Connecting to the Photon Cloud might fail due to:<br/>
+            - Network issues<br/>
+            - Region not available<br/>
+            - Subscription CCU limit<br/>
+            </remarks>
+            <see cref="T:Fusion.Photon.Realtime.IConnectionCallbacks"/>
+            <see cref="P:Fusion.Photon.Realtime.LoadBalancingClient.AuthValues"/>
+            <param name="appSettings">Collection of settings defining this app and how to connect.</param>
+            <returns>True if the client can attempt to connect.</returns>
+        </member>
         <member name="M:Fusion.Photon.Realtime.LoadBalancingClient.ConnectToMasterServer">
              <summary>
              Starts the "process" to connect to a Master Server, using MasterServerAddress and AppId properties.
@@ -1177,15 +1247,20 @@
         </member>
         <member name="M:Fusion.Photon.Realtime.LoadBalancingClient.ConnectToRegionMaster(System.String)">
              <summary>
-             Connects you to a specific region's Master Server, using the Name Server to find the IP.
+             Connects you to a specific region's Master Server, using the Name Server to get the IP.
              </summary>
              <remarks>
              If the region is null or empty, no connection will be made.
              If the region (code) provided is not available, the connection process will fail on the Name Server.
-             This method connects only to the region defined. No "Best Region" pinging will be done.
+             This method connects only to the region defined. Any "Best Region" pinging should get done beforehand.
             
-             If the region string does not contain a "/", this means no specific cluster is requested.
-             To support "Sharding", the region gets a "/*" postfix in this case, to select a random cluster.
+             To support "sharding", a region string may contain a "/*" to pick a random cluster or "/clustername"
+             to connect to a specific cluster.
+             With a "/" or no cluster postfix, the client connects to the default cluster (a specific one
+             for a region).
+            
+             By default, the region string provided by the Name Server does not contain a cluster (and only the
+             default cluster is used).
              </remarks>
              <returns>If the operation could be sent. If false, no operation was sent.</returns>
         </member>
@@ -1366,10 +1441,14 @@
             
              There are separate parameters for joining and creating a room.
             
+             Tickets: Both parameter types have a Ticket value. It is enough to set the opJoinRandomRoomParams.Ticket.
+             The createRoomParams.Ticket will not be used.
+            
              This method can only be called while connected to a Master Server.
              This client's State is set to ClientState.Joining immediately.
             
-             Either IMatchmakingCallbacks.OnJoinedRoom or IMatchmakingCallbacks.OnCreatedRoom get called.
+             For success, IMatchmakingCallbacks.OnJoinedRoom or IMatchmakingCallbacks.OnCreatedRoom get called.
+             In error cases IMatchmakingCallbacks.OnJoinRoomFailed or IMatchmakingCallbacks.OnJoinRandomRoomFailed get called.
             
              More about matchmaking:
              https://doc.photonengine.com/en-us/realtime/current/reference/matchmaking-and-lobby
@@ -1494,7 +1573,7 @@
              <param name="enterRoomParams">Definition of properties for the room to join.</param>
              <returns>If the operation could be sent currently (requires connection to Master Server).</returns>
         </member>
-        <member name="M:Fusion.Photon.Realtime.LoadBalancingClient.OpRejoinRoom(System.String)">
+        <member name="M:Fusion.Photon.Realtime.LoadBalancingClient.OpRejoinRoom(System.String,System.Object)">
              <summary>
              Rejoins a room by roomName (using the userID internally to return).  Will callback: OnJoinedRoom or OnJoinRoomFailed.
              </summary>
@@ -1503,7 +1582,7 @@
              Internally, the userID will be checked by the server, to make sure this user is in the room (active or inactice).
             
              In contrast to join, this operation never adds a players to a room. It will attempt to retake an existing
-             spot in the playerlist or fail. This makes sure the client doean't accidentally join a room when the
+             spot in the playerlist or fail. This makes sure the client doesn't accidentally join a room when the
              game logic meant to re-activate an existing actor in an existing room.
             
              This method will fail on the server, when the room does not exist, can't be loaded (persistent rooms) or
@@ -1511,6 +1590,9 @@
             
              Rejoining room will not send any player properties. Instead client will receive up-to-date ones from server.
              If you want to set new player properties, do it once rejoined.
+            
+             Tickets: If the server requires use of Tickets or if the room was entered with a Ticket initially,
+             you will have to provide 
              </remarks>
         </member>
         <member name="M:Fusion.Photon.Realtime.LoadBalancingClient.OpLeaveRoom(System.Boolean,System.Boolean)">
@@ -1537,7 +1619,7 @@
             
              This is an async request which triggers a OnOperationResponse() call.
              </remarks>
-             <see cref="!:https://doc.photonengine.com/en-us/realtime/current/reference/matchmaking-and-lobby#sql_lobby_type"/>
+             <see href="https://doc.photonengine.com/en-us/realtime/current/reference/matchmaking-and-lobby#sql_lobby_type"/>
              <param name="typedLobby">The lobby to query. Has to be of type SqlLobby.</param>
              <param name="sqlLobbyFilter">The sql query statement.</param>
              <returns>If the operation could be sent (has to be connected).</returns>
@@ -1785,7 +1867,7 @@
              The covered callback interfaces are: IConnectionCallbacks, IMatchmakingCallbacks,
              ILobbyCallbacks, IInRoomCallbacks, IOnEventCallback and IWebRpcCallback.
             
-             See: <a href="https://doc.photonengine.com/en-us/realtime/current/reference/dotnet-callbacks"/>
+             See: <a href="https://doc.photonengine.com/en-us/realtime/current/reference/dotnet-callbacks">DotNet Callbacks</a>
              </remarks>
              <param name="target">The object that registers to get callbacks from this client.</param>
         </member>
@@ -1891,7 +1973,7 @@
             
              Example: void OnCustomAuthenticationResponse(Dictionary&lt;string, object&gt; data) { ... }
              </remarks>
-             <see cref="!:https://doc.photonengine.com/en-us/realtime/current/reference/custom-authentication"/>
+             <see href="https://doc.photonengine.com/en-us/realtime/current/reference/custom-authentication"/>
         </member>
         <member name="M:Fusion.Photon.Realtime.IConnectionCallbacks.OnCustomAuthenticationFailed(System.String)">
              <summary>
@@ -1941,13 +2023,23 @@
             </remarks>
         </member>
         <member name="M:Fusion.Photon.Realtime.ILobbyCallbacks.OnRoomListUpdate(System.Collections.Generic.List{Fusion.Photon.Realtime.RoomInfo})">
-            <summary>
-            Called for any update of the room-listing while in a lobby (InLobby) on the Master Server.
-            </summary>
-            <remarks>
-            Each item is a RoomInfo which might include custom properties (provided you defined those as lobby-listed when creating a room).
-            Not all types of lobbies provide a listing of rooms to the client. Some are silent and specialized for server-side matchmaking.
-            </remarks>
+             <summary>
+             Called for any update of the room-listing while in a lobby (InLobby) on the Master Server.
+             </summary>
+             <remarks>
+             Each item is a RoomInfo which might include custom properties (provided you defined those as lobby-listed when creating a room).
+             Not all types of lobbies provide a listing of rooms to the client. Some are silent and specialized for server-side matchmaking.
+            
+             The list is sorted using two criteria: open or closed, full or not. So the list is composed of three groups, in this order:
+            
+             first group: open and not full (joinable).<br/>
+             second group: full but not closed (not joinable).<br/>
+             third group: closed (not joinable, could be full or not).<br/>
+            
+             In each group, entries do not have any particular order (random).
+            
+             The list of rooms (or rooms' updates) is also limited in number, see Lobby Limits.
+             </remarks>
         </member>
         <member name="M:Fusion.Photon.Realtime.ILobbyCallbacks.OnLobbyStatisticsUpdate(System.Collections.Generic.List{Fusion.Photon.Realtime.TypedLobbyInfo})">
             <summary>
@@ -2045,7 +2137,7 @@
         </member>
         <member name="M:Fusion.Photon.Realtime.IMatchmakingCallbacks.OnJoinRandomFailed(System.Int16,System.String)">
              <summary>
-             Called when a previous OpJoinRandom call failed on the server.
+             Called when a previous OpJoinRandom (or OpJoinRandomOrCreateRoom etc.) call failed on the server.
              </summary>
              <remarks>
              The most common causes are that a room is full or does not exist (due to someone else being faster or closing the room).
@@ -2067,6 +2159,9 @@
              This wraps up multiple internal actions.
             
              Wait for the callback OnConnectedToMaster, before you use lobbies and join or create rooms.
+            
+             OnLeftRoom also gets called, when the application quits.
+             It makes sense to check static ConnectionHandler.AppQuits before loading scenes in OnLeftRoom().
              </remarks>
         </member>
         <member name="T:Fusion.Photon.Realtime.IInRoomCallbacks">
@@ -2455,7 +2550,7 @@
             This is an async request which triggers a OnOperationResponse() call.
             Returned game list is stored in RoomInfoList.
             </remarks>
-            <see cref="!:https://doc.photonengine.com/en-us/realtime/current/reference/matchmaking-and-lobby#sql_lobby_type"/>
+            <see href="https://doc.photonengine.com/en-us/realtime/current/reference/matchmaking-and-lobby#sql_lobby_type"/>
             <param name="lobby">The lobby to query. Has to be of type SqlLobby.</param>
             <param name="queryData">The sql query statement.</param>
             <returns>If the operation could be sent (has to be connected).</returns>
@@ -2595,7 +2690,7 @@
             Parameters for the matchmaking of JoinRandomRoom and JoinRandomOrCreateRoom.
             </summary>
             <remarks>
-            More about matchmaking: <see cref="!:https://doc.photonengine.com/en-us/pun/current/manuals-and-demos/matchmaking-and-lobby"/>.
+            More about matchmaking: <see href="https://doc.photonengine.com/en-us/pun/current/manuals-and-demos/matchmaking-and-lobby"/>.
             </remarks>
         </member>
         <member name="F:Fusion.Photon.Realtime.OpJoinRandomRoomParams.ExpectedCustomRoomProperties">
@@ -2616,6 +2711,9 @@
         <member name="F:Fusion.Photon.Realtime.OpJoinRandomRoomParams.ExpectedUsers">
             <summary>The expected users list blocks player slots for your friends or team mates to join the room, too.</summary>
             <remarks>See: https://doc.photonengine.com/en-us/pun/v2/lobby-and-matchmaking/matchmaking-and-lobby#matchmaking_slot_reservation </remarks>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.OpJoinRandomRoomParams.Ticket">
+            <summary>Ticket for matchmaking. Provided by a plugin / server and contains a list of party members who should join the same room (among other things).</summary>
         </member>
         <member name="T:Fusion.Photon.Realtime.EnterRoomParams">
             <summary>Parameters for creating rooms.</summary>
@@ -2640,6 +2738,9 @@
         </member>
         <member name="F:Fusion.Photon.Realtime.EnterRoomParams.ExpectedUsers">
             <summary>A list of users who are expected to join the room along with this client. Reserves slots for rooms with MaxPlayers value.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.EnterRoomParams.Ticket">
+            <summary>Ticket for matchmaking. Provided by a plugin / server and contains a list of party members who should join the same room (among other things).</summary>
         </member>
         <member name="T:Fusion.Photon.Realtime.ErrorCode">
             <summary>
@@ -2738,8 +2839,11 @@
         </member>
         <member name="F:Fusion.Photon.Realtime.ErrorCode.PluginReportedError">
             <summary>
-            (32752) A server-side plugin (or webhook) failed to execute and reported an error. Check the OperationResponse.DebugMessage.
+            (32752) A server-side plugin or WebHook failed and reported an error. Check the OperationResponse.DebugMessage.
             </summary>
+            <remarks>A typical case is when a plugin prevents a user from creating or joining a room.
+            If this is prohibited, that reports to the client as a plugin error.<br/>
+            Same for WebHooks.</remarks>
         </member>
         <member name="F:Fusion.Photon.Realtime.ErrorCode.PluginMismatch">
             <summary>
@@ -2827,6 +2931,10 @@
         <member name="F:Fusion.Photon.Realtime.GamePropertyKey.MaxPlayers">
             <summary>(255) Max number of players that "fit" into this room. 0 is for "unlimited".</summary>
         </member>
+        <member name="F:Fusion.Photon.Realtime.GamePropertyKey.MaxPlayersInt">
+            <summary>(243) Integer-typed max number of players that "fit" into a room. 0 is for "unlimited". Important: Code changed. See remarks.</summary>
+            <remarks>This was code 244 for a brief time (Realtime v4.1.7.2 to v4.1.7.4) and those versions must be replaced or edited!</remarks>
+        </member>
         <member name="F:Fusion.Photon.Realtime.GamePropertyKey.IsVisible">
             <summary>(254) Makes this room listed or not in the lobby on master.</summary>
         </member>
@@ -2901,7 +3009,7 @@
             (252) When player left game unexpected and the room has a playerTtl != 0, this event is fired to let everyone know about the timeout.
             Obsolete. Replaced by Leave. public const byte Disconnect = LiteEventCode.Disconnect;
             <summary>(251) Sent by Photon Cloud when a plugin-call or webhook-call failed or events cache limit exceeded. Usually, the execution on the server continues, despite the issue. Contains: ParameterCode.Info.</summary>
-            <seealso cref="!:https://doc.photonengine.com/en-us/realtime/current/reference/webhooks#options"/>
+            <seealso href="https://doc.photonengine.com/en-us/realtime/current/reference/webhooks#options"/>
         </member>
         <member name="F:Fusion.Photon.Realtime.EventCode.CacheSliceChanged">
             <summary>(250) Sent by Photon whent he event cache slice was changed. Done by OpRaiseEvent.</summary>
@@ -3130,6 +3238,15 @@
         </member>
         <member name="F:Fusion.Photon.Realtime.ParameterCode.RoomOptionFlags">
             <summary>(191) An int parameter summarizing several boolean room-options with bit-flags.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.ParameterCode.Ticket">
+            <summary>Matchmaking ticket (type object).</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.ParameterCode.MatchMakingGroupId">
+            <summary>Used server side once the group is extracted from the ticket. Clients don't send this.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.ParameterCode.AllowRepeats">
+            <summary>(188) Parameter key to let the server know it may queue the client in low-ccu matchmaking situations.</summary>
         </member>
         <member name="T:Fusion.Photon.Realtime.OperationCode">
             <summary>
@@ -3661,6 +3778,36 @@
             Abstract implementation of PhotonPing, ase for pinging servers to find the "Best Region".
             </summary>
         </member>
+        <member name="F:Fusion.Photon.Realtime.PhotonPing.DebugString">
+            <summary>Caches the last exception/error message, if any.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.PhotonPing.Successful">
+            <summary>True of the ping was successful.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.PhotonPing.GotResult">
+            <summary>True if there was any result.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.PhotonPing.PingLength">
+            <summary>Length of a ping.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.PhotonPing.PingBytes">
+            <summary>Bytes to send in a (Photon UDP) ping.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.PhotonPing.PingId">
+            <summary>Randomized number to identify a ping.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.PhotonPing.StartPing(System.String)">
+            <summary>Begins sending a ping.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.PhotonPing.Done">
+            <summary>Check if done.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.PhotonPing.Dispose">
+            <summary>Dispose of this ping.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.PhotonPing.Init">
+            <summary>Initialize this ping (GotResult, Successful, PingId).</summary>
+        </member>
         <member name="T:Fusion.Photon.Realtime.PingMono">
             <summary>Uses C# Socket class from System.Net.Sockets (as Unity usually does).</summary>
             <remarks>Incompatible with Windows 8 Store/Phone API.</remarks>
@@ -3671,6 +3818,12 @@
             </summary>
             <param name="ip">Address in IPv4 or IPv6 format. An address containing a '.' will be interpreted as IPv4.</param>
             <returns>True if the Photon Ping could be sent.</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.PingMono.Done">
+            <summary>Check if done.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.PingMono.Dispose">
+            <summary>Dispose of this ping.</summary>
         </member>
         <member name="T:Fusion.Photon.Realtime.Player">
             <summary>
@@ -3863,11 +4016,21 @@
              Otherwise, returns if this operation could be sent to the server.
              </returns>
         </member>
+        <member name="M:Fusion.Photon.Realtime.Player.UpdateNickNameOnJoined">
+            <summary>If there is a nickname in the room props, but it's not the current (local) one, update the room when joining/joined.</summary>
+        </member>
         <member name="M:Fusion.Photon.Realtime.Player.SetPlayerNameProperty">
             <summary>Uses OpSetPropertiesOfActor to sync this player's NickName (server is being updated with this.NickName).</summary>
         </member>
         <member name="P:Fusion.Photon.Realtime.Region.Cluster">
             <summary>Unlike the CloudRegionCode, this may contain cluster information.</summary>
+        </member>
+        <member name="P:Fusion.Photon.Realtime.Region.Ping">
+            <summary>Weighted ping time.</summary>
+            <remarks>
+            Regions gets pinged 5 times (RegionPinger.Attempts).
+            Out of those, the worst rtt is discarded and the best will be counted two times for a weighted average.
+            </remarks>
         </member>
         <member name="T:Fusion.Photon.Realtime.RegionHandler">
              <summary>
@@ -3882,6 +4045,11 @@
              more regions get pinged.
              Not all regions will be pinged. As soon as the results are final, the client will connect to the best region,
              so you can check the ping results when connected to the Master Server.
+            
+             Regions gets pinged 5 times (RegionPinger.Attempts).
+             Out of those, the worst rtt is discarded and the best will be counted two times for a weighted average.
+            
+             Usually UDP will be used to ping the Master Servers. In WebGL, WSS is used instead.
             
              It makes sense to make clients "sticky" to a region when one gets selected.
              This can be achieved by storing the SummaryToCache value, once pinging was done.
@@ -3914,6 +4082,77 @@
             When connecting again, use it as previous summary to speed up pinging regions and to make the best region sticky for the client.
             </remarks>
         </member>
+        <member name="M:Fusion.Photon.Realtime.RegionHandler.GetResults">
+            <summary>Provides a list of regions and their pings as string.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionHandler.SetRegions(ExitGames.Client.Photon.OperationResponse)">
+            <summary>Initializes the regions of this RegionHandler with values provided from the Name Server (as OperationResponse for OpGetRegions).</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.RegionHandler.PortToPingOverride">
+            <summary>If non-zero, this port will be used to ping Master Servers on.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.RegionHandler.rePingFactor">
+            <summary>If the previous Best Region's ping is now higher by this much, ping all regions and find a new Best Region.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.RegionHandler.pingSimilarityFactor">
+            <summary>How much higher a region's ping can be from the absolute best, to be considered the Best Region (by ping and name).</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.RegionHandler.BestRegionSummaryPingLimit">
+            <summary>If the region from a previous BestRegionSummary now has a ping higher than this limit, all regions get pinged again to find a better. Default: 90ms.</summary>
+            <remarks>
+            Pinging all regions takes time, which is why a BestRegionSummary gets stored.
+            If that is available, the Best Region becomes sticky and is used again.
+            This limit introduces an exception: Should the pre-defined best region have a ping worse than this, all regions are considered.
+            </remarks>
+        </member>
+        <member name="P:Fusion.Photon.Realtime.RegionHandler.IsPinging">
+            <summary>True if the available regions are being pinged currently.</summary>
+        </member>
+        <member name="P:Fusion.Photon.Realtime.RegionHandler.Aborted">
+            <summary>True if the pinging of regions is being aborted.</summary>
+            <see cref="M:Fusion.Photon.Realtime.RegionHandler.Abort"/>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionHandler.#ctor(System.UInt16)">
+            <summary>Creates a new RegionHandler.</summary>
+            <param name="masterServerPortOverride">If non-zero, this port will be used to ping Master Servers on.</param>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionHandler.PingMinimumOfRegions(System.Action{Fusion.Photon.Realtime.RegionHandler},System.String)">
+            <summary>Starts the process of pinging of all available regions.</summary>
+            <param name="onCompleteCallback">Provide a method to call when all ping results are available. Aborting the pings will also cancel the callback.</param>
+            <param name="previousSummary">A BestRegionSummary from an earlier RegionHandler run. This makes a selected best region "sticky" and keeps ping times lower.</param>
+            <returns>If pining the regions gets started now. False if the current state prevent this.</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionHandler.Abort">
+            <summary>Calling this will stop pinging the regions and suppress the onComplete callback.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionHandler.PingEnabledRegions">
+            <summary>Privately used to ping regions if the current best one isn't as fast as earlier.</summary>
+            <returns>If pinging can be started.</returns>
+        </member>
+        <member name="T:Fusion.Photon.Realtime.RegionPinger">
+            <summary>Wraps the ping attempts and workflow for a single region.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.RegionPinger.Attempts">
+            <summary>How often to ping a region.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.RegionPinger.MaxMillisecondsPerPing">
+            <summary>How long to wait maximum for a response.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.RegionPinger.PingWhenFailed">
+            <summary>Ping result when pinging failed.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.RegionPinger.CurrentAttempt">
+            <summary>Current ping attempt count.</summary>
+        </member>
+        <member name="P:Fusion.Photon.Realtime.RegionPinger.Done">
+            <summary>True if all attempts are done or timed out.</summary>
+        </member>
+        <member name="P:Fusion.Photon.Realtime.RegionPinger.Aborted">
+            <summary>Set to true to abort pining this region.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionPinger.#ctor(Fusion.Photon.Realtime.Region,System.Action{Fusion.Photon.Realtime.Region})">
+            <summary>Initializes a RegionPinger for the given region.</summary>
+        </member>
         <member name="M:Fusion.Photon.Realtime.RegionPinger.GetPingImplementation">
             <summary>Selects the best fitting ping implementation or uses the one set in RegionHandler.PingImplementation.</summary>
             <returns>PhotonPing instance to use.</returns>
@@ -3926,12 +4165,21 @@
             Pinging runs in a ThreadPool worker item or (if needed) in a Thread.
             WebGL runs pinging on the Main Thread as coroutine.
             </remarks>
-            <returns>Always true.</returns>
+            <returns>True unless Aborted.</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionPinger.Abort">
+            <summary>Calling this will stop pinging the regions and cancel the onComplete callback.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionPinger.RegionPingThreaded">
+            <summary>Pings the region. To be called by a thread.</summary>
         </member>
         <member name="M:Fusion.Photon.Realtime.RegionPinger.RegionPingCoroutine">
             <remarks>
             Affected by frame-rate of app, as this Coroutine checks the socket for a result once per frame.
             </remarks>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.RegionPinger.GetResults">
+            <summary>Gets this region's results as string summary.</summary>
         </member>
         <member name="M:Fusion.Photon.Realtime.RegionPinger.ResolveHost(System.String)">
             <summary>
@@ -4040,16 +4288,16 @@
             <remarks>You could name properties that are not set from the beginning. Those will be synced with the lobby when added later on.</remarks>
         </member>
         <member name="P:Fusion.Photon.Realtime.Room.AutoCleanUp">
-            <summary>
-            Gets if this room cleans up the event cache when a player (actor) leaves. 
-            </summary>
-            <remarks>
-            This affects which events joining players get.
+             <summary>
+             Gets if this room cleans up the event cache when a player (actor) leaves.
+             </summary>
+             <remarks>
+             This affects which events joining players get.
             
-            Set in room creation via RoomOptions.CleanupCacheOnLeave.
+             Set in room creation via RoomOptions.CleanupCacheOnLeave.
             
-            Within PUN, auto cleanup of events means that cached RPCs and instantiated networked objects are deleted from the room.
-            </remarks>
+             Within PUN, auto cleanup of events means that cached RPCs and instantiated networked objects are deleted from the room.
+             </remarks>
         </member>
         <member name="P:Fusion.Photon.Realtime.Room.BroadcastPropertiesChangeToAll">
             <summary>Define if the client who calls SetProperties should receive the properties update event or not. </summary>
@@ -4070,6 +4318,7 @@
             <summary>Creates a Room (representation) with given name and properties and the "listing options" as provided by parameters.</summary>
             <param name="roomName">Name of the room (can be null until it's actually created on server).</param>
             <param name="options">Room options.</param>
+            <param name="isOffline">Signal if this room is only used locally.</param>
         </member>
         <member name="M:Fusion.Photon.Realtime.Room.InternalCacheRoomFlags(System.Int32)">
             <summary>Read (received) room option flags into related bool parameters.</summary>
@@ -4380,6 +4629,62 @@
             Debug logs basic information (AppId, AppVersion, PeerID, Server address, Region) about the attached Photon Client.
             </summary>
         </member>
+        <member name="T:Fusion.Photon.Realtime.SystemConnectionSummary">
+             <summary>
+             The SystemConnectionSummary (SBS) is useful to analyze low level connection issues in Unity. This requires a ConnectionHandler in the scene.
+             </summary>
+             <remarks>
+             A LoadBalancingClient automatically creates a SystemConnectionSummary on these disconnect causes:
+             DisconnectCause.ExceptionOnConnect, DisconnectCause.Exception, DisconnectCause.ServerTimeout and DisconnectCause.ClientTimeout.
+            
+             The SBS can then be turned into an integer (ToInt()) or string to debug the situation or use in analytics.
+             Both, ToString and ToInt summarize the network-relevant conditions of the client at and before the connection fail, including the PhotonPeer.SocketErrorCode.
+            
+             Important: To correctly create the SBS instance, a ConnectionHandler component must be present and enabled in the
+             Unity scene hierarchy. In best case, keep the ConnectionHandler on a GameObject which is flagged as
+             DontDestroyOnLoad.
+             </remarks>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.SystemConnectionSummary.SCSBitPos.Version">
+            <summary>28 and up. 4 bits.</summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.SystemConnectionSummary.SCSBitPos.UsedProtocol">
+            <summary>25 and up. 3 bits.</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.SystemConnectionSummary.#ctor(Fusion.Photon.Realtime.LoadBalancingClient)">
+             <summary>
+             Creates a SystemConnectionSummary for an incident of a local LoadBalancingClient. This gets used automatically by the LoadBalancingClient!
+             </summary>
+             <remarks>
+             If the LoadBalancingClient.SystemConnectionSummary is non-null after a connection-loss, you can call .ToInt() and send this to analytics or log it.
+            
+             </remarks>
+             <param name="client"></param>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.SystemConnectionSummary.#ctor(System.Int32)">
+            <summary>
+            Creates a SystemConnectionSummary instance from an int (reversing ToInt()). This can then be turned into a string again.
+            </summary>
+            <param name="summary">An int, as provided by ToInt(). No error checks yet.</param>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.SystemConnectionSummary.ToInt">
+            <summary>
+            Turns the SystemConnectionSummary into an integer, which can be be used for analytics purposes. It contains a lot of info and can be used to instantiate a new SystemConnectionSummary.
+            </summary>
+            <returns>Compact representation of the context for a disconnect issue.</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.SystemConnectionSummary.ToString">
+            <summary>
+            A readable debug log string of the context for network problems.
+            </summary>
+            <returns>SystemConnectionSummary as readable string.</returns>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.SystemConnectionSummary.SetBit(System.Int32@,System.Boolean,System.Int32)">
+            <summary>Applies bitval to bitpos (no matter value's initial bit value).</summary>
+        </member>
+        <member name="M:Fusion.Photon.Realtime.SystemConnectionSummary.SetBits(System.Int32@,System.Byte,System.Int32)">
+            <summary>Applies bitvals via OR operation (expects bits in value to be 0 initially).</summary>
+        </member>
         <member name="T:Fusion.Photon.Realtime.WebRpcResponse">
             <summary>Reads an operation response of a WebRpc and provides convenient access to most common values.</summary>
             <remarks>
@@ -4438,6 +4743,16 @@
             Indicates whether to send serialized game state in HTTP request to web service or not.
             </summary>
         </member>
+        <member name="F:Fusion.Photon.Realtime.FusionAppSettings.encryptionMode">
+            <summary>
+            Select the Relayed Connection Encryption Mode
+            </summary>
+        </member>
+        <member name="F:Fusion.Photon.Realtime.FusionAppSettings.emptyRoomTtl">
+            <summary>
+            Photon Session EmptyRoomTTL. Valid only in Shared Mode.  
+            </summary>
+        </member>
         <member name="T:Fusion.Photon.Realtime.PhotonAppSettings">
             <summary>
             Collection of connection-relevant settings, used internally by PhotonNetwork.ConnectUsingSettings.
@@ -4450,7 +4765,7 @@
             The photon settings class, which is wrapped by this <see cref="T:Fusion.Photon.Realtime.PhotonAppSettings"/> ScriptableObject.
             </summary>
         </member>
-        <member name="P:Fusion.Photon.Realtime.PhotonAppSettings.Instance">
+        <member name="P:Fusion.Photon.Realtime.PhotonAppSettings.Global">
             <summary>Serialized server settings, written by the Setup Wizard for use in ConnectUsingSettings.</summary>
         </member>
         <member name="T:Fusion.SessionProperty">
@@ -4478,6 +4793,11 @@
             Signal if this Session Property is a string value
             </summary>
         </member>
+        <member name="P:Fusion.SessionProperty.Isbool">
+            <summary>
+            Signal if this Session Property is a bool value
+            </summary>
+        </member>
         <member name="M:Fusion.SessionProperty.op_Implicit(Fusion.SessionProperty)~System.Int32">
             <summary>
             Convert a <see cref="T:Fusion.SessionProperty"/> into int
@@ -4496,6 +4816,16 @@
         <member name="M:Fusion.SessionProperty.op_Implicit(System.String)~Fusion.SessionProperty">
             <summary>
             Convert a string into a <see cref="T:Fusion.SessionProperty"/>
+            </summary>
+        </member>
+        <member name="M:Fusion.SessionProperty.op_Implicit(Fusion.SessionProperty)~System.Boolean">
+            <summary>
+            Convert a <see cref="T:Fusion.SessionProperty"/> into bool
+            </summary>
+        </member>
+        <member name="M:Fusion.SessionProperty.op_Implicit(System.Boolean)~Fusion.SessionProperty">
+            <summary>
+            Convert a bool into a <see cref="T:Fusion.SessionProperty"/>
             </summary>
         </member>
         <member name="M:Fusion.SessionProperty.Support(System.Object)">
