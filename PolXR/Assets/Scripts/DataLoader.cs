@@ -164,22 +164,27 @@ public class DataLoader : MonoBehaviour
             // Extract the file name without extension (e.g., "bedrock")
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(objFile);
 
-            // Load the .obj file as a GameObject
             GameObject demObj = LoadObj(objFile);
             if (demObj != null)
             {
                 // Name the GameObject after the .obj file (e.g., "bedrock")
                 demObj.name = fileNameWithoutExtension;
 
-                // Scale and rotate the DEM object
+                if (fileNameWithoutExtension.Equals("bedrock", StringComparison.OrdinalIgnoreCase))
+                {
+                    Transform childTransform = demObj.transform.GetChild(0);
+                    Renderer renderer = childTransform.GetComponent<Renderer>();
+                    if (renderer != null)
+                    {
+                        renderer.material.color = Color.Lerp(Color.black, Color.white, 0.25f);
+                    }
+                }
+
                 ScaleAndRotate(demObj, 0.0001f, 0.0001f, 0.001f, -90f);
 
-                // Parent the DEM object directly under the DEM container
                 demObj.transform.SetParent(parent.transform);
             }
         }
-
-        Debug.Log($"Processed DEM folder: {demDirectoryPath}");
     }
 
     private void ProcessFlightlines(string flightlineDirectory, GameObject parent)
