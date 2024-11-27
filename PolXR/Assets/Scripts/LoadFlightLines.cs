@@ -23,7 +23,7 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject gridLine;
 
     public GameObject MarkObj3D;
-    public void Start()
+    public void Awake()
     {
         BetterStreamingAssets.Initialize();
         LoadFlightLine("20100324_01"); // TODO: replace with menu option
@@ -203,7 +203,7 @@ public class LoadFlightLines : MonoBehaviour
                 string imgName = mesh.name + ".png";
                 string path = Path.Combine("HorizontalRadar", imgName);
                 byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
-                Texture2D radarimg = new Texture2D(meshRenderer.material.mainTexture.width, meshRenderer.material.mainTexture.height,TextureFormat.RGBA32, 1, false);
+                Texture2D radarimg = new Texture2D(meshRenderer.material.mainTexture.width, meshRenderer.material.mainTexture.height, TextureFormat.RGBA32, 1, false);
                 radarimg.LoadImage(fileData);
                 meshRenderer.material.mainTexture = rotateTexture(radarimg, false);
                 radarimg.Apply();

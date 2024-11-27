@@ -1,0 +1,20 @@
+# Ignore virtual environment directories
+.venv/
+venv/
+ENV/
+env/
+*.env
+
+# Ignore Python bytecode files and __pycache__ directories
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.DS_Store
+
+pipeline/cresis_data/*
+!pipeline/cresis_data/
+
+pipeline/dems/*
+!pipeline/dems/
