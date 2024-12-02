@@ -47019,7 +47019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b2dfec39f015045b1dbe3b2d68d390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMode: 4
+  gameMode: 6
   roomName: Greenland
   connectOnStart: 1
   playerCount: 0
