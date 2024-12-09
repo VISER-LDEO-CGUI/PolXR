@@ -66303,6 +66303,9 @@ GameObject:
   m_Component:
   - component: {fileID: 543450653659935782}
   - component: {fileID: 919132149203529373}
+  - component: {fileID: 919132149203529376}
+  - component: {fileID: 919132149203529375}
+  - component: {fileID: 919132149203529374}
   m_Layer: 0
   m_Name: RadarImageContainer
   m_TagString: Player
@@ -66326,6 +66329,64 @@ MonoBehaviour:
   DEM: {fileID: 1083601297}
   gridLine: {fileID: 2049385536}
   MarkObj3D: {fileID: 932958961}
+--- !u!114 &919132149203529374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149203529372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2847272680
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 919132149203529375}
+--- !u!114 &919132149203529375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149203529372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e29a5da46f946a43a21a0c03ef7d768, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onDidUngrab:
+    m_PersistentCalls:
+      m_Calls: []
+  onDidGrab:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &919132149203529376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149203529372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e034f6bf9f0e97d4e86137d874c9d521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentGrabber: {fileID: 0}
+  networkGrabbable: {fileID: 0}
+  localPositionOffset: {x: 0, y: 0, z: 0}
+  localRotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  ungrabPosition: {x: 0, y: 0, z: 0}
+  ungrabRotation: {x: 0, y: 0, z: 0, w: 0}
+  ungrabVelocity: {x: 0, y: 0, z: 0}
+  ungrabAngularVelocity: {x: 0, y: 0, z: 0}
+  isGrabbed: 0
+  ungrabTime: -1
 --- !u!4 &1151388028730063987
 Transform:
   m_ObjectHideFlags: 0
