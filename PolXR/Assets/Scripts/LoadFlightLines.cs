@@ -157,6 +157,7 @@ public class LoadFlightLines : MonoBehaviour
             radargram.AddComponent<NetworkKinematicGrabbable>();
             radargram.AddComponent<NetworkObject>();
             radargram.AddComponent<KinematicGrabbable>();
+            radargram.AddComponent<NetworkTransform>();
             Debug.Log("Add Component Success!");
 
 
@@ -215,6 +216,7 @@ public class LoadFlightLines : MonoBehaviour
                 go.AddComponent<NetworkObject>();
                 go.AddComponent<NetworkKinematicGrabbable>();
                 go.AddComponent<KinematicGrabbable>();
+                go.AddComponent<NetworkTransform>();
                 Debug.Log("Adding component to children success!");
 
                 // Rotate the texture 90 degrees to the left
