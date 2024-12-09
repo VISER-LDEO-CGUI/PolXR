@@ -209,6 +209,13 @@ public class LoadFlightLines : MonoBehaviour
                 MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
                 meshRenderer.material = gltfImport.GetMaterial(i);
 
+                // Terry: Adding NetworkObject to all these meshes aka Children of the OBJ
+                // Debug:
+                Debug.Log("Adding NetworkObject to all these meshes.");
+                go.AddComponent<NetworkObject>();
+                go.AddComponent<NetworkKinematicGrabbable>();
+                go.AddComponent<KinematicGrabbable>();
+                Debug.Log("Adding component to children success!");
 
                 // Rotate the texture 90 degrees to the left
                 // this is basically swapping out the original .glb texture and using new png images instead
