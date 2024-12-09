@@ -14,6 +14,8 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using GLTFast;
 using Oculus.Platform;
+using Fusion.XR.Host.Grabbing;
+using Fusion;
 
 public class LoadFlightLines : MonoBehaviour
 {
@@ -148,6 +150,16 @@ public class LoadFlightLines : MonoBehaviour
             radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
             radargram.AddComponent<NearInteractionGrabbable>();
             Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+
+            // Test if this is the code for generating radargram
+            // Debug:
+            Debug.Log("Radargram Test Add Component Network!!");
+            radargram.AddComponent<NetworkKinematicGrabbable>();
+            radargram.AddComponent<NetworkObject>();
+            radargram.AddComponent<KinematicGrabbable>();
+            Debug.Log("Add Component Success!");
+
+
             objectManipulator.enabled = true;
 
             // Link the parent to the menu
