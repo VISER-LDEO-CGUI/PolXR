@@ -2,7 +2,17 @@
 """
 Spyder Editor
 
-This is a temporary script file.
+This script converts CReSIS formatted .MAT radar files to OBJ/MTL/PNG Mesh files
+By: Joel Salzman
+Updated: Isabel Cordero
+Updated: Sungjoon Park
+
+NOTE - Change inputpath on Line 268 (bottom of code) to reflect local path
+        Data should be organized in the following directory structure:
+        - data_prep
+            L resources
+                L mat
+                L mesh
 """
 import os
 import pandas as pd
@@ -10,9 +20,11 @@ import geopandas as gpd
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
+#import impdar #a secret tool we will use later
 from scipy.io import loadmat
+from scipy.io.matlab import matfile_version
 
-# Constants
+# Constants DO NOT TOUCH
 cAir = 299792458  # m/s
 cIce = 1.68e8	  # m/s
 
@@ -25,30 +37,74 @@ def cresis_to_mesh(
     set_origin=False,
     clip_noise=False
 ):
+    def check_mat_file_version(file_path):
+        try:
+            # Attempt to open with h5py (post-7.3 HDF5 format)
+            with h5py.File(file_path, 'r') as f:
+                print(f"{file_path} is a MATLAB v7.3+ (HDF5) file.")
+                return "post"
+        except (OSError, IOError):
+            # If h5py fails, check for pre-7.3 format
+            try:
+                with open(file_path, 'rb') as f:
+                    major_version, minor_version = matfile_version(f)
+                    print(f"{file_path} is a MATLAB pre-v7.3 file (v{major_version}.{minor_version}).")
+                    return "pre"
+            except Exception as e:
+                print(f"Unable to determine the version for {file_path}. Error: {e}")
+                return "Unknown"
+    
+    #check version and Read Mat
+    version = check_mat_file_version(matfile)
 
-    # Read mat
-    mat = loadmat(matfile)
-    #mat = h5py.File('matfile.h5', 'r')
-
-    # Convert arrays to dataframes
-    data = None
-    singletons = dict()
-    horizontal = dict()
-    vertical = dict()
-
-    for k, v in mat.items():
-        if isinstance(v, np.ndarray):
+    if(version=='post'):
+        #The case of Post-7.3
+        mat = h5py.File(matfile, 'r+')
+        data = None
+        singletons = dict()
+        horizontal = dict()
+        vertical = dict()
+        for k, v in mat.items():
+            #Check if v is a h5py dataset and convert to np.ndarray
+            if isinstance(v, h5py.Dataset):
+                v = v[()] 
             
-            # Search by key
-            if v.shape == (1, 1):
-                singletons[k] = v
-            elif k.lower() == 'data':
-                data = pd.DataFrame(v).T
-            elif k.lower() in {'time', 'depth'}:
-                vertical[k] = v.flatten()
-            else:
-                horizontal[k] = v.flatten()
-               
+            if isinstance(v, np.ndarray):
+                if v.shape == (1, 1):
+                    singletons[k] = v
+                elif k.lower() == 'data':
+                    data = pd.DataFrame(v)
+                elif k.lower() in {'time', 'depth'}:
+                    vertical[k.capitalize()] = v.flatten()
+                elif k.lower() in {'longitude','latitude', 'surface', 'elevation', 'bottom', 'heading', 'pitch', 'roll', 'gps_time'}:
+                    horizontal[k.capitalize()] = v.flatten()
+                else:
+                    pass
+ 
+    else:
+        #The case of Pre-7.3 Mat file 
+        mat = loadmat(matfile)
+        data = None
+        singletons = dict()
+        horizontal = dict()
+        vertical = dict()
+        #print(mat.keys())
+        for k, v in mat.items():
+            if isinstance(v, np.ndarray):
+                # Search by key
+                if v.shape == (1, 1):
+                    singletons[k] = v
+                elif k.lower() == 'data':
+                    data = pd.DataFrame(v).T
+                elif k.lower() in {'time', 'depth'}:
+                    vertical[k] = v.flatten()
+                elif k.lower() in {'longitude','latitude', 'surface', 'elevation'}:
+                    horizontal[k] = v.flatten()
+                else:
+                    horizontal[k] = v.flatten()
+                    
+                    
+
 
     # Convert coordinates to points
     horizontal['geometry'] = gpd.GeoSeries.from_xy(
@@ -101,6 +157,9 @@ def cresis_to_mesh(
 
     # create mesh
     return create_mesh(matfile, outdir, arr, set_origin)
+    
+
+
 
 
 def create_mesh(matfile, outdir, arr, set_origin=False):
@@ -133,6 +192,10 @@ def create_mesh(matfile, outdir, arr, set_origin=False):
     out_png = f'{basepath}.png'
     out_mtl = f'{basepath}.mtl'
     out_obj = f'{basepath}.obj'
+    #reference of mtl file from obj file
+    mtl_ref_obj = f'{os.path.relpath(out_mtl, start=os.path.dirname(out_obj))}'
+    #reference of png file from mtl file
+    png_ref_mtl = f'{os.path.relpath(out_png, start=os.path.dirname(out_mtl))}'
     out_line = f'{basepath.replace(basename, f"FlightLine_{basename}")}.obj'
 
     # reset origin maybe
@@ -141,6 +204,7 @@ def create_mesh(matfile, outdir, arr, set_origin=False):
         arr[:, :, 1] -= arr[:, :, 1].min()
 
     # write png file
+        #every single pixel gets converted to a full resoltion of 
     cvals = 20 * np.log10(np.abs(arr[:, :, 3]))
     c = np.abs((cvals - np.min(cvals)) / (np.max(cvals) - np.min(cvals))) * 256
     plt.imsave(out_png, np.flipud(c.T), cmap='gray')
@@ -151,14 +215,14 @@ def create_mesh(matfile, outdir, arr, set_origin=False):
         mtl.write('Ka  0.0000  0.0000  0.0000\n')
         mtl.write('Kd  1.0000  1.0000  1.0000\n')
         mtl.write('illum 1\n')
-        mtl.write(f'map_Kd {out_png}')
+        mtl.write(f'map_Kd {png_ref_mtl}')
 
     # write obj file
     polyline = list()
     with open(out_obj, 'w') as obj:
         
         # include material
-        obj.write(f'mtllib {out_mtl}\n')
+        obj.write(f'mtllib {mtl_ref_obj}\n')
         
         # iterate through horizontal coordinates
         for i in range(arr.shape[0]-1):
@@ -207,8 +271,7 @@ def create_mesh(matfile, outdir, arr, set_origin=False):
     return out_obj
 
 if __name__ == '__main__':
-    folder = r'D:\data_process\cresis_mesh\Eqip\20170501_03\mat'
-    # matfile = os.path.join(folder, 'Data_img_01_20100324_01_013.mat')
+    folder = r'resources/mat'
     for matfile in os.listdir(folder):
         matfile = os.path.join(folder, matfile)
         crs_old = 4326  #WGS84
