@@ -659,7 +659,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: FUSION_WEAVER;OVR_ANDROID_MRC;MRTK_GLTF_IMPORTER_OFF
+    Android: FUSION_WEAVER;OVR_ANDROID_MRC;MRTK_GLTF_IMPORTER_OFF;FUSION2
     Standalone: FUSION_WEAVER;MRTK_GLTF_IMPORTER_OFF;FUSION2
   additionalCompilerArguments: {}
   platformArchitecture: {}
