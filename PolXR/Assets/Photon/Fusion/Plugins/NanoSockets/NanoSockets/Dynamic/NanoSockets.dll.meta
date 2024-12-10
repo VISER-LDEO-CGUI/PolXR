@@ -25,17 +25,20 @@ PluginImporter:
         Exclude PS4: 1
         Exclude PS5: 1
         Exclude Switch: 1
+        Exclude VisionOS: 1
         Exclude WebGL: 1
         Exclude Win: 0
         Exclude Win64: 0
         Exclude WindowsStoreApps: 1
         Exclude XboxOne: 1
         Exclude iOS: 1
+        Exclude tvOS: 1
   - first:
       Android: Android
     second:
       enabled: 1
       settings:
+        AndroidSharedLibraryType: Executable
         CPU: ARMv7
   - first:
       Any: 
@@ -85,6 +88,15 @@ PluginImporter:
       settings:
         CPU: x86_64
   - first:
+      VisionOS: VisionOS
+    second:
+      enabled: 0
+      settings:
+        AddToEmbeddedBinaries: false
+        CPU: ARM64
+        CompileFlags: 
+        FrameworkDependencies: 
+  - first:
       Windows Store Apps: WindowsStoreApps
     second:
       enabled: 0
@@ -92,14 +104,22 @@ PluginImporter:
         CPU: AnyCPU
         DontProcess: false
         PlaceholderPath: 
-        SDK: AnySDK
-        ScriptingBackend: AnyScriptingBackend
+        SDK: UWP
+        ScriptingBackend: Il2Cpp
   - first:
       iPhone: iOS
     second:
       enabled: 0
       settings:
         AddToEmbeddedBinaries: false
+        CPU: AnyCPU
+        CompileFlags: 
+        FrameworkDependencies: 
+  - first:
+      tvOS: tvOS
+    second:
+      enabled: 0
+      settings:
         CPU: AnyCPU
         CompileFlags: 
         FrameworkDependencies: 

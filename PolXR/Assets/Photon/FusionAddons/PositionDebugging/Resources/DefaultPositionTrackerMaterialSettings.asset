@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0add32f87c2bfa4780763179b18fa16, type: 3}
+  m_Name: DefaultPositionTrackerMaterialSettings
+  m_EditorClassIdentifier: 
+  defaultMaterialSettings:
+    lineMaterial: {fileID: 2100000, guid: 40d06a8ed9f54894ead8246cf3ed7a0a, type: 2}
+    primitiveMaterial: {fileID: 2100000, guid: bcdcd1f24765ba4438684d445da166ca, type: 2}
+  renderMaterialSettings:
+    lineMaterial: {fileID: 2100000, guid: 8d601297f0dd59749a99bb7b74e4e423, type: 2}
+    primitiveMaterial: {fileID: 2100000, guid: ddb5bcbb92012ab43a7a6adca34e72c9, type: 2}
+  funForwardMaterialSettings:
+    lineMaterial: {fileID: 2100000, guid: cf4f850cd5424674fb6b2137cdfb474f, type: 2}
+    primitiveMaterial: {fileID: 2100000, guid: b26da52b84698d34b8c96a2c9650a9b8, type: 2}
+  funResimMaterialSettings:
+    lineMaterial: {fileID: 2100000, guid: fb05ca3c3300007419bfec97aaf4a4f1, type: 2}
+    primitiveMaterial: {fileID: 2100000, guid: f5b42b4b73bcb1044bd5e5227f94af7f, type: 2}
+  funFirstResimMaterialSettings:
+    lineMaterial: {fileID: 2100000, guid: c7c62bb355e98ef48a6744b2ef94a282, type: 2}
+    primitiveMaterial: {fileID: 2100000, guid: b053008c39e24db4288a7ba5a0f7237b, type: 2}
+  lateUpdateMaterialSettings:
+    lineMaterial: {fileID: 2100000, guid: b0a8e5e4d184a3b4ebdb703ffb9b865c, type: 2}
+    primitiveMaterial: {fileID: 2100000, guid: a2699510d55ab1147b32419d4816a9a3, type: 2}
+  fixedUpdateMaterialSettings:
+    lineMaterial: {fileID: 2100000, guid: 48b2e0c98e3967b4090fb69b5f1196c4, type: 2}
+    primitiveMaterial: {fileID: 2100000, guid: 0247c891d2eb04647ae72de1c1b5e8a3, type: 2}
+  velocityChangeMaterial: {fileID: 2100000, guid: 0ff79d97a542dd340a87d19182227bc8, type: 2}
