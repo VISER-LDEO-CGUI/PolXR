@@ -5,6 +5,7 @@ using UnityEngine;
 public class StudySceneManager : MonoBehaviour
 {
     public Transform radargramContainer;
+    public float radargramScaleFactor = 0.5f;
     void Start()
     {
         List<GameObject> radargrams = PreserveRadargrams.Instance?.GetRadargrams();
@@ -21,6 +22,8 @@ public class StudySceneManager : MonoBehaviour
             if (radargramContainer != null)
             {
                 radargram.transform.SetParent(radargramContainer, true);
+                radargram.transform.localScale = Vector3.one;
+                radargramContainer.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
             radargram.SetActive(true);
         }

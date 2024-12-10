@@ -21,6 +21,7 @@ public class PreserveRadargrams : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         radargramsContainer = new GameObject("PersistentRadargramsContainer");
+        radargramsContainer.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
         DontDestroyOnLoad(radargramsContainer);
     }
 
