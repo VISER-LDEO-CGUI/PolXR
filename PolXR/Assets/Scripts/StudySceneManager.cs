@@ -2,14 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class StudySceneManager : MonoBehaviour
 {
     public Transform radargramContainer;
-    public float radargramScaleFactor = 0.5f;
     void Start()
     {
+        //retrieve list of radargrams from singleton
         List<GameObject> radargrams = PreserveRadargrams.Instance?.GetRadargrams();
+        if(radargramContainer == null)
+        {
+            GameObject containerObject = new GameObject("RadargramContainer");
+            radargramContainer = containerObject.transform;
 
+        }
         if(radargrams == null || radargrams.Count == 0) 
         {
             Debug.LogWarning("No radargrams found in the study scene");
@@ -18,13 +24,8 @@ public class StudySceneManager : MonoBehaviour
 
         foreach(GameObject radargram in radargrams)
         {
-            Debug.Log($"radargram in study scene: {radargram.name}");
-            if (radargramContainer != null)
-            {
-                radargram.transform.SetParent(radargramContainer, true);
-                radargram.transform.localScale = Vector3.one;
-                radargramContainer.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-            }
+            radargram.transform.SetParent(radargramContainer, true);
+            radargram.transform.localScale = Vector3.one;
             radargram.SetActive(true);
         }
     }

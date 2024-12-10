@@ -28,10 +28,20 @@ public class SnapRadargramManager : MonoBehaviour
             Debug.Log("Radargram already selected");
             return;
         }
-
         radargram.transform.SetParent(null);
+        //add selection to singleton so that it is saved to next scene
         PreserveRadargrams.Instance.AddRadargram(radargram);
+        RadarEvents3D radarEvents = radargram.GetComponent<RadarEvents3D>();
+        if (radarEvents != null)
+        {
+            radarEvents.ToggleRadar(true);
+        }
+        else
+        {
+            Debug.LogError($"Radargram {radargram.name} does not have RadarEvents3D.");
+        }
 
+        //convert 3d radargram to sprite so that it shows up on Unity UI
         Sprite radargramSprite = ConvertRadargramTextureToSprite(radargram);
         
         if (radargramSprite == null)
@@ -40,6 +50,7 @@ public class SnapRadargramManager : MonoBehaviour
             return;
         }
         
+        //create new UI element for selected radargram
         GameObject radargramUI = Instantiate(radargramPrefab, contentParent);
         Image radargramImage = radargramUI.GetComponent<Image>();
         
@@ -99,20 +110,27 @@ public class SnapRadargramManager : MonoBehaviour
 
     public void OnRadargramDeselected(GameObject radargramUI, GameObject radargram) 
     {
+
+        RadarEvents3D radarEvents = radargram.GetComponent<RadarEvents3D>();
+        if (radarEvents != null)
+        {
+            radarEvents.ToggleRadar(false);
+        }
+
         PreserveRadargrams.Instance.RemoveRadargram(radargram);
+
         if (radargramSprites.ContainsKey(radargram))
         {
             Destroy(radargramSprites[radargram]);
             radargramSprites.Remove(radargram);
         }
 
-        GameObject radargramObject = radargram.transform.Find("OBJ_" + radargram.name)?.gameObject;
+        //GameObject radargramObject = radargram.transform.Find("OBJ_" + radargram.name)?.gameObject;
         
         if(PreserveRadargrams.Instance.GetRadargrams().Count < 1) 
         {
             StudyButton.SetActive(false);
         }
-        PreserveRadargrams.Instance.AddRadargram(radargramObject);
     }
 
     public void LoadStudyScene()
