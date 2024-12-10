@@ -638,7 +638,6 @@ GameObject:
   - component: {fileID: 9860634}
   - component: {fileID: 9860633}
   - component: {fileID: 9860632}
-  - component: {fileID: 9860639}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -664,7 +663,6 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 9860633}
-  - {fileID: 9860639}
 --- !u!114 &9860633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -791,22 +789,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9860639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9860631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
 --- !u!1 &11937835
 GameObject:
   m_ObjectHideFlags: 0
@@ -48283,7 +48265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b2dfec39f015045b1dbe3b2d68d390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMode: 6
+  gameMode: 4
   roomName: Greenland
   connectOnStart: 1
   playerCount: 0
