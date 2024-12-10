@@ -12,28 +12,25 @@ public class SnapRadargramManager : MonoBehaviour
     public ScrollRect scrollRect;
     public GameObject StudyButton;
 
-    private int maxSelection = 8;
-    private List<GameObject> selectedRadargrams = new List<GameObject>();
-
+    private int maxSelection = 6;
+    private Dictionary<GameObject, GameObject> radargramSprites = new Dictionary<GameObject, GameObject>();
+    
     public void OnRadargramSelected(GameObject radargram)
     {
         StudyButton.SetActive(true);
-        if (selectedRadargrams.Count >= maxSelection)
+        if (PreserveRadargrams.Instance.GetRadargrams().Count >= maxSelection)
         {
-            Debug.Log("Max selection reached");
-            RadarEvents3D radarEvents = radargram.GetComponent<RadarEvents3D>();
-            if(radarEvents != null)
-            {
-                radarEvents.ToggleRadar(false);
-            }
+            Debug.Log("max selection reached");
+            return;
+        }
+        if (PreserveRadargrams.Instance.GetRadargrams().Contains(radargram))
+        {
+            Debug.Log("Radargram already selected");
             return;
         }
 
-        if(selectedRadargrams.Contains(radargram))
-        {
-            Debug.Log("radargram already selected");
-            return;
-        }
+        radargram.transform.SetParent(null);
+        PreserveRadargrams.Instance.AddRadargram(radargram);
 
         Sprite radargramSprite = ConvertRadargramTextureToSprite(radargram);
         
@@ -43,7 +40,6 @@ public class SnapRadargramManager : MonoBehaviour
             return;
         }
         
-        selectedRadargrams.Add(radargram);
         GameObject radargramUI = Instantiate(radargramPrefab, contentParent);
         Image radargramImage = radargramUI.GetComponent<Image>();
         
@@ -65,6 +61,7 @@ public class SnapRadargramManager : MonoBehaviour
         {
             Debug.LogError("deselect button not found");
         }
+        radargramSprites[radargram] = radargramUI;
         Debug.Log("radargram added");
     }
 
@@ -102,29 +99,36 @@ public class SnapRadargramManager : MonoBehaviour
 
     public void OnRadargramDeselected(GameObject radargramUI, GameObject radargram) 
     {
-        if(selectedRadargrams.Contains(radargram)) 
+        PreserveRadargrams.Instance.RemoveRadargram(radargram);
+        if (radargramSprites.ContainsKey(radargram))
         {
-            selectedRadargrams.Remove(radargram);
-            Debug.Log($"radargram deselected in the UI. remaining selections: {selectedRadargrams.Count}");
-        }
-        Destroy(radargramUI);
-
-        RadarEvents3D radarEvents = radargram.GetComponent<RadarEvents3D>();
-        if(radarEvents != null) 
-        {
-            radarEvents.ToggleRadar(false);
-            radarEvents.TogglePolyline(true,false);
-            Debug.Log($"radargram {radargram.name} deselected in the SCENE.");
+            Destroy(radargramSprites[radargram]);
+            radargramSprites.Remove(radargram);
         }
 
-        if(selectedRadargrams.Count < 1) 
+        GameObject radargramObject = radargram.transform.Find("OBJ_" + radargram.name)?.gameObject;
+        
+        if(PreserveRadargrams.Instance.GetRadargrams().Count < 1) 
         {
             StudyButton.SetActive(false);
         }
+        PreserveRadargrams.Instance.AddRadargram(radargramObject);
     }
 
-    public void loadStudyScene()
+    public void LoadStudyScene()
     {
+        Debug.Log("LoadStudyScene called");
+        var radargrams = PreserveRadargrams.Instance.GetRadargrams();
+
+        if(radargrams.Count == 0)
+        {
+            Debug.LogWarning("no radargrams to save");
+            return;
+        }
+        foreach (var radargram in radargrams)
+        {
+            Debug.Log($"Radargram before transition: {radargram.name}, position: {radargram.transform.position}");
+        }
         SceneManager.LoadSceneAsync("StudyScene");
     }
 }

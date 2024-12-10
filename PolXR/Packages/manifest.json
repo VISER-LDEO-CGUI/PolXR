@@ -23,7 +23,7 @@
     "com.unity.timeline": "1.6.4",
     "com.unity.toolchain.macos-arm64-linux-x86_64": "2.0.0",
     "com.unity.ugui": "1.0.0",
-    "com.unity.xr.interaction.toolkit": "2.5.2",
+    "com.unity.xr.interaction.toolkit": "3.0.7",
     "com.unity.xr.management": "4.4.0",
     "com.unity.xr.oculus": "4.1.2",
     "com.unity.xr.openxr": "1.10.0",
