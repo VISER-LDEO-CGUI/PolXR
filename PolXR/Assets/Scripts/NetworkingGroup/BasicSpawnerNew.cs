@@ -70,7 +70,47 @@ public class BasicSpawnerNew : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Remove(player);
         }
     }
-    public void OnInput(NetworkRunner runner, NetworkInput input) { }
+    private bool _mouseButton0;
+    private void Update()
+    {
+        _mouseButton0 = _mouseButton0 | Input.GetKey(KeyCode.X);
+        if (Input.GetKey(KeyCode.X))
+        {
+            Debug.Log("shoot");
+        }
+    }
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        var data = new NetworkInputData();
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            data.direction += Vector3.forward;
+            Debug.Log("going forward");
+        }
+        if (Input.GetKey(KeyCode.K))
+        {
+            data.direction += Vector3.back;
+            Debug.Log("going backward");
+        }
+
+        if (Input.GetKey(KeyCode.J))
+        {
+            data.direction += Vector3.left;
+            Debug.Log("going left");
+        }
+
+        if (Input.GetKey(KeyCode.L))
+        {
+            data.direction += Vector3.right;
+            Debug.Log("going right");
+        }
+        data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
+        _mouseButton0 = false;
+
+        input.Set(data);
+    }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }
