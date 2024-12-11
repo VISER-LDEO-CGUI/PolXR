@@ -550,17 +550,19 @@ public class MenuEvents : NetworkBehaviour
         //GameObject targetDem = DEMs.Find(name).gameObject;
         //targetDem.SetActive(!targetDem.activeSelf);
         Debug.LogWarning("demtoggle called");
-        if (Object.HasInputAuthority)
-        {
-            Debug.LogWarning("yes authority");
-            RPC_SendMessage("Hey Mate!");
-        } else
-        {
-            Debug.LogWarning("No authority");
-        }
+        //if (Object.HasInputAuthority)
+        //{
+        //    Debug.LogWarning("yes authority");
+        //    RPC_SendMessage("Hey Mate!");
+        //} else
+        //{
+        //    Debug.LogWarning("No authority");
+        //}
         // Debug.LogWarning("demtoggle called");
         // RPC_SendMessage("Hey Mate!");
-
+        GameObject DEM = GameObject.Find("DEMs(Clone)");
+        NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
+        DEMController.toggle();
     }
 
 
