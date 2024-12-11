@@ -546,9 +546,9 @@ public class MenuEvents : NetworkBehaviour
     // Find the dem according to name.
     public void DemToggle(string name)
     {
-        GameObject targetDem = DEMs.Find(name).gameObject;
-        targetDem.SetActive(!targetDem.activeSelf);
-
+        //GameObject targetDem = DEMs.Find(name).gameObject;
+        //targetDem.SetActive(!targetDem.activeSelf);
+        Debug.LogWarning("demtoggle called");
         RPC_SendMessage("Hey Mate!");
 
     }
