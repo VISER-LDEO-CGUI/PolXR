@@ -199,8 +199,12 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 _spawnedUsers.Add(player, networkPlayerObject);
 
                 // CLT Network Team change:
-                NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(10, -1, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
-                });
+                if (player.PlayerId == 1) {
+                    NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(10, -1, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
+                    });
+                    Debug.LogWarning("Spawned DEMs with Player 1");
+                }
+                
             }
 
         }
