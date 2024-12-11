@@ -68324,6 +68324,7 @@ GameObject:
   - component: {fileID: 1151388028730063987}
   - component: {fileID: 2823090746204456249}
   - component: {fileID: 1587545474336203181}
+  - component: {fileID: 8164078558919634761}
   m_Layer: 0
   m_Name: BEDMACHINE_DEM_IDBMG4
   m_TagString: Untagged
@@ -68331,6 +68332,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8164078558919634761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164078558919634760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 41120258
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours: []
 --- !u!1001 &8326082214626112602
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68473,6 +68491,7 @@ GameObject:
   - component: {fileID: 7435763830413457377}
   - component: {fileID: 8883454425197957654}
   - component: {fileID: 9189260757652488643}
+  - component: {fileID: 9189260757652488644}
   m_Layer: 0
   m_Name: MEASURES_NSIDC-0715-002
   m_TagString: Untagged
@@ -68502,6 +68521,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 7107633710438236949, guid: a2410c8a9a86a9d4e89b4ac34b4ed080, type: 3}
+--- !u!114 &9189260757652488644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9189260757652488642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 917571870
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
