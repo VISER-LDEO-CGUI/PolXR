@@ -1,8 +1,6 @@
-﻿using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class RadarEvents2D : RadarEvents, IMixedRealityPointerHandler
+public class RadarEvents2D : RadarEvents// IMixedRealityPointerHandler
 {
 
     // The file root under the "Resources" folder.
@@ -23,9 +21,9 @@ public class RadarEvents2D : RadarEvents, IMixedRealityPointerHandler
         // https://docs.unity3d.com/ScriptReference/Component.GetComponents.html
     }
 
-    public void OnPointerUp(MixedRealityPointerEventData eventData) { }
-    public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
-    public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
+    //public void OnPointerUp(MixedRealityPointerEventData eventData) { }
+    //public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
+    //public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
 
     // For adding particle. Late update needed because the initialization of particle system takes time.
     private void LateUpdate()
@@ -64,41 +62,41 @@ public class RadarEvents2D : RadarEvents, IMixedRealityPointerHandler
     }
 
     // Show the menu and mark and update the variables.
-    public void OnPointerDown(MixedRealityPointerEventData eventData)
-    {
-        SychronizeMenu();
-        Debug.Log(eventData.Pointer.Result.Details.Point);
-        // Only load the images when selected.
-        Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
-        loadImage(content);
-        loaded = true;
+    //public void OnPointerDown(MixedRealityPointerEventData eventData)
+    //{
+    //    SychronizeMenu();
+    //    Debug.Log(eventData.Pointer.Result.Details.Point);
+    //    // Only load the images when selected.
+    //    Texture content = Resources.Load<Texture2D>(fileRoot + '/' + this.transform.name);
+    //    loadImage(content);
+    //    loaded = true;
 
-        // Measurement
-        if (Menu.GetComponent<MenuEvents>().measureMode() == 1)
-        {
-            MeasureObj.SetActive(true);
-            MeasureObj.transform.rotation = this.transform.rotation;
-            MeasureObj.transform.SetParent(this.transform);
-            MeasureObj.transform.position = eventData.Pointer.Result.Details.Point;
-            line.SetActive(true);
-        }
-        else
-        {
-            if (Menu.GetComponent<MenuEvents>().measureMode() == 0)
-            {
-                // Clean up!
-                line.SetActive(false);
-                MeasureObj.SetActive(false);
-            }
+    //    // Measurement
+    //    if (Menu.GetComponent<MenuEvents>().measureMode() == 1)
+    //    {
+    //        MeasureObj.SetActive(true);
+    //        MeasureObj.transform.rotation = this.transform.rotation;
+    //        MeasureObj.transform.SetParent(this.transform);
+    //        MeasureObj.transform.position = eventData.Pointer.Result.Details.Point;
+    //        line.SetActive(true);
+    //    }
+    //    else
+    //    {
+    //        if (Menu.GetComponent<MenuEvents>().measureMode() == 0)
+    //        {
+    //            // Clean up!
+    //            line.SetActive(false);
+    //            MeasureObj.SetActive(false);
+    //        }
 
-            // The mark.
-            MarkObj.SetActive(true);
-            MarkObj.transform.rotation = this.transform.rotation;
-            MarkObj.transform.SetParent(this.transform);
-            MarkObj.transform.position = eventData.Pointer.Result.Details.Point;
-            Debug.Log(eventData.Pointer.Result.Details.Point);
-        }
-    }
+    //        // The mark.
+    //        MarkObj.SetActive(true);
+    //        MarkObj.transform.rotation = this.transform.rotation;
+    //        MarkObj.transform.SetParent(this.transform);
+    //        MarkObj.transform.position = eventData.Pointer.Result.Details.Point;
+    //        Debug.Log(eventData.Pointer.Result.Details.Point);
+    //    }
+    //}
 
     // Dynamic loading.
     public void TempLoad(bool loadNew)
@@ -209,7 +207,7 @@ public class RadarEvents2D : RadarEvents, IMixedRealityPointerHandler
     public new void ToggleRadar(bool toggle)
     {
         this.transform.GetComponent<BoxCollider>().enabled = toggle;
-        this.transform.GetComponent<BoundsControl>().enabled = toggle;
+        // this.transform.GetComponent<BoundsControl>().enabled = toggle;
         transform.GetChild(0).gameObject.SetActive(toggle);
         transform.GetChild(1).gameObject.SetActive(toggle);
         MarkObj.gameObject.SetActive((MarkObj.transform.parent == this.transform) && toggle);

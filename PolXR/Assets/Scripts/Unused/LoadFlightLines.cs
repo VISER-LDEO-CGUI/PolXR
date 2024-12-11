@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.XR;
-using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
-using Microsoft.MixedReality.Toolkit.Utilities;
+//using Microsoft.MixedReality.Toolkit.Input;
+//using Microsoft.MixedReality.Toolkit.UI;
+//using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+//using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
+//using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -89,14 +89,14 @@ public class LoadFlightLines : MonoBehaviour
             parent.transform.localScale = new Vector3(1, 1, 1);
             parent.transform.localPosition = new Vector3(0, 0, 0);
             parent.transform.rotation = Quaternion.identity;
-            BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
+            // BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
 
             //turns off gizmos and bounding boxes
-            parentBoundsControl.LinksConfig.ShowWireFrame = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-            parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+            //parentBoundsControl.LinksConfig.ShowWireFrame = false;
+            //parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            //parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            //parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+            //parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
 
             // Create a parent to group both radargram objects
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
@@ -122,33 +122,33 @@ public class LoadFlightLines : MonoBehaviour
             line.transform.rotation = Quaternion.Euler(-90f, 0f, 180f);
 
             // Add the correct Bounds Control so that MRTK knows where the objects are
-            BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
-            boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
+            //BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
+            //boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
 
             //turns off gizmos and bounding boxes
-            boundsControl.LinksConfig.ShowWireFrame = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-            boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+            //boundsControl.LinksConfig.ShowWireFrame = false;
+            //boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            //boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            //boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+            //boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
 
             BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
             boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
             boxCollider.size = meshBounds.size;
-            boundsControl.BoundsOverride = boxCollider;
+            // boundsControl.BoundsOverride = boxCollider;
 
             // Constrain the rotation axes
-            RotationAxisConstraint rotationConstraint = radargram.AddComponent<RotationAxisConstraint>();
-            rotationConstraint.ConstraintOnRotation = AxisFlags.XAxis | AxisFlags.ZAxis;
+            //RotationAxisConstraint rotationConstraint = radargram.AddComponent<RotationAxisConstraint>();
+            //rotationConstraint.ConstraintOnRotation = AxisFlags.XAxis | AxisFlags.ZAxis;
 
             // Set the parent's BoxCollider to have the same bounds
             BoxCollider parentCollider = parent.GetComponent<BoxCollider>();
 
             // Add the correct Object Manipulator so users can grab the radargrams
-            radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-            radargram.AddComponent<NearInteractionGrabbable>();
-            Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-            objectManipulator.enabled = true;
+            //radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+            //radargram.AddComponent<NearInteractionGrabbable>();
+            //Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+            //objectManipulator.enabled = true;
 
             // Link the parent to the menu
             script.Menu = GameObject.Find("Menu");

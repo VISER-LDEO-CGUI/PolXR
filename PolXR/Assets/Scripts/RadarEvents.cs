@@ -1,5 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+﻿//using Microsoft.MixedReality.Toolkit.Input;
+//using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -65,9 +65,9 @@ public class RadarEvents : MonoBehaviour
     {
         // The menu.
         Vector3 newPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.6f;
-        Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
-        Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
-        Menu.transform.GetComponent<MenuEvents>().syncScaleSlider();
+        //Menu.transform.GetComponent<MenuEvents>().CloseButton(false);
+        //Menu.transform.GetComponent<MenuEvents>().ResetRadarSelected(this.transform, newPosition, alpha);
+        //Menu.transform.GetComponent<MenuEvents>().syncScaleSlider();
         //radarMark.SetActive(true);
     }
 }

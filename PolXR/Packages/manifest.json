@@ -2,9 +2,6 @@
   "dependencies": {
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
     "com.gwiazdorrr.betterstreamingassets": "https://github.com/gwiazdorrr/BetterStreamingAssets.git",
-    "com.microsoft.mixedreality.toolkit.extensions": "file:MixedReality/com.microsoft.mixedreality.toolkit.extensions-2.8.2.tgz",
-    "com.microsoft.mixedreality.toolkit.foundation": "file:MixedReality/com.microsoft.mixedreality.toolkit.foundation-2.8.2.tgz",
-    "com.microsoft.mixedreality.toolkit.standardassets": "file:MixedReality/com.microsoft.mixedreality.toolkit.standardassets-2.8.2.tgz",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.cloud.gltfast": "6.4.0",
     "com.unity.collab-proxy": "2.2.0",

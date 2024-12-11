@@ -4,9 +4,10 @@ using UnityEditor;
 using UnityEngine;
 using System;
 using System.Linq;
-using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using Microsoft.MixedReality.Toolkit.Input;
+using UnityEngine.XR.Interaction.Toolkit;
+//using Microsoft.MixedReality.Toolkit.UI;
+//using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+//using Microsoft.MixedReality.Toolkit.Input;
 
 [System.Serializable]
 public class Centroid
@@ -237,15 +238,15 @@ public class DataLoader : MonoBehaviour
                         radarObj.transform.SetParent(segmentContainer.transform);
 
                         // Add necessary components to the Radar object
-                        radarObj.AddComponent<ConstraintManager>();
-                        radarObj.AddComponent<BoundsControl>();
-                        radarObj.AddComponent<NearInteractionGrabbable>();
-                        radarObj.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-                        radarObj.AddComponent<RotationAxisConstraint>();
+                        //radarObj.AddComponent<ConstraintManager>();
+                        //radarObj.AddComponent<BoundsControl>();
+                        //radarObj.AddComponent<NearInteractionGrabbable>();
+                        //radarObj.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+                        //radarObj.AddComponent<RotationAxisConstraint>();
 
                         // Add necessary components to the parent segment container
                         segmentContainer.AddComponent<BoxCollider>();
-                        segmentContainer.AddComponent<ConstraintManager>();
+                        //segmentContainer.AddComponent<ConstraintManager>();
                         segmentContainer.AddComponent<MyRadarEvents>();
                     }
                 }
@@ -345,7 +346,7 @@ public class DataLoader : MonoBehaviour
             {
                 if (child.name.StartsWith("Data"))
                 {
-                    lineObj.AddComponent<Interactable>();
+                    lineObj.AddComponent<XRSimpleInteractable>();
                     break;
                 }
             }

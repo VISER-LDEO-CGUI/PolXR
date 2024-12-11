@@ -1,6 +1,6 @@
-using Microsoft.MixedReality.Toolkit;
-using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+//using Microsoft.MixedReality.Toolkit;
+//using Microsoft.MixedReality.Toolkit.UI;
+//using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -17,8 +17,8 @@ public class HomeMenuEvents : MonoBehaviour
     private bool updatePosition = true;
 
     // Radar Menu Toggle Buttons
-    public Interactable AntarcticaButton;
-    public Interactable GreenlandButton;
+    //public Interactable AntarcticaButton;
+    //public Interactable GreenlandButton;
 
     // Indices for scenes
     readonly int ANTARCTICA_INDEX = 0;
