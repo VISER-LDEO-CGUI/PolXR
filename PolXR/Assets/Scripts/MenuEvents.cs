@@ -7,8 +7,10 @@ using TMPro;
 using System;
 using System.IO;
 using UnityEngine.SceneManagement;
+using Fusion;
 
-public class MenuEvents : MonoBehaviour
+
+public class MenuEvents : NetworkBehaviour
 {
     // The current menu type, true stands for main menu.
     private bool isMainMenu;
@@ -546,6 +548,50 @@ public class MenuEvents : MonoBehaviour
     {
         GameObject targetDem = DEMs.Find(name).gameObject;
         targetDem.SetActive(!targetDem.activeSelf);
+
+        RPC_SendMessage("Hey Mate!");
+
+    }
+
+    private TMP_Text _messages;
+    public GameObject surfaceDEM;
+    //private void Update()
+    //{
+    //    if (Object.HasInputAuthority && Input.GetKeyDown(KeyCode.R))
+    //    {
+    //        RPC_SendMessage("Hey Mate!");
+    //    }
+    //}
+
+    public void ChangeDEM()
+    {
+        Debug.Log("Change command sent!");
+        surfaceDEM.SetActive(!surfaceDEM.activeSelf);
+    }
+
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_SendMessage(string message, RpcInfo info = default)
+    {
+        RPC_RelayMessage(message, info.Source);
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
+    public void RPC_RelayMessage(string message, PlayerRef messageSource)
+    {
+        if (_messages == null)
+            _messages = FindObjectOfType<TMP_Text>();
+
+        if (messageSource == Runner.LocalPlayer)
+        {
+            message = $"You said: {message}\n";
+        }
+        else
+        {
+            message = $"Some other player said: {message}\n";
+        }
+
+        _messages.text += message;
+        ChangeDEM();
     }
 
     // Switch between two states of the bounding box.
