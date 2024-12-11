@@ -5447,6 +5447,11 @@ PrefabInstance:
       propertyPath: safeZone
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6368858450254648827, guid: 9f502e2c0755040f388ba04dde170547,
+        type: 3}
+      propertyPath: onLastHandLost.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6368858450678635437, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       propertyPath: m_Enabled
@@ -5461,6 +5466,10 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6368858450254648820, guid: 9f502e2c0755040f388ba04dde170547,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 167759650}
     - targetCorrespondingSourceObject: {fileID: 6368858450276512478, guid: 9f502e2c0755040f388ba04dde170547,
         type: 3}
       insertIndex: -1
@@ -6129,6 +6138,42 @@ Transform:
   - {fileID: 573540802}
   m_Father: {fileID: 1380716798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &167759643 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6368858450254648820, guid: 9f502e2c0755040f388ba04dde170547,
+    type: 3}
+  m_PrefabInstance: {fileID: 145987759}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &167759644 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6368858450254648822, guid: 9f502e2c0755040f388ba04dde170547,
+    type: 3}
+  m_PrefabInstance: {fileID: 145987759}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167759643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e581f8171bcb1504cb28c7b40db01d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &167759650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167759643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2905126288
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 167759644}
 --- !u!1 &168876577
 GameObject:
   m_ObjectHideFlags: 0
@@ -38708,7 +38753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 2128539198
   ObjectInterest: 1
-  Flags: 1
+  Flags: 262145
   NestedObjects:
   - {fileID: 9189260757652488644}
   - {fileID: 8164078558919634761}
