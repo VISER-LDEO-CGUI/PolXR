@@ -15,6 +15,7 @@ fastjsonschema==2.20.0
 Flask==3.0.3
 fonttools==4.55.0
 geopandas==1.0.1
+h5py==3.12.1
 idna==3.10
 importlib_metadata==8.5.0
 itsdangerous==2.2.0
