@@ -1,4 +1,5 @@
 using Fusion;
+using GLTFast.Schema;
 using TMPro;
 using UnityEngine;
 
@@ -11,11 +12,40 @@ public class Player : NetworkBehaviour
     private NetworkCharacterController _cc;
     private Vector3 _forward;
 
+    [Networked]
+    public bool spawnedProjectile { get; set; }
+
+    private ChangeDetector _changeDetector;
+
+    public override void Spawned()
+    {
+        _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
+    }
+
+    public UnityEngine.Material _material;
+
+
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
         _forward = transform.forward;
         surfaceDEM = GameObject.Find("MEASURES_NSIDC-0715-002");
+
+        _material = GetComponentInChildren<MeshRenderer>().material;
+    }
+
+    public override void Render()
+    {
+        foreach (var change in _changeDetector.DetectChanges(this))
+        {
+            switch (change)
+            {
+                case nameof(spawnedProjectile):
+                    _material.color = Color.white;
+                    break;
+            }
+        }
+        _material.color = Color.Lerp(_material.color, Color.blue, Time.deltaTime);
     }
 
     public override void FixedUpdateNetwork()
@@ -35,13 +65,13 @@ public class Player : NetworkBehaviour
                 {
                     // Debug.Log("player shoot");
                     delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
-                    Runner.Spawn(_prefabBall,
-                    transform.position + _forward, Quaternion.LookRotation(_forward),
+                    Runner.Spawn(_prefabBall, transform.position + _forward, Quaternion.LookRotation(_forward),
                     Object.InputAuthority, (runner, o) =>
                     {
                         // Initialize the Ball before synchronizing it
                         o.GetComponent<Ball>().Init();
                     });
+                    spawnedProjectile = !spawnedProjectile;
                 }
             }
         }

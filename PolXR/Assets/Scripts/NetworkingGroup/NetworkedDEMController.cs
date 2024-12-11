@@ -3,8 +3,23 @@ using UnityEngine;
 
 public class NetworkedDEMController : NetworkBehaviour
 {
+
     [Networked]
     public bool isVisiable { get; set; }
+    [Networked]
+    public NetworkObject surface { get; set; }
+    [Networked]
+    public NetworkObject bottom { get; set; }
+
+    [SerializeField] GameObject SurfaceDEM;
+    [SerializeField] GameObject BottomDEM;
+    MeshRenderer surfaceMeshRenderer;
+    MeshRenderer bottomMeshRenderer;
+
+
+    [Networked]
+    public bool spawnedProjectile { get; set; }
+
     private ChangeDetector _changeDetector;
 
     public override void Spawned()
@@ -12,14 +27,39 @@ public class NetworkedDEMController : NetworkBehaviour
         _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
     }
 
-    public MeshRenderer demMeshRenderer;
     //// test whether using start or awake
     //private void Awake()
     //{
-    //    demMeshRenderer = GetComponent<MeshRenderer>();
+    //    
     //    // gpt
     //    UpdateVisibility();
     //}
+
+    private void Awake()
+    {
+        surfaceMeshRenderer = gameObject.transform.GetChild(0).GetComponent<MeshRenderer>();
+        bottomMeshRenderer = gameObject.transform.GetChild(1).GetComponent<MeshRenderer>();
+    }
+
+
+    public override void Render()
+    {
+        foreach (var change in _changeDetector.DetectChanges(this))
+        {
+            switch (change)
+            {
+                case nameof(spawnedProjectile):
+                    //_material.color = Color.white;
+                    surfaceMeshRenderer.enabled = !surfaceMeshRenderer.enabled;
+                    bottomMeshRenderer.enabled = !bottomMeshRenderer.enabled;
+                    //surface.gameObject.SetActive(true);
+                    //bottom.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                    break;
+            }
+        }
+        //_material.color = Color.Lerp(_material.color, Color.blue, Time.deltaTime);
+    }
+
 
     // Called when the IsVisible property changes
     public override void FixedUpdateNetwork()
@@ -33,26 +73,26 @@ public class NetworkedDEMController : NetworkBehaviour
         //    }
 
         //}
-        gameObject.SetActive(!gameObject.activeSelf);
+        spawnedProjectile = !spawnedProjectile;
         Debug.Log("want to change");
     }
 
-    // Updates the visibility of the DEM
-    private void UpdateVisibility()
-    {
-        if (demMeshRenderer != null)
-        {
-            demMeshRenderer.enabled = isVisiable;
-        }
-        gameObject.SetActive(isVisiable);
-    }
+    //    // Updates the visibility of the DEM
+    //    private void UpdateVisibility()
+    //    {
+    //        if (demMeshRenderer != null)
+    //        {
+    //            demMeshRenderer.enabled = isVisiable;
+    //        }
+    //        gameObject.SetActive(isVisiable);
+    //    }
 
-    // Method to toggle visibility (only the host should call this)
-    public void ToggleVisibility(bool visibility)
-    {
-        if (HasStateAuthority)
-        {
-            isVisiable = visibility;
-        }
-    }
+    //    // Method to toggle visibility (only the host should call this)
+    //    public void ToggleVisibility(bool visibility)
+    //    {
+    //        if (HasStateAuthority)
+    //        {
+    //            isVisiable = visibility;
+    //        }
+    //    }
 }
