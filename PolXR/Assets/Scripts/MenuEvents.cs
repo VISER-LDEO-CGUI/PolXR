@@ -106,26 +106,6 @@ public class MenuEvents : NetworkBehaviour
         MarkObj.SetActive(false);
     }
 
-    //public NetworkedDEMController surfaceDEMController; // Assign in the Inspector
-    //public NetworkedDEMController baseDEMController;    // Assign in the Inspector
-
-    //// Toggle Surface DEM visibility
-    //public void ToggleSurfaceDEM(bool isVisible)
-    //{
-    //    if (surfaceDEMController != null)
-    //    {
-    //        surfaceDEMController.ToggleVisibility(isVisible);
-    //    }
-    //}
-
-    //// Toggle Base DEM visibility
-    //public void ToggleBaseDEM(bool isVisible)
-    //{
-    //    if (baseDEMController != null)
-    //    {
-    //        baseDEMController.ToggleVisibility(isVisible);
-    //    }
-    //}
 
     // Update is called once per frame
     void Update()
@@ -563,7 +543,7 @@ public class MenuEvents : NetworkBehaviour
         // RPC_SendMessage("Hey Mate!");
         GameObject DEM = GameObject.Find("DEMs(Clone)");
         NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
-        DEMController.toggle();
+        DEMController.toggle(name);
     }
 
 

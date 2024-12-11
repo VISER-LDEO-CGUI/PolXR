@@ -117,7 +117,8 @@ public class Player : NetworkBehaviour
         surfaceDEM = GameObject.Find("MEASURES_NSIDC-0715-002");
         GameObject DEM = GameObject.Find("DEMs(Clone)");
         NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
-        DEMController.toggle();
+        // simply turn off surface
+        DEMController.toggle("MEASURES_NSIDC-0715-002");
 
         // ChangeDEM();
     }

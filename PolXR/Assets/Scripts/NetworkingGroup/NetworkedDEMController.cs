@@ -21,6 +21,7 @@ public class NetworkedDEMController : NetworkBehaviour
     public bool spawnedProjectile { get; set; }
 
     private ChangeDetector _changeDetector;
+    public string toggleName;
 
     public override void Spawned()
     {
@@ -50,8 +51,13 @@ public class NetworkedDEMController : NetworkBehaviour
             {
                 case nameof(spawnedProjectile):
                     //_material.color = Color.white;
-                    surfaceMeshRenderer.enabled = !surfaceMeshRenderer.enabled;
-                    bottomMeshRenderer.enabled = !bottomMeshRenderer.enabled;
+                    if (toggleName.Equals("MEASURES_NSIDC-0715-002"))
+                    {
+                        surfaceMeshRenderer.enabled = !surfaceMeshRenderer.enabled;
+                    } else
+                    {
+                        bottomMeshRenderer.enabled = !bottomMeshRenderer.enabled;
+                    }
                     //surface.gameObject.SetActive(true);
                     //bottom.gameObject.GetComponent<MeshRenderer>().enabled = false;
                     break;
@@ -78,10 +84,11 @@ public class NetworkedDEMController : NetworkBehaviour
     }
 
 
-    public void toggle()
+    public void toggle(string name)
     {
+        toggleName = name;
         spawnedProjectile = !spawnedProjectile;
-        Debug.Log("want to change");
+        Debug.Log("want to change" + toggleName);
     }
     //    // Updates the visibility of the DEM
     //    private void UpdateVisibility()
