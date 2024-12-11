@@ -229,6 +229,16 @@ namespace Fusion.Addons.ConnectionManagerAddon
             }
         }
 
+        private bool _mouseButton0;
+        private void Update()
+        {
+            _mouseButton0 = _mouseButton0 | Input.GetKey(KeyCode.X);
+            if (Input.GetKey(KeyCode.X))
+            {
+                Debug.Log("shoot");
+            }
+        }
+
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
             var data = new NetworkInputData();
@@ -251,6 +261,9 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 data.direction += Vector3.right;
                 Debug.Log("going right");
             }
+            data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
+            _mouseButton0 = false;
+
             input.Set(data);
         }
         #endregion
