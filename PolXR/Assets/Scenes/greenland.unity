@@ -47026,7 +47026,7 @@ MonoBehaviour:
   connectionCriterias: 1
   additionalSessionProperties: []
   runner: {fileID: 1449092981}
-  userPrefab: {fileID: 2549000073306557744, guid: e263782ae517b5e46a1d6228d8ee88b7,
+  userPrefab: {fileID: 6968224753676756898, guid: 36f6cdead37272046a7873cf8755b955,
     type: 3}
   onWillConnect:
     m_PersistentCalls:
