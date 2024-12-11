@@ -29164,8 +29164,7 @@ MonoBehaviour:
   scenePaths:
   - Assets/Scenes/homescreen.unity
   audioSource: {fileID: 0}
-  surfaceDEMController: {fileID: 0}
-  baseDEMController: {fileID: 0}
+  surfaceDEM: {fileID: 0}
 --- !u!82 &812634071
 AudioSource:
   m_ObjectHideFlags: 0
@@ -38550,6 +38549,7 @@ GameObject:
   - component: {fileID: 1083601299}
   - component: {fileID: 1083601301}
   - component: {fileID: 1083601300}
+  - component: {fileID: 1083601302}
   m_Layer: 0
   m_Name: DEMs
   m_TagString: Untagged
@@ -38628,8 +38628,7 @@ MonoBehaviour:
   PSLine: {fileID: 0}
   scenePaths: []
   audioSource: {fileID: 0}
-  surfaceDEMController: {fileID: 0}
-  baseDEMController: {fileID: 0}
+  surfaceDEM: {fileID: 0}
 --- !u!114 &1083601300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38695,6 +38694,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoConstraintSelection: 1
   selectedConstraints: []
+--- !u!114 &1083601302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083601297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2128539198
+  ObjectInterest: 1
+  Flags: 1
+  NestedObjects:
+  - {fileID: 9189260757652488644}
+  - {fileID: 8164078558919634761}
+  NetworkedBehaviours:
+  - {fileID: 1083601299}
 --- !u!1 &1086253172
 GameObject:
   m_ObjectHideFlags: 0

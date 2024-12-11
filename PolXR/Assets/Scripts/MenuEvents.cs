@@ -544,6 +544,7 @@ public class MenuEvents : NetworkBehaviour
     }
 
     // Find the dem according to name.
+
     public void DemToggle(string name)
     {
         //GameObject targetDem = DEMs.Find(name).gameObject;
@@ -552,6 +553,7 @@ public class MenuEvents : NetworkBehaviour
         RPC_SendMessage("Hey Mate!");
 
     }
+
 
     private TMP_Text _messages;
     public GameObject surfaceDEM;
