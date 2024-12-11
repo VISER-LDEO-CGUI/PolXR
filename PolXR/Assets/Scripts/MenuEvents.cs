@@ -104,6 +104,27 @@ public class MenuEvents : MonoBehaviour
         MarkObj.SetActive(false);
     }
 
+    //public NetworkedDEMController surfaceDEMController; // Assign in the Inspector
+    //public NetworkedDEMController baseDEMController;    // Assign in the Inspector
+
+    //// Toggle Surface DEM visibility
+    //public void ToggleSurfaceDEM(bool isVisible)
+    //{
+    //    if (surfaceDEMController != null)
+    //    {
+    //        surfaceDEMController.ToggleVisibility(isVisible);
+    //    }
+    //}
+
+    //// Toggle Base DEM visibility
+    //public void ToggleBaseDEM(bool isVisible)
+    //{
+    //    if (baseDEMController != null)
+    //    {
+    //        baseDEMController.ToggleVisibility(isVisible);
+    //    }
+    //}
+
     // Update is called once per frame
     void Update()
     {

@@ -235,7 +235,7 @@ namespace Fusion.Addons.ConnectionManagerAddon
             _mouseButton0 = _mouseButton0 | Input.GetKey(KeyCode.X);
             if (Input.GetKey(KeyCode.X))
             {
-                Debug.Log("shoot");
+                // Debug.Log("shoot");
             }
         }
 
