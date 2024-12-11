@@ -73,10 +73,16 @@ public class NetworkedDEMController : NetworkBehaviour
         //    }
 
         //}
+        //spawnedProjectile = !spawnedProjectile;
+        // Debug.Log("want to change");
+    }
+
+
+    public void toggle()
+    {
         spawnedProjectile = !spawnedProjectile;
         Debug.Log("want to change");
     }
-
     //    // Updates the visibility of the DEM
     //    private void UpdateVisibility()
     //    {

@@ -197,10 +197,12 @@ namespace Fusion.Addons.ConnectionManagerAddon
 
                 // Keep track of the player avatars so we can remove it when they disconnect
                 _spawnedUsers.Add(player, networkPlayerObject);
+
+                // CLT Network Team change:
+                NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(10, -1, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
+                });
             }
-            // CLT Network Team change:
-            NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(10, -1, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
-            });
+
         }
 
         // Despawn the user object upon disconnection

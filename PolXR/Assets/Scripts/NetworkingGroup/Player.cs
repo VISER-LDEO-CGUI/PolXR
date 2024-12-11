@@ -114,6 +114,11 @@ public class Player : NetworkBehaviour
         }
 
         _messages.text += message;
-        ChangeDEM();
+        surfaceDEM = GameObject.Find("MEASURES_NSIDC-0715-002");
+        GameObject DEM = GameObject.Find("DEMs(Clone)");
+        NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
+        DEMController.toggle();
+
+        // ChangeDEM();
     }
 }
