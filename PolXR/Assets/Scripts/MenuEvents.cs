@@ -549,6 +549,7 @@ public class MenuEvents : NetworkBehaviour
     {
         //GameObject targetDem = DEMs.Find(name).gameObject;
         //targetDem.SetActive(!targetDem.activeSelf);
+        // Working!!! Need to seperate them into two.
         Debug.LogWarning("demtoggle called");
         //if (Object.HasInputAuthority)
         //{
