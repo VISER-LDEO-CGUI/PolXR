@@ -233,18 +233,24 @@ namespace Fusion.Addons.ConnectionManagerAddon
         {
             var data = new NetworkInputData();
 
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.W)) {
                 data.direction += Vector3.forward;
-
-            if (Input.GetKey(KeyCode.S))
+                Debug.Log("going forward");
+            }
+            if (Input.GetKey(KeyCode.K)) {
                 data.direction += Vector3.back;
+                Debug.Log("going backward");
+            }
 
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.J)) {
                 data.direction += Vector3.left;
+                Debug.Log("going left");
+            }
 
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.L)) { 
                 data.direction += Vector3.right;
-
+                Debug.Log("going right");
+            }
             input.Set(data);
         }
         #endregion
