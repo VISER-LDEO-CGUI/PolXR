@@ -110,7 +110,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.2.0",
+      "version": "2.5.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -131,7 +131,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.27",
+      "version": "3.0.34",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -179,7 +179,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.recorder": {
-      "version": "4.0.2",
+      "version": "4.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -215,7 +215,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.6",
+      "version": "3.0.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -224,7 +224,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.6.4",
+      "version": "1.7.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -320,7 +320,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.oculus": {
-      "version": "4.1.2",
+      "version": "4.4.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -329,7 +329,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.openxr": {
-      "version": "1.10.0",
+      "version": "1.13.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {

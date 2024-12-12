@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class StudySceneManager : MonoBehaviour
 {
     public Transform radargramContainer;
+    public GameObject backToGreenland;
     void Start()
     {
         //retrieve list of radargrams from singleton
@@ -28,5 +30,10 @@ public class StudySceneManager : MonoBehaviour
             radargram.transform.localScale = Vector3.one;
             radargram.SetActive(true);
         }
+    }
+
+    public void BackToGreenland()
+    {
+        SceneManager.LoadSceneAsync("greenland");
     }
 }
