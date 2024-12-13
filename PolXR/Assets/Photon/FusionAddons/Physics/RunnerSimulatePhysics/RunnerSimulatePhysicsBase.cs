@@ -5,39 +5,19 @@ using UnityEngine;
 
 namespace Fusion.Addons.Physics {
   
-  /// <summary>
-  /// Base class for <see cref="RunnerSimulatePhysics3D"/> and <see cref="RunnerSimulatePhysics2D"/>;
-  /// </summary>
   public abstract class RunnerSimulatePhysicsBase: SimulationBehaviour, IBeforeTick  {
     
-    /// <summary>
-    /// Stored original Physics setting auto-simulate setting, used to restore Unity settings when Fusion runners are shutdown.
-    /// </summary>
     [StaticField(StaticFieldResetMode.None)]
     protected static PhysicsTimings _physicsAutoSimRestore;
     
-    /// <summary>
-    /// Tracked number of started NetworkRunners. Used to determine when last Runner has stopped,
-    /// and original Unity physics settings should be restored.
-    /// </summary>
     [StaticField(StaticFieldResetMode.None)]
     private static int _enabledRunnersCount;
     
     // Inspector logic (Used by our WarnIf and DrawIf attributes)
+    protected bool ShowForwardOnly        => _physicsTiming    == PhysicsTimings.FixedUpdateNetwork;
+    protected bool ShowMultiplier         => _physicsAuthority != PhysicsAuthorities.Unity;
+    protected bool WarnAutoSyncTransforms => AutoSyncTransforms && _physicsAuthority != PhysicsAuthorities.Unity && _physicsTiming != PhysicsTimings.Update;
     
-    /// <summary>
-    /// Used by Fusion inspector UI.
-    /// </summary>
-    internal bool ShowForwardOnly => _physicsTiming == PhysicsTimings.FixedUpdateNetwork;
-    /// <summary>
-    /// Used by Fusion inspector UI.
-    /// </summary>
-    internal bool ShowMultiplier => _physicsAuthority != PhysicsAuthorities.Unity;
-    /// <summary>
-    /// Used by Fusion inspector UI.
-    /// </summary>
-    internal bool WarnAutoSyncTransforms => AutoSyncTransforms && _physicsAuthority != PhysicsAuthorities.Unity && _physicsTiming != PhysicsTimings.Update;
-
     /// <summary>
     /// Indicates whether Unity or Fusion should handle Physics.Simulate() calls.
     /// When set to Auto (default), this will pick the most appropriate setting for the Game Mode and Peer Mode settings.
@@ -45,11 +25,6 @@ namespace Fusion.Addons.Physics {
     [InlineHelp]
     [SerializeField]
     protected PhysicsAuthorities _physicsAuthority = PhysicsAuthorities.Fusion;
-    /// <summary>
-    /// Public getter of the <see cref="_physicsAuthority"/> value.
-    /// Indicates whether Unity or Fusion should handle Physics.Simulate() calls.
-    /// When set to Auto (default), this will pick the most appropriate setting for the Game Mode and Peer Mode settings.
-    /// </summary>
     public    PhysicsAuthorities PhysicsAuthority => _physicsAuthority;
     
     /// <summary>
@@ -66,10 +41,6 @@ namespace Fusion.Addons.Physics {
       AsBox = true
     )]
     protected PhysicsTimings _physicsTiming = PhysicsTimings.FixedUpdateNetwork;
-    /// <summary>
-    /// Public getter of the <see cref="_physicsTiming"/> value.
-    /// Indicates which timing segment should be used for calling Physics.Simulate().
-    /// </summary>
     public    PhysicsTimings PhysicsTiming => _physicsTiming;
     
     /// <summary>
@@ -123,23 +94,10 @@ namespace Fusion.Addons.Physics {
       get => Runner.DeltaTime;
     }
 
-    /// <summary>
-    /// Abstracted get/set for Unity's Physics auto-sync transforms setting, for the applicable 3d/2d physics.
-    /// </summary>
-    protected abstract bool AutoSyncTransforms { get; set; }
-    /// <summary>
-    /// Abstracted getter for Unity's Physics physics mode setting, for the applicable 3d/2d physics.
-    /// </summary>
-    protected abstract PhysicsTimings UnityPhysicsMode { get; }
-    /// <summary>
-    /// Sets the auto-simulate setting for the associated Physics engine.
-    /// If the setting is not currently overridden, the current value of the setting for the physics engine is recorded
-    /// to allow for restoration later with the <see cref="RestoreAutoSimulate"/> method.
-    /// </summary>
+    protected abstract bool           AutoSyncTransforms      { get; set; }
+    protected abstract PhysicsTimings UnityPhysicsPhysicsMode { get; }
+    
     protected abstract void OverrideAutoSimulate(bool enabled);
-    /// <summary>
-    /// Restore sauto-simulate setting of the associated physics engine to its original value prior to any <see cref="OverrideAutoSimulate"/> method calls.
-    /// </summary>
     protected abstract void RestoreAutoSimulate();
     
     #region Simulation Callbacks
@@ -179,15 +137,7 @@ namespace Fusion.Addons.Physics {
     
 #endregion
 
-    /// <summary>
-    /// Method which calls simulate() for the associated Unity physics engine,
-    /// for the primary physics scene of the associated <see cref="NetworkRunner"/>.
-    /// </summary>
     protected abstract void SimulatePrimaryScene(    float deltaTime);
-    /// <summary>
-    /// Method which calls simulate() for the associated Unity physics engine,
-    /// for any additional physics scenes of the associated <see cref="NetworkRunner"/>.
-    /// </summary>
     protected abstract void SimulateAdditionalScenes(float deltaTime, bool forwardOnly);
     
 #if UNITY_EDITOR
@@ -201,9 +151,6 @@ namespace Fusion.Addons.Physics {
 
     private bool _isInitialized;
 
-    /// <summary>
-    /// Initialization code that is run on the first execution of <see cref="FixedUpdateNetwork"/>.
-    /// </summary>
     protected virtual void Startup() {
       // Resolve 'Auto" to give Unity or Fusion control of Physics.Simulate
       // Should let Unity handle Physics if running Single-Peer, and in a valid Timing that Unity can Handle.
@@ -230,9 +177,6 @@ namespace Fusion.Addons.Physics {
       _isInitialized = true;
     }
     
-    /// <summary>
-    /// Shutdown code executed when associated <see cref="NetworkRunner"/> shuts down.
-    /// </summary>
     protected virtual void Shutdown() {
 
       // When the last Runner shuts down, restore Physics.AutoSimulate
@@ -249,16 +193,13 @@ namespace Fusion.Addons.Physics {
       if (_physicsTiming != PhysicsTimings.Update) { return; } 
       
       // if Unity is currently auto-simulating - Fusion should not.
-      if (UnityPhysicsMode != PhysicsTimings.Script) { return; }
+      if (UnityPhysicsPhysicsMode != PhysicsTimings.Script) { return; }
       
       var deltaTime = Time.deltaTime * DeltaTimeMultiplier;
       // Debug.LogWarning($"Update Sim {deltaTime}");
       SimulationExecute(deltaTime, true);
     }
     
-    /// <summary>
-    /// Unity FixedUpdate callback.
-    /// </summary>
     public void FixedUpdate() {
       
       if (_isInitialized == false) { return; }
@@ -274,13 +215,12 @@ namespace Fusion.Addons.Physics {
       }
       
       // if Unity is currently auto-simulating - Fusion should not.
-      if (UnityPhysicsMode != PhysicsTimings.Script) { return; }
+      if (UnityPhysicsPhysicsMode != PhysicsTimings.Script) { return; }
       
       var deltaTime = Time.fixedDeltaTime * DeltaTimeMultiplier;
       SimulationExecute(deltaTime, true);
     }
 
-    /// <inheritdoc/>
     public override void FixedUpdateNetwork() {
       // We have no Spawned(), so initializing on first FUN
       if (_isInitialized == false) {
@@ -307,7 +247,7 @@ namespace Fusion.Addons.Physics {
       if (_physicsTiming != PhysicsTimings.FixedUpdateNetwork) { return; }
       
       // if Unity is currently auto-simulating - Fusion should not.
-      if (UnityPhysicsMode != PhysicsTimings.Script) { return; }
+      if (UnityPhysicsPhysicsMode != PhysicsTimings.Script) { return; }
 
       var  deltaTime = PhysicsSimulationDeltaTime * DeltaTimeMultiplier;
       bool isForward = Runner.IsForward;
@@ -328,13 +268,10 @@ namespace Fusion.Addons.Physics {
       SimulateAdditionalScenes(deltaTime, isForward);
     }
     
-    void IBeforeTick.BeforeTick() {
+    public void BeforeTick() {
       HasSimulatedThisTick = false;
     }
 
-    /// <summary>
-    /// Executes the simulation of primary and secondary physics scenes, and triggers the associated callback interfaces.
-    /// </summary>
     protected virtual void DoSimulatePrimaryScene(float deltaTime) {
 
       while (_onBeforeSimulateCallbacks.Count > 0) {

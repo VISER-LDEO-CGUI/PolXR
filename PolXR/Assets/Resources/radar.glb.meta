@@ -11,15 +11,16 @@ ScriptedImporter:
   editorImportSettings:
     generateSecondaryUVSet: 0
   importSettings:
-    nodeNameMethod: 0
-    animationMethod: 0
-    generateMipMaps: 0
-    defaultMinFilterMode: 0
-    defaultMagFilterMode: 0
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
     anisotropicFilterLevel: 1
   instantiationSettings:
     mask: -1
-    layer: 15
+    layer: 0
     skinUpdateWhenOffscreen: 1
     lightIntensityFactor: 1
     sceneObjectCreation: 2

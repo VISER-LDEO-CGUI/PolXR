@@ -2,91 +2,46 @@ using UnityEngine;
 
 namespace Fusion.Addons.Physics
 {
-  /// <summary>
-  /// Abstract base class for NetworkRigidbody3D and NetworkRigidbody2D.
-  /// </summary>
   public abstract partial class NetworkRigidbodyBase {
     /// <summary>
-    /// Get and Set the associated Rigidbody or Rigidbody2D position value.
-    /// Used by the generic <see cref="NetworkRigidbody{RBType,PhysicsSimType}"/> base class.
+    /// The rigidbody position
     /// </summary>
     public abstract Vector3    RBPosition    { get; set; }
     /// <summary>
-    /// Get and Set the associated Rigidbody or Rigidbody2D rotation value.
-    /// Used by the generic <see cref="NetworkRigidbody{RBType,PhysicsSimType}"/> base class.
+    /// The rigidbody rotation
     /// </summary>
     public abstract Quaternion RBRotation    { get; set; }
     /// <summary>
-    /// Get and Set the associated Rigidbody or Rigidbody2D isKinematic bool value.
-    /// Used by the generic <see cref="NetworkRigidbody{RBType,PhysicsSimType}"/> base class.
+    /// Signals if the rigidbody is kinematic
     /// </summary>
     public abstract bool       RBIsKinematic { get; set; }
   }
 
-  /// <summary>
-  /// Abstract base class for NetworkRigidbody3D and NetworkRigidbody2D.
-  /// </summary>
   public abstract partial class NetworkRigidbody<RBType, PhysicsSimType> : IBeforeAllTicks, IAfterTick {
 
     // PhysX/Box2D abstractions
     
-    /// <summary>
-    /// Abstracted method for applying position and rotation values to the passed Rigidbody or Rigidbody2D.
-    /// </summary>
     protected abstract void ApplyRBPositionRotation(RBType rb, Vector3 pos, Quaternion rot);
-    /// <summary>
-    /// Abstracted method for capturing position and rotation values from the passed Rigidbody or Rigidbody2D
-    /// to the <see cref="NetworkRBData"/> networked property.
-    /// </summary>
+    
     protected abstract void CaptureRBPositionRotation(RBType rb, ref NetworkRBData data);
-    /// <summary>
-    /// Abstracted method for capturing velocity and other values from the passed Rigidbody or Rigidbody2D
-    /// to the <see cref="NetworkRBData"/> networked property.
-    /// </summary>
     protected abstract void CaptureExtras(RBType             rb, ref NetworkRBData data);
-    /// <summary>
-    /// Abstracted method for applying velocity and other additional values to the passed Rigidbody or Rigidbody2D
-    /// from the <see cref="NetworkRBData"/> networked property.
-    /// </summary>
     protected abstract void ApplyExtras(RBType               rb, ref NetworkRBData data);
-    /// <summary>
-    /// Abstracted method for composing <see cref="NetworkRigidbodyFlags"/> from the passed Rigidbody/Rigidbody2D state.
-    /// </summary>
+
     protected abstract NetworkRigidbodyFlags GetRBFlags(RBType rb);
-    /// <summary>
-    /// Abstracted method for getting the passed Rigidbody/Rigidbody2D kinematic state.
-    /// </summary>
+    
     protected abstract bool GetRBIsKinematic(RBType rb);
-    /// <summary>
-    /// Abstracted method for setting the passed Rigidbody/Rigidbody2D kinematic state.
-    /// </summary>
     protected abstract void SetRBIsKinematic(RBType rb, bool kinematic);
-    /// <summary>
-    /// Abstracted method for getting the passed Rigidbody/Rigidbody2D axis constraints.
-    /// </summary>
     protected abstract int  GetRBConstraints(RBType rb);
-    /// <summary>
-    /// Abstracted method for setting the passed Rigidbody/Rigidbody2D axis constraints.
-    /// </summary>
     protected abstract void SetRBConstraints(RBType rb, int constraints);
-    /// <summary>
-    /// Abstracted method for getting the passed Rigidbody/Rigidbody2D sleep state.
-    /// </summary>
+    
     protected abstract bool IsRBSleeping(RBType rb);
-    /// <summary>
-    /// Abstracted method for forcing the passed Rigidbody/Rigidbody2D to sleep.
-    /// </summary>
     protected abstract void ForceRBSleep(RBType rb);
-    /// <summary>
-    /// Abstracted method for forcing the passed Rigidbody/Rigidbody2D to wake.
-    /// </summary>
     protected abstract void ForceRBWake( RBType rb);
     
     // Main NRB logic
 
     private int _remainingSimulationsCount;
     
-    /// <inheritdoc/>
     void IBeforeAllTicks.BeforeAllTicks(bool resimulation, int tickCount) {
 
       // Capture the number of ticks about to be simulated.
@@ -109,8 +64,8 @@ namespace Fusion.Addons.Physics
       }
     }
 
-    // Capture simulation results for State Authority's outgoing updates, and for interpolation.
-    void IAfterTick.AfterTick() {
+    // Simulation results for State Authority outgoing updates, and for interpolation.
+    public void AfterTick() {
 
       // Never capture more than the last two ticks of a complete simulation loop
       // Interpolation will only ever need the last two.
@@ -202,11 +157,11 @@ namespace Fusion.Addons.Physics
       } else {
         CaptureRBPositionRotation(rb, ref Data);
         
-        // Only capture extras (velocity, etc) on the State Authority or if there is client prediction.
-        if (!captureTRSPOnly) {
-          if (_clientPrediction || Object.HasStateAuthority) {
-            CaptureExtras(rb, ref Data);
-          }
+        // We don't need to store/network any physics info if there is no client prediction...
+        // UNLESS we need to rewind the root transform because it is being used for interpolation.
+        // then it is needed for the StateAuthority in OnBeforeAllTicks after Render.
+        if (!captureTRSPOnly && (_clientPrediction || (ReferenceEquals(_interpolationTarget, null) && Object.HasStateAuthority))) {
+          CaptureExtras(rb, ref Data);
         }
       }
 
@@ -288,7 +243,6 @@ namespace Fusion.Addons.Physics
       var networkedIsSleeping  = (flags & NetworkRigidbodyFlags.IsSleeping)  != 0;
       var networkedIsKinematic = (flags & NetworkRigidbodyFlags.IsKinematic) != 0;
       var currentIsSleeping    = IsRBSleeping(rb);
-      var rootIsDirty          = _rootIsDirtyFromInterpolation;
       
       // If the State Authority is asleep, it will have valid uncompressed pos/rot values.
       if (networkedIsSleeping) {
@@ -301,7 +255,7 @@ namespace Fusion.Addons.Physics
             
       // Both local and networked state are sleeping and in agreement - avoid waking the RB locally.
       // This test of position and rotation can possibly be removed by developers without consequence for many use cases.
-      bool avoidWaking = !rootIsDirty && currentIsSleeping && networkedIsSleeping && tr.localPosition == pos && tr.localRotation == rot;
+      bool avoidWaking = !_rootIsDirtyFromInterpolation && currentIsSleeping && networkedIsSleeping && tr.localPosition == pos && tr.localRotation == rot;
       
       if (networkedIsKinematic != GetRBIsKinematic(rb)) {
         SetRBIsKinematic(rb, networkedIsKinematic);;
@@ -310,8 +264,8 @@ namespace Fusion.Addons.Physics
       // Apply position and rotation
       if (avoidWaking == false) {
 
-        // Push state to transform always if kinematic, parented, or if the transform was dirtied by interpolation
-        if (networkedIsKinematic || rootIsDirty || !syncParent || isParented) {
+        // Push state to transform always if parented, and if the transform was dirtied by interpolation
+        if (_rootIsDirtyFromInterpolation || !syncParent || isParented) {
           if (useWorldSpace) {
             tr.SetPositionAndRotation(pos, rot);
           } else {

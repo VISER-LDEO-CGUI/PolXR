@@ -28,11 +28,6 @@
             "name": "com.unity.addressables",
             "expression": "1.20",
             "define": "FUSION_ENABLE_ADDRESSABLES_LOCAL_PHYSICS"
-        },
-        {
-            "name": "com.unity.multiplayer.playmode",
-            "expression": "0.6",
-            "define": "FUSION_HAS_MPPM"
         }
     ],
     "noEngineReferences": false

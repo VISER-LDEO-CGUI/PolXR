@@ -23,7 +23,6 @@ PluginImporter:
         Exclude PS4: 0
         Exclude PS5: 0
         Exclude Switch: 0
-        Exclude VisionOS: 0
         Exclude WebGL: 1
         Exclude Win: 1
         Exclude Win64: 1
@@ -35,7 +34,6 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        AndroidSharedLibraryType: Executable
         CPU: ARMv7
   - first:
       Any: 
@@ -89,15 +87,6 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: None
-  - first:
-      VisionOS: VisionOS
-    second:
-      enabled: 1
-      settings:
-        AddToEmbeddedBinaries: false
-        CPU: ARM64
-        CompileFlags: 
-        FrameworkDependencies: 
   - first:
       Windows Store Apps: WindowsStoreApps
     second:

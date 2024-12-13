@@ -14,6 +14,7 @@ ScriptedImporter:
     nodeNameMethod: 1
     animationMethod: 2
     generateMipMaps: 1
+    texturesReadable: 0
     defaultMinFilterMode: 9729
     defaultMagFilterMode: 9729
     anisotropicFilterLevel: 1

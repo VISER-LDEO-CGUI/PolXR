@@ -158,7 +158,7 @@ namespace Fusion.Editor {
 
       GUILayout.Space(15);
 
-      DrawButtonAction(Icon.Community, Constants.DiscordHeader, Constants.DiscordText, callback: OpenURL(Constants.UrlDashboardProfile));
+      DrawButtonAction(Icon.Community, Constants.DiscordHeader, Constants.DiscordText, callback: OpenURL(Constants.UrlDiscordGeneral));
       DrawButtonAction(Icon.Documentation, Constants.DocumentationHeader, Constants.DocumentationText, callback: OpenURL(Constants.UrlFusionDocsOnline));
     }
 
@@ -177,11 +177,16 @@ namespace Fusion.Editor {
           GUILayout.Label("Fusion App Id:", GUILayout.Width(120));
           var icon = IsAppIdValid() ? CorrectIcon : EditorGUIUtility.FindTexture("console.erroricon.sml");
           GUILayout.Label(icon, GUILayout.Width(24), GUILayout.Height(24));
-          var editedAppId = EditorGUILayout.TextField("", realtimeAppId, FusionHubSkin.textField, GUILayout.Height(24));
-          
-          // Check for changes and validate the AppId
-          if (EditorGUI.EndChangeCheck() && Guid.TryParse(editedAppId, out _)) {
-            // Update the AppId
+          var editedAppId = EditorGUILayout.DelayedTextField("", realtimeAppId, FusionHubSkin.textField, GUILayout.Height(24));
+          if (EditorGUI.EndChangeCheck()) {
+            if (Guid.TryParse(editedAppId, out _)) {
+              var currentAppId = realtimeSettings.AppSettings.AppIdFusion;
+
+              if (string.IsNullOrEmpty(currentAppId) || currentAppId.Equals(editedAppId) == false) {
+                VSAttribution.SendAttributionEvent(editedAppId);
+              }
+            }
+            
             realtimeSettings.AppSettings.AppIdFusion = editedAppId;
             EditorUtility.SetDirty(realtimeSettings);
             AssetDatabase.SaveAssets();

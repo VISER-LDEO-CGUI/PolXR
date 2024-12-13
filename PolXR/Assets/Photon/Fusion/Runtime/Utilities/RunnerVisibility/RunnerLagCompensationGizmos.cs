@@ -55,7 +55,7 @@ namespace Fusion
               Gizmos.DrawWireSphere(colliderDrawInfo.Offset, colliderDrawInfo.Radius);
               break;
             case HitboxTypes.Capsule:
-              LagCompensationDraw.GizmosDrawWireCapsule(colliderDrawInfo.CapsuleTopCenter, colliderDrawInfo.CapsuleBottomCenter, colliderDrawInfo.Radius);
+              LagCompensationDraw.GizmosDrawWireCapsule(Vector3.up * colliderDrawInfo.CapsuleHeight, Vector3.down * colliderDrawInfo.CapsuleHeight, colliderDrawInfo.Radius);
               break;
             default:
               Debug.LogWarning($"HitboxType {colliderDrawInfo.Type} not supported to draw.");

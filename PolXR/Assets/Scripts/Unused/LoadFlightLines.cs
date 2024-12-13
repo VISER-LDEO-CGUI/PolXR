@@ -13,7 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using GLTFast;
-using Oculus.Platform;
+//using Oculus.Platform;
 
 public class LoadFlightLines : MonoBehaviour
 {

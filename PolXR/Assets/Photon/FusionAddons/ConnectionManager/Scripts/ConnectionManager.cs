@@ -14,7 +14,11 @@ namespace Fusion.Addons.ConnectionManagerAddon
      * - connection launch (either with room name or matchmaking session properties)
      * - user representation spawn on connection
      **/
+#if XRSHARED_ADDON_AVAILABLE
+    public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks, Fusion.XR.Shared.IUserSpawner
+#else
     public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
+#endif
     {
         [System.Flags]
         public enum ConnectionCriterias
@@ -51,6 +55,13 @@ namespace Fusion.Addons.ConnectionManagerAddon
         [Header("Local user spawner")]
         public NetworkObject userPrefab;
 
+#region IUserSpawner
+        public NetworkObject UserPrefab { 
+            get => userPrefab;
+            set => userPrefab = value;
+        }
+#endregion
+
         [Header("Event")]
         public UnityEvent onWillConnect = new UnityEvent();
 
@@ -75,6 +86,11 @@ namespace Fusion.Addons.ConnectionManagerAddon
 
         private async void Start()
         {
+            if (runner && new List<NetworkRunner>(GetComponentsInParent<NetworkRunner>()).Contains(runner) == false)
+            {
+                // The connectionManager is not in the hierarchy of the runner, so it has not been automatically subscribed to its callbacks
+                runner.AddCallbacks(this);
+            }
             // Launch the connection at start
             if (connectOnStart) await Connect();
         }
@@ -171,7 +187,7 @@ namespace Fusion.Addons.ConnectionManagerAddon
             }
         }
 
-        #region Player spawn
+#region Player spawn
         public void OnPlayerJoinedSharedMode(NetworkRunner runner, PlayerRef player)
         {
             if (player == runner.LocalPlayer && userPrefab != null)
@@ -208,12 +224,12 @@ namespace Fusion.Addons.ConnectionManagerAddon
             }
         }
 
-        #endregion
+#endregion
 
-        #region INetworkRunnerCallbacks
+#region INetworkRunnerCallbacks
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
-            if(runner.Topology == Topologies.ClientServer)
+            if (runner.Topology == Topologies.ClientServer)
             {
                 OnPlayerJoinedHostMode(runner, player);
             }
@@ -228,9 +244,9 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 OnPlayerLeftHostMode(runner, player);
             }
         }
-        #endregion
+#endregion
 
-        #region INetworkRunnerCallbacks (debug log only)
+#region INetworkRunnerCallbacks (debug log only)
         public void OnConnectedToServer(NetworkRunner runner) {
             Debug.Log("OnConnectedToServer");
 
@@ -245,9 +261,9 @@ namespace Fusion.Addons.ConnectionManagerAddon
         public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) {
             Debug.Log("OnConnectFailed: " + reason);
         }
-        #endregion
+#endregion
 
-        #region Unused INetworkRunnerCallbacks 
+#region Unused INetworkRunnerCallbacks 
 
         public void OnInput(NetworkRunner runner, NetworkInput input) { }
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
@@ -256,14 +272,13 @@ namespace Fusion.Addons.ConnectionManagerAddon
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
         public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
         public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
-        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
+        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey reliableKey, ArraySegment<byte> data){}
+        public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey reliableKey, float progress){}
         public void OnSceneLoadDone(NetworkRunner runner) { }
         public void OnSceneLoadStart(NetworkRunner runner) { }
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
         public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
-        public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
-        #endregion
+#endregion
     }
 
 }

@@ -215,11 +215,7 @@ namespace Fusion {
           }
 
           if (gameObject.scene != MultiPeerScene) {
-            gameObject.transform.SetParent(null, true);
             SceneManager.MoveGameObjectToScene(gameObject, MultiPeerScene);
-            
-            if (Application.isBatchMode == false)
-              Runner.AddVisibilityNodes(gameObject);
           }
           
           gameObject.transform.SetParent(root.transform, true);
