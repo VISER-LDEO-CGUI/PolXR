@@ -15,8 +15,16 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
     {
         // Detect if this is a custom spawn by its high prefabID value we are passing.
         // The Spawn call will need to pass this value instead of a prefab.
-        if (context.PrefabId.RawValue >= CUSTOM_PREFAB_FLAG)
+        Debug.LogWarning("Check condition");
+        if (context.PrefabId.RawValue == CUSTOM_PREFAB_FLAG)
         {
+            BetterStreamingAssets.Initialize();
+            GameObject.Find("RadarImageContainer").GetComponent<LoadFlightLines>().LoadFlightLine("20100324_01");
+            //LoadFlightLine("20100324_01"); // TODO: replace with menu option
+            Debug.Log("Loaded flight line");
+
+
+            Debug.LogWarning("spawn customized prefab!");
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var no = go.AddComponent<NetworkObject>();
             go.AddComponent<NetworkTransform>();
