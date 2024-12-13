@@ -1,9 +1,10 @@
-﻿using Microsoft.MixedReality.Toolkit.Input;
+﻿using Fusion;
+using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RadarEvents : MonoBehaviour
+public class RadarEvents : NetworkBehaviour
 {
 
     // Pop up menu and the mark object.

@@ -15,7 +15,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
     {
         // Detect if this is a custom spawn by its high prefabID value we are passing.
         // The Spawn call will need to pass this value instead of a prefab.
-        if (context.PrefabId.RawValue == CUSTOM_PREFAB_FLAG)
+        if (context.PrefabId.RawValue >= CUSTOM_PREFAB_FLAG)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var no = go.AddComponent<NetworkObject>();
