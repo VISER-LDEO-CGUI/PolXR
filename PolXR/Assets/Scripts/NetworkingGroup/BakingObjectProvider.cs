@@ -18,10 +18,12 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
         Debug.LogWarning("Check condition");
         if (context.PrefabId.RawValue == CUSTOM_PREFAB_FLAG)
         {
-            BetterStreamingAssets.Initialize();
-            GameObject.Find("RadarImageContainer").GetComponent<LoadFlightLines>().LoadFlightLine("20100324_01");
-            //LoadFlightLine("20100324_01"); // TODO: replace with menu option
-            Debug.Log("Loaded flight line");
+            //BetterStreamingAssets.Initialize();
+            //GameObject.Find("RadarImageContainer").GetComponent<LoadFlightLines>().LoadFlightLine("20100324_01");
+            ////LoadFlightLine("20100324_01"); // TODO: replace with menu option
+            //Debug.Log("Loaded flight line");
+
+            // Copy all codes from loadflightline to here
 
 
             Debug.LogWarning("spawn customized prefab!");
