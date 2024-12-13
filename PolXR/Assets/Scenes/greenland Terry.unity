@@ -5283,6 +5283,7 @@ MonoBehaviour:
   NestedObjects:
   - {fileID: 167759650}
   - {fileID: 469521232}
+  - {fileID: 919132149203529373}
   - {fileID: 919132149203529374}
   - {fileID: 1083601302}
   - {fileID: 9189260757652488644}
@@ -18337,6 +18338,7 @@ MonoBehaviour:
   ObjectInterest: 1
   Flags: 262145
   NestedObjects:
+  - {fileID: 919132149203529373}
   - {fileID: 919132149203529374}
   - {fileID: 1083601302}
   - {fileID: 9189260757652488644}
@@ -48347,10 +48349,11 @@ MonoBehaviour:
   actualSessionProperties: []
   DEMsPrefab: {fileID: 3982057875640392390, guid: e02f885a537e0e84694dfd15564b4995,
     type: 3}
-  Container: {fileID: 0}
+  RadarImageContainer: {fileID: 919132149203529374}
+  Container: {fileID: 543450653659935782}
   DEM: {fileID: 0}
-  gridLine: {fileID: 0}
-  MarkObj3D: {fileID: 0}
+  gridLine: {fileID: 2049385536}
+  MarkObj3D: {fileID: 932958961}
 --- !u!4 &1449092983
 Transform:
   m_ObjectHideFlags: 0
@@ -68137,15 +68140,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132149203529372}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f1c0233c0c6f80449ad33ef511c8d40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SortKey: 3357806857
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours: []
   Container: {fileID: 543450653659935782}
   DEM: {fileID: 0}
   gridLine: {fileID: 2049385536}
   MarkObj3D: {fileID: 932958961}
+  runner: {fileID: 1449092981}
 --- !u!114 &919132149203529374
 MonoBehaviour:
   m_ObjectHideFlags: 0
