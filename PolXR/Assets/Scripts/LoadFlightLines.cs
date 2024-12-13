@@ -17,7 +17,7 @@ using Oculus.Platform;
 using Fusion.XR.Host.Grabbing;
 using Fusion;
 
-public class LoadFlightLines : MonoBehaviour
+public class LoadFlightLines : NetworkBehaviour
 {
     public Transform Container;
     //public GameObject radarMark;
@@ -25,6 +25,8 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject gridLine;
 
     public GameObject MarkObj3D;
+
+    public NetworkRunner runner;
     public void Start()
     {
         BetterStreamingAssets.Initialize();
@@ -36,16 +38,21 @@ public class LoadFlightLines : MonoBehaviour
     // }
     public async void LoadFlightLine(string line_id)
     {
+
         // // Load the data // old workflow loading from resources
         //UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
-        Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
+        Dictionary<string, GameObject> polylines = createPolylineObjects("20100324_01");
+        Debug.LogWarning("Passed createPolylinObjects");
         //GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
+
 
         // Load the glTF asset from streaming assets folder
         byte[] data = BetterStreamingAssets.ReadAllBytes("radar.glb");
 
         var gltf = new GltfImport();
+        Debug.LogWarning("Try to load data");
         var success = await gltf.Load(data);
+        Debug.LogWarning("Loaded data");
         UnityEngine.Object[] meshes;
 
         if (success)
@@ -58,6 +65,11 @@ public class LoadFlightLines : MonoBehaviour
             Debug.LogError("Failed to load glTF asset");
             return;
         }
+
+        NetworkPrefabId parentID = new NetworkPrefabId();
+        NetworkPrefabId radargramID = new NetworkPrefabId();
+
+        Debug.LogWarning("mesh length" + meshes.Length);
 
         for (int i = 0; i < meshes.Length; i++)
         {
@@ -85,23 +97,53 @@ public class LoadFlightLines : MonoBehaviour
 
             // Create a parent for all the new objects to associate with RadarEvents3D
             string parentName = "#" + key; //"GRP_" + meshForward.name;
-            GameObject parent = new GameObject(parentName);
+            // change the parent to parentLocal to distinguish
+            GameObject parentLocal = new GameObject(parentName);
+            Debug.LogWarning("parent local name" + parentLocal.name);
+            parentLocal.AddComponent<NetworkObject>();
+
+            // CTL Team Change:
+            parentID.RawValue = 100000;
+            Debug.LogWarning("just before parent spawn");
+            NetworkObject parent = runner.Spawn(parentLocal, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0));
+            //runner.Spawn(parentLocal, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0));
+            //runner.Spawn(parentLocal, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0));
+            parentID.RawValue += 1;
+            Debug.LogWarning("parentID RawValue" + parentID.RawValue);
+
+
+
             parent.transform.SetParent(Container);
-            RadarEvents3D script = parent.AddComponent<RadarEvents3D>();
+            // Single player version
+            // RadarEvents3D script = parent.AddComponent<RadarEvents3D>();
+            // Photon uses AddBehavior
+            RadarEvents3D script = parent.AddBehaviour<RadarEvents3D>();
             parent.transform.localScale = new Vector3(1, 1, 1);
             parent.transform.localPosition = new Vector3(0, 0, 0);
             parent.transform.rotation = Quaternion.identity;
-            BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
+            // Commented out Reason: Photon can't use this since BoundsControl is MonoBehavior only
+            // BoundsControl parentBoundsControl = parent.AddBehaviour<BoundsControl>();
 
+            // Commented out Reason: Photon can't use this since BoundsControl is MonoBehavior only
             //turns off gizmos and bounding boxes
-            parentBoundsControl.LinksConfig.ShowWireFrame = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-            parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+            //parentBoundsControl.LinksConfig.ShowWireFrame = false;
+            //parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            //parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            //parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+            //parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
 
             // Create a parent to group both radargram objects
-            GameObject radargram = new GameObject("OBJ_" + meshForward.name);
+            GameObject radargramLocal = new GameObject("OBJ_" + meshForward.name);
+            Debug.LogWarning("Radargram Local name" + radargramLocal.name);
+            radargramLocal.AddComponent<NetworkObject>();
+
+            // CTL Team Change:
+            radargramID.RawValue = 200000;
+            NetworkObject radargram = runner.Spawn(radargramLocal, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0));
+            radargramID.RawValue += 1;
+            Debug.LogWarning("RadargramID" + radargramID.RawValue);
+
+
             radargram.transform.localPosition = meshBounds.center;
             // MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
             // radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
@@ -124,51 +166,46 @@ public class LoadFlightLines : MonoBehaviour
             line.transform.rotation = Quaternion.Euler(-90f, 0f, 180f);
 
             // Add the correct Bounds Control so that MRTK knows where the objects are
-            BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
-            boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
+            // Commented out Reason: Photon can't use this since BoundsControl is MonoBehavior only
+            //BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
+            //boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
 
             //turns off gizmos and bounding boxes
-            boundsControl.LinksConfig.ShowWireFrame = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-            boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+            // Commented out Reason: Photon can't use this since BoundsControl is MonoBehavior only
+            //boundsControl.LinksConfig.ShowWireFrame = false;
+            //boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+            //boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+            //boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+            //boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
 
             BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
             boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
             boxCollider.size = meshBounds.size;
-            boundsControl.BoundsOverride = boxCollider;
+            // Commented out Reason: Photon can't use this since BoundsControl is MonoBehavior only
+            // boundsControl.BoundsOverride = boxCollider;
 
+            // Commented out Reason: Photon can't use this since RotationAxisConstraint is MonoBehavior only
             // Constrain the rotation axes
-            RotationAxisConstraint rotationConstraint = radargram.AddComponent<RotationAxisConstraint>();
-            rotationConstraint.ConstraintOnRotation = AxisFlags.XAxis | AxisFlags.ZAxis;
+            // RotationAxisConstraint rotationConstraint = radargram.AddComponent<RotationAxisConstraint>();
+            // rotationConstraint.ConstraintOnRotation = AxisFlags.XAxis | AxisFlags.ZAxis;
 
             // Set the parent's BoxCollider to have the same bounds
             BoxCollider parentCollider = parent.GetComponent<BoxCollider>();
 
             // Add the correct Object Manipulator so users can grab the radargrams
-            radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-            radargram.AddComponent<NearInteractionGrabbable>();
-            Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+            // Commented out Reason: Photon can't use this since MRTK uses MonoBehavior
+            // radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+            // radargram.AddComponent<NearInteractionGrabbable>();
+            // Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
 
-            //// Test if this is the code for generating radargram
-            //// Debug:
-            //Debug.Log("Radargram Test Add Component Network!!");
-            //radargram.AddComponent<NetworkKinematicGrabbable>();
-            //radargram.AddComponent<NetworkObject>();
-            //radargram.AddComponent<KinematicGrabbable>();
-            //radargram.AddComponent<NetworkTransform>();
-            //Debug.Log("Add Component Success!");
-
-
-            objectManipulator.enabled = true;
+            // objectManipulator.enabled = true;
 
             // Link the parent to the menu
             script.Menu = GameObject.Find("Menu");
 
             // Create and place the radar mark for the minimap
             Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
-            //GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
+                                                                                                     //GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
 
             //GameObject markObj3D = Instantiate(MarkObj3D, position, Quaternion.identity, radargram.transform);
             GameObject markObj3D = Instantiate(MarkObj3D, radargram.transform);
@@ -210,14 +247,14 @@ public class LoadFlightLines : MonoBehaviour
                 MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
                 meshRenderer.material = gltfImport.GetMaterial(i);
 
-                // Terry: Adding NetworkObject to all these meshes aka Children of the OBJ
-                // Debug:
-                Debug.Log("Adding NetworkObject to all these meshes.");
-                go.AddComponent<NetworkObject>();
-                go.AddComponent<NetworkKinematicGrabbable>();
-                go.AddComponent<KinematicGrabbable>();
-                go.AddComponent<NetworkTransform>();
-                Debug.Log("Adding component to children success!");
+                //// Terry: Adding NetworkObject to all these meshes aka Children of the OBJ
+                //// Debug:
+                //Debug.Log("Adding NetworkObject to all these meshes.");
+                //go.AddComponent<NetworkObject>();
+                //go.AddComponent<NetworkKinematicGrabbable>();
+                //go.AddComponent<KinematicGrabbable>();
+                //go.AddComponent<NetworkTransform>();
+                //Debug.Log("Adding component to children success!");
 
                 // Rotate the texture 90 degrees to the left
                 // this is basically swapping out the original .glb texture and using new png images instead

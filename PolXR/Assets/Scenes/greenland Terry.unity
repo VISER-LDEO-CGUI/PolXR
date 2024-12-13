@@ -5283,7 +5283,6 @@ MonoBehaviour:
   NestedObjects:
   - {fileID: 167759650}
   - {fileID: 469521232}
-  - {fileID: 919132149203529373}
   - {fileID: 919132149203529374}
   - {fileID: 1083601302}
   - {fileID: 9189260757652488644}
@@ -18338,7 +18337,6 @@ MonoBehaviour:
   ObjectInterest: 1
   Flags: 262145
   NestedObjects:
-  - {fileID: 919132149203529373}
   - {fileID: 919132149203529374}
   - {fileID: 1083601302}
   - {fileID: 9189260757652488644}
@@ -68145,11 +68143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f1c0233c0c6f80449ad33ef511c8d40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 3357806857
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours: []
   Container: {fileID: 543450653659935782}
   DEM: {fileID: 0}
   gridLine: {fileID: 2049385536}
@@ -68172,6 +68165,7 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 919132149203529373}
   - {fileID: 919132149203529375}
 --- !u!114 &919132149203529375
 MonoBehaviour:
