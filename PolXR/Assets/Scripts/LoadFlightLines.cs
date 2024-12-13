@@ -151,14 +151,14 @@ public class LoadFlightLines : MonoBehaviour
             radargram.AddComponent<NearInteractionGrabbable>();
             Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
 
-            // Test if this is the code for generating radargram
-            // Debug:
-            Debug.Log("Radargram Test Add Component Network!!");
-            radargram.AddComponent<NetworkKinematicGrabbable>();
-            radargram.AddComponent<NetworkObject>();
-            radargram.AddComponent<KinematicGrabbable>();
-            radargram.AddComponent<NetworkTransform>();
-            Debug.Log("Add Component Success!");
+            //// Test if this is the code for generating radargram
+            //// Debug:
+            //Debug.Log("Radargram Test Add Component Network!!");
+            //radargram.AddComponent<NetworkKinematicGrabbable>();
+            //radargram.AddComponent<NetworkObject>();
+            //radargram.AddComponent<KinematicGrabbable>();
+            //radargram.AddComponent<NetworkTransform>();
+            //Debug.Log("Add Component Success!");
 
 
             objectManipulator.enabled = true;

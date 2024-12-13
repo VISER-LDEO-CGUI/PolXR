@@ -138,8 +138,19 @@ namespace Fusion.Addons.ConnectionManagerAddon
             if (onWillConnect != null) onWillConnect.Invoke();
 
             // Start or join (depends on gamemode) a session with a specific name
-            var args = new StartGameArgs()
-            {
+            // Original code
+            //var args = new StartGameArgs()
+
+            //{
+            //    GameMode = gameMode,
+            //    Scene = CurrentSceneInfo(),
+            //    SceneManager = sceneManager
+            //};
+
+            // CLT Team Change: Use customized Object Provider instead of fallback to default one
+            var args = new StartGameArgs() 
+            { 
+                ObjectProvider = new BakingObjectProvider(),
                 GameMode = gameMode,
                 Scene = CurrentSceneInfo(),
                 SceneManager = sceneManager
