@@ -410,7 +410,7 @@ PlayerSettings:
   enableCrashReportAPI: 0
   cameraUsageDescription: 
   locationUsageDescription: 
-  microphoneUsageDescription: 
+  microphoneUsageDescription: NA
   bluetoothUsageDescription: 
   macOSTargetOSVersion: 10.13.0
   switchNMETAOverride: 
@@ -660,8 +660,9 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: FUSION_WEAVER;OVR_ANDROID_MRC;MRTK_GLTF_IMPORTER_OFF
-    Standalone: FUSION_WEAVER;MRTK_GLTF_IMPORTER_OFF
+    Android: FUSION_WEAVER;OVR_ANDROID_MRC;MRTK_GLTF_IMPORTER_OFF;USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS
+    Standalone: FUSION_WEAVER;MRTK_GLTF_IMPORTER_OFF;USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS
+    Windows Store Apps: USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
