@@ -2,12 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using System;
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
-//using Microsoft.MixedReality.Toolkit.UI;
-//using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-//using Microsoft.MixedReality.Toolkit.Input;
 
 [System.Serializable]
 public class Centroid
@@ -338,18 +336,21 @@ public class DataLoader : MonoBehaviour
             lineRenderer.startWidth = 0.1f;
             lineRenderer.endWidth = 0.1f;
 
-            // Add a MeshCollider to the LineRenderer
-            AttachBoxColliders(lineObj, rotatedVertices.ToArray());
-
             // Add a click handler
             foreach (Transform child in parentContainer.transform)
             {
-                if (child.name.StartsWith("Data"))
+                if (child.name.StartsWith("Flightline"))
                 {
                     lineObj.AddComponent<XRSimpleInteractable>();
                     break;
                 }
             }
+
+            // Add a MeshCollider to the LineRenderer
+            AttachBoxColliders(lineObj, rotatedVertices.ToArray());
+
+            lineObj.GetComponent<XRSimpleInteractable>().selectEntered.AddListener(TogglePolyline);
+            Debug.Log(lineObj.GetComponent<XRSimpleInteractable>().selectEntered.ToString());
 
             return lineObj;
         }
@@ -358,6 +359,13 @@ public class DataLoader : MonoBehaviour
             Debug.LogWarning($"No vertices found in flightline .obj file: {objPath}");
             return null;
         }
+    }
+    static void TogglePolyline(SelectEnterEventArgs arg0)
+    {
+        IXRSelectInteractable selectedObj = arg0.interactableObject;
+        IXRSelectInteractor iXRInteractorObj = arg0.interactorObject;
+
+        Debug.Log("selected");
     }
 
     private void AttachBoxColliders(GameObject lineObj, Vector3[] vertices)
@@ -379,6 +387,8 @@ public class DataLoader : MonoBehaviour
                 Math.Max(Mathf.Abs(a.y - b.y), 0.2f),
                 Math.Max(Mathf.Abs(a.z - b.z), 0.2f)
             );
+
+            lineObj.GetComponent<XRSimpleInteractable>().colliders.Add(collider);
         }
     }
 
