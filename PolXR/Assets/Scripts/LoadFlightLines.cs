@@ -1,10 +1,5 @@
 using UnityEngine;
 using UnityEngine.XR;
-using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes;
-using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,14 +9,13 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using GLTFast;
 using Oculus.Platform;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class LoadFlightLines : MonoBehaviour
 {
     public Transform Container;
-    //public GameObject radarMark;
     public GameObject DEM;
     public GameObject gridLine;
-
     public GameObject MarkObj3D;
 
     public void Start()
@@ -30,21 +24,16 @@ public class LoadFlightLines : MonoBehaviour
         LoadFlightLine("20100324_01"); // TODO: replace with menu option
         Debug.Log("Loaded flight line");
     }
-    // public class YourCustomInstantiator : GLTFast.IInstantiator {
-    // // Your code here
-    // }
+
     public async void LoadFlightLine(string line_id)
     {
-        // // Load the data // old workflow loading from resources
-        //UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
         Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
-        //GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
 
         // Load the glTF asset from streaming assets folder
         byte[] data = BetterStreamingAssets.ReadAllBytes("radar.glb");
-
         var gltf = new GltfImport();
         var success = await gltf.Load(data);
+        
         UnityEngine.Object[] meshes;
 
         if (success)
@@ -66,7 +55,7 @@ public class LoadFlightLines : MonoBehaviour
             GameObject meshBackward = meshBoth[1];
             Bounds meshBounds = meshForward.GetComponent<Renderer>().bounds; // cuz we need bounds in world coords
 
-            // Select and name line
+            // get corresponding polyline
             string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
             GameObject line;
             try
@@ -90,66 +79,72 @@ public class LoadFlightLines : MonoBehaviour
             parent.transform.localScale = new Vector3(1, 1, 1);
             parent.transform.localPosition = new Vector3(0, 0, 0);
             parent.transform.rotation = Quaternion.identity;
-            BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
 
-            //turns off gizmos and bounding boxes
-            parentBoundsControl.LinksConfig.ShowWireFrame = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-            parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+            RadarEvents3D radarEvents = parent.AddComponent<RadarEvents3D>();
 
             // Create a parent to group both radargram objects
             GameObject radargram = new GameObject("OBJ_" + meshForward.name);
-            radargram.transform.localPosition = meshBounds.center;
+            radargram.transform.localPosition = Vector3.zero;
+            radargram.transform.parent = Container;
+
+            GameObject markObj = Instantiate(MarkObj3D, radargram.transform);
+            markObj.transform.localPosition = Vector3.zero;
+            markObj.SetActive(false);
+
             // MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
             // radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
 
             // add mesh colliders to each of the mesh forward and backward
             MeshCollider meshForwardCollider = meshForward.AddComponent<MeshCollider>();
             meshForwardCollider.sharedMesh = meshForward.GetComponent<MeshFilter>().mesh;
+            meshForwardCollider.convex = true;
 
             MeshCollider meshBackwardCollider = meshBackward.AddComponent<MeshCollider>();
             meshBackwardCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
+            meshBackwardCollider.convex = true;
 
-
-            // Organize the children
-            line.transform.parent = parent.transform;
-            radargram.transform.parent = parent.transform;
             meshForward.transform.parent = radargram.transform;
             meshBackward.transform.parent = radargram.transform;
+            radargram.AddComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
+
+            radarEvents.meshForward = meshForward;
+            radarEvents.meshBackward = meshBackward;
+            radarEvents.MarkObj3D = markObj;
+
+            // Organize the children
+            line.transform.parent = radargram.transform;
+            //radargram.transform.parent = parent.transform;
+            //meshForward.transform.parent = radargram.transform;
+            //meshBackward.transform.parent = radargram.transform;
 
             // Place polyline properly in relation to the DEM
             line.transform.rotation = Quaternion.Euler(-90f, 0f, 180f);
 
-            // Add the correct Bounds Control so that MRTK knows where the objects are
-            BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
-            boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
+            BoxCollider radarCollider = radargram.GetComponent<BoxCollider>();
+            if(radarCollider == null)
+            {
+                radarCollider = radargram.AddComponent<BoxCollider>();
+            }
+            radarCollider.center = Vector3.zero;
+            radarCollider.size = meshForward.GetComponent<Renderer>().bounds.size;
+            radarCollider.isTrigger = true;
 
-            //turns off gizmos and bounding boxes
-            boundsControl.LinksConfig.ShowWireFrame = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-            boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
-
-            BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
-            boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
-            boxCollider.size = meshBounds.size;
-            boundsControl.BoundsOverride = boxCollider;
-
-            // Constrain the rotation axes
-            RotationAxisConstraint rotationConstraint = radargram.AddComponent<RotationAxisConstraint>();
-            rotationConstraint.ConstraintOnRotation = AxisFlags.XAxis | AxisFlags.ZAxis;
-
-            // Set the parent's BoxCollider to have the same bounds
-            BoxCollider parentCollider = parent.GetComponent<BoxCollider>();
-
-            // Add the correct Object Manipulator so users can grab the radargrams
-            radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-            radargram.AddComponent<NearInteractionGrabbable>();
-            Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-            objectManipulator.enabled = true;
+            radargram.AddComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
+            UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grab = radargram.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
+            grab.colliders.Clear();
+            
+            Rigidbody rb = radargram.GetComponent<Rigidbody>();
+            if(rb == null) 
+            {
+                rb = radargram.AddComponent<Rigidbody>();
+            }
+            rb.isKinematic = true; 
+            
+            Collider[] childColliders = radargram.GetComponentsInChildren<MeshCollider>();
+            foreach(var c in childColliders)
+            {
+                grab.colliders.Add(c);
+            }
 
             // Link the parent to the menu
             script.Menu = GameObject.Find("Menu");
@@ -210,15 +205,6 @@ public class LoadFlightLines : MonoBehaviour
                 radarimg.Apply();
 
                 meshRenderer.material.mainTexture.filterMode = FilterMode.Bilinear;
-
-                // Rotate texture 90 degrees to the right by adjusting UV coordinates
-                // this is easy and quick but BAD because then line picking doesn't work since the uvs are wrong
-                // Vector2[] uvs = mesh.uv;
-                // for (int j = 0; j < uvs.Length; j++)
-                // {
-                //     uvs[j] = new Vector2(uvs[j].y, 1 - uvs[j].x);
-                // }
-                // mesh.uv = uvs;
 
                 // Set the rendering mode to "Opaque" if the material doesn't contain transparency
                 // This is necessary for the radar to render correctly, otherwise materials in the back

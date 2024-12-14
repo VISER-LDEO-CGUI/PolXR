@@ -14,6 +14,11 @@ scopes = {
 	"last_search.E8DA15E5" = ""
 	"OpenInspectorPreview.E8DA15E5" = "0"
 	"currentGroup.E8DA15E5" = "asset"
+	"picker_window_position_offset.D845A788" = "-403.5;189;320;550"
+	"picker_search_text.D845A788" = "XRI Right"
+	"last_search.D845A788" = "XRI Right"
+	"OpenInspectorPreview.D845A788" = "0"
+	"currentGroup.D845A788" = "all"
 }
 providers = {
 	adb = {
@@ -65,6 +70,11 @@ providers = {
 objectSelectors = {
 }
 recentSearches = [
+	"XRI Right  "
+	"XRI Right Interaction/"
+	"XRI Right I"
+	"XRI Left Interaction/"
+	"XRI Left Interaction/A "
 	"u"
 ]
 searchItemFavorites = [

@@ -5,16 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/antarctica.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/greenland.unity
     guid: 59f633de1da7670498ed579da6db9e97
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/homescreen.unity
     guid: de0cb7e77de81ba42bb5ba8d3c35123a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/StudyScene.unity
     guid: 3b7a8ba725dbf4ddb808ab52a7ee7875
   - enabled: 0
@@ -27,6 +27,8 @@ EditorBuildSettings:
       type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: a8afc796d99006746816c0a0b5f788dd,
       type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: a6b81e30945f243518580381d559d980,
       type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 558ca79e57d7ba84695a32a2019ab572,
