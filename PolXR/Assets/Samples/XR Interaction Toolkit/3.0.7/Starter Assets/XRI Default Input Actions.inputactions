@@ -1035,6 +1035,17 @@
                 },
                 {
                     "name": "",
+                    "id": "293da04f-bf64-447c-9b9f-5a17a756acc6",
+                    "path": "<Mouse>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "49a23327-a116-48c0-8af9-0d2c50c15a88",
                     "path": "<XRController>{LeftHand}/{Grip}",
                     "interactions": "",
@@ -2163,6 +2174,17 @@
                     "name": "",
                     "id": "82f232f1-6246-4d1e-aacc-a7ccc16c76d9",
                     "path": "<HoloLensHand>{RightHand}/squeezePressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f297cb41-1ce9-431e-9ef3-8b2835c5ef52",
+                    "path": "<Mouse>/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
