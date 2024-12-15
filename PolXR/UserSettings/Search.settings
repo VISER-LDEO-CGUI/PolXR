@@ -14,9 +14,9 @@ scopes = {
 	"last_search.E8DA15E5" = ""
 	"OpenInspectorPreview.E8DA15E5" = "0"
 	"currentGroup.E8DA15E5" = "asset"
-	"picker_window_position_offset.D845A788" = "-403;189;320;550"
-	"picker_search_text.D845A788" = "XRI right "
-	"last_search.D845A788" = "XRI right "
+	"picker_window_position_offset.D845A788" = "-403;188;320;550"
+	"picker_search_text.D845A788" = "XRI Right "
+	"last_search.D845A788" = "XRI Right "
 	"OpenInspectorPreview.D845A788" = "0"
 	"currentGroup.D845A788" = "all"
 }

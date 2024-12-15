@@ -143,9 +143,6 @@ PlayerSettings:
   preloadedAssets:
   - {fileID: 11400000, guid: a8afc796d99006746816c0a0b5f788dd, type: 2}
   - {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  - {fileID: -1983991007908662398, guid: 558ca79e57d7ba84695a32a2019ab572, type: 2}
-  - {fileID: -2818413939735461545, guid: 56b27a46813148f46b4c7defb9e08cc6, type: 2}
-  - {fileID: 11400000, guid: a6b81e30945f243518580381d559d980, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -181,8 +178,8 @@ PlayerSettings:
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
   iPhoneScriptCallOptimization: 0
-  ForceInternetPermission: 0
-  ForceSDCardPermission: 0
+  ForceInternetPermission: 1
+  ForceSDCardPermission: 1
   CreateWallpaper: 0
   APKExpansionFiles: 0
   keepLoadedShadersAlive: 0
