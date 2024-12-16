@@ -30,6 +30,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
 
             // var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var no = go.AddComponent<NetworkObject>();
+            go.AddComponent<NetworkedRadargramController>();
             go.AddComponent<NetworkTransform>();
             go.name = $"Our Radargram";
 
@@ -79,6 +80,8 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
             else if (fileName.StartsWith("Data"))
             {
                 GameObject radarObj = LoadObj(objFile);
+                radarObj.AddComponent<NetworkObject>();
+                radarObj.AddComponent<NetworkTransform>();
 
                 //GameObject radarObjLocal = LoadObj(objFile);
                 //radarObjLocal.AddComponent<NetworkObject>();

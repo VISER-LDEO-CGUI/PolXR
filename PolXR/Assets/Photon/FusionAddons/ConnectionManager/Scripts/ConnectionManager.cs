@@ -338,6 +338,14 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 DEMController.toggle("bottom");
             }
 
+            if (Input.GetKey(KeyCode.Y))
+            {
+                // Toggle all radargram
+                GameObject radargrams = GameObject.Find("Our Radargram");
+                NetworkedRadargramController radargramController = radargrams.GetComponent<NetworkedRadargramController>();
+                radargramController.radargramToggle();
+            }
+
             //data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
             //_mouseButton0 = false;
 
