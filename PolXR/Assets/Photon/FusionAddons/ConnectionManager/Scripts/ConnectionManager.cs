@@ -236,8 +236,12 @@ namespace Fusion.Addons.ConnectionManagerAddon
                     Debug.Log("Spawned DEMs with Player " + player.PlayerId);
 
                     NetworkPrefabId radarID = new NetworkPrefabId();
-                    radarID.RawValue = 100000;
-                    NetworkObject cubeNetwork = runner.Spawn(radarID);
+                    for (int i = 100000; i < 100040; i++)
+                    {
+                        radarID.RawValue = (uint)i;
+                        NetworkObject cubeNetwork = runner.Spawn(radarID);
+                    }
+
                 }
 
                 // CTL comment: After spawning the old rig prefab, the program no longer executes.

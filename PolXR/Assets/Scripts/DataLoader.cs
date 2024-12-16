@@ -91,14 +91,14 @@ public class DataLoader : NetworkBehaviour
 
     void Awake()
     {
-        runner = GameObject.Find("ConnectionManager").GetComponent<NetworkRunner>();
-        if (runner == null)
-        {
-            Debug.LogError("Runner is null!!");
-        } else if (runner != null)
-        {
-            Debug.LogError("Runner not null!");
-        }
+        //runner = GameObject.Find("ConnectionManager").GetComponent<NetworkRunner>();
+        //if (runner == null)
+        //{
+        //    Debug.LogError("Runner is null!!");
+        //} else if (runner != null)
+        //{
+        //    Debug.LogError("Runner not null!");
+        //}
         // Load the RadarShader from the specified path
         radarShader = AssetDatabase.LoadAssetAtPath<Shader>("Assets/Shaders/RadarShader.shader");
         if (radarShader == null)
@@ -137,6 +137,7 @@ public class DataLoader : NetworkBehaviour
         foreach (string flightlineDirectory in flightlineDirectories)
         {
             ProcessFlightlines(flightlineDirectory, radarContainer);
+            Debug.LogError(flightlineDirectory);
         }
 
         DisableAllRadarObjects(radarContainer);
