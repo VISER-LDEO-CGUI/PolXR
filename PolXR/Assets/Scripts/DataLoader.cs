@@ -6,6 +6,9 @@ using UnityEngine.Events;
 using System;
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
+using Fusion;
+
+
 
 [System.Serializable]
 public class Centroid
@@ -21,12 +24,15 @@ public class MetaData
     public Centroid centroid;
 }
 
+
 public class DataLoader : MonoBehaviour
 {
     public string demDirectoryPath;
     public List<string> flightlineDirectories;
     private Shader radarShader;
     private GameObject menu;
+
+    public NetworkRunner runner;
 
     public Vector3 GetDEMCentroid()
     {
@@ -143,49 +149,50 @@ public class DataLoader : MonoBehaviour
     }
     private void ProcessDEMs(GameObject parent)
     {
+        Debug.Log("DataLoader Process DEMs called!");
         // Check if the selected DEM directory exists
-        if (!Directory.Exists(demDirectoryPath))
-        {
-            Debug.LogError($"DEM directory not found: {demDirectoryPath}");
-            return;
-        }
+        //if (!Directory.Exists(demDirectoryPath))
+        //{
+        //    Debug.LogError($"DEM directory not found: {demDirectoryPath}");
+        //    return;
+        //}
 
-        // Get all .obj files in the selected DEM folder
-        string[] objFiles = Directory.GetFiles(demDirectoryPath, "*.obj");
-        if (objFiles.Length == 0)
-        {
-            Debug.LogWarning($"No .obj files found in the selected DEM directory: {demDirectoryPath}");
-            return;
-        }
+        //// Get all .obj files in the selected DEM folder
+        //string[] objFiles = Directory.GetFiles(demDirectoryPath, "*.obj");
+        //if (objFiles.Length == 0)
+        //{
+        //    Debug.LogWarning($"No .obj files found in the selected DEM directory: {demDirectoryPath}");
+        //    return;
+        //}
 
-        foreach (string objFile in objFiles)
-        {
-            // Extract the file name without extension (e.g., "bedrock")
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(objFile);
+        //foreach (string objFile in objFiles)
+        //{
+        //    // Extract the file name without extension (e.g., "bedrock")
+        //    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(objFile);
 
-            GameObject demObj = LoadObj(objFile);
-            if (demObj != null)
-            {
-                // Name the GameObject after the .obj file (e.g., "bedrock")
-                demObj.name = fileNameWithoutExtension;
+        //    GameObject demObj = LoadObj(objFile);
+        //    if (demObj != null)
+        //    {
+        //        // Name the GameObject after the .obj file (e.g., "bedrock")
+        //        demObj.name = fileNameWithoutExtension;
 
-                if (fileNameWithoutExtension.Equals("bedrock", StringComparison.OrdinalIgnoreCase))
-                {
-                    Transform childTransform = demObj.transform.GetChild(0);
-                    Renderer renderer = childTransform.GetComponent<Renderer>();
-                    if (renderer != null)
-                    {
-                        renderer.material.color = Color.Lerp(Color.black, Color.white, 0.25f);
-                    }
-                }
+        //        if (fileNameWithoutExtension.Equals("bedrock", StringComparison.OrdinalIgnoreCase))
+        //        {
+        //            Transform childTransform = demObj.transform.GetChild(0);
+        //            Renderer renderer = childTransform.GetComponent<Renderer>();
+        //            if (renderer != null)
+        //            {
+        //                renderer.material.color = Color.Lerp(Color.black, Color.white, 0.25f);
+        //            }
+        //        }
 
-                ScaleAndRotate(demObj, 0.0001f, 0.0001f, 0.001f, -90f);
+        //        ScaleAndRotate(demObj, 0.0001f, 0.0001f, 0.001f, -90f);
 
-                demObj.transform.SetParent(parent.transform);
+        //        demObj.transform.SetParent(parent.transform);
 
-                Debug.Log("DataLoader Process DEMs called!");
-            }
-        }
+                
+        //    }
+        //}
     }
 
     private void ProcessFlightlines(string flightlineDirectory, GameObject parent)
@@ -212,7 +219,9 @@ public class DataLoader : MonoBehaviour
                 }
                 else if (fileName.StartsWith("Data"))
                 {
-                    GameObject radarObj = LoadObj(objFile);
+                    // GameObject radarObj = LoadObj(objFile);
+                    NetworkObject radarObj = LoadObj(objFile);
+                    Debug.Log("FileName starts with data" + fileName);
                     if (radarObj != null)
                     {
                         ScaleAndRotate(radarObj, 0.0001f, 0.0001f, 0.001f, -90f);
@@ -254,7 +263,9 @@ public class DataLoader : MonoBehaviour
         }
     }
 
-    private GameObject LoadObj(string objPath)
+    // CTL Networking
+    // private GameObject LoadObj(string objPath)
+    private NetworkObject LoadObj(string objPath)
     {
         GameObject importedObj = AssetDatabase.LoadAssetAtPath<GameObject>(objPath);
         if (importedObj == null)
@@ -262,8 +273,9 @@ public class DataLoader : MonoBehaviour
             Debug.LogError($"Failed to load OBJ: {objPath}");
             return null;
         }
-
-        return Instantiate(importedObj);
+        NetworkObject importedObjNetworked = runner.Spawn(importedObj);
+        return importedObjNetworked;
+        // return Instantiate(importedObj);
     }
 
     private Texture2D LoadTexture(string texturePath)
@@ -412,7 +424,8 @@ public class DataLoader : MonoBehaviour
         return rotatedVertices;
     }
 
-    private void ScaleAndRotate(GameObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
+    // private void ScaleAndRotate(GameObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
+    private void ScaleAndRotate(NetworkObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
     {
         obj.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         obj.transform.eulerAngles = new Vector3(rotationX, 0f, 0f);

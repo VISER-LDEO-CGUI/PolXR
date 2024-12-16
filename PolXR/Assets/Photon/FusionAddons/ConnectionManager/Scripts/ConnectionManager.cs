@@ -155,13 +155,23 @@ namespace Fusion.Addons.ConnectionManagerAddon
             if (sceneManager == null) sceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>();
             if (onWillConnect != null) onWillConnect.Invoke();
 
-            // Start or join (depends on gamemode) a session with a specific name
+            // Original Code: Uses default Object Provider
+            //// Start or join (depends on gamemode) a session with a specific name
+            //var args = new StartGameArgs()
+            //{
+            //    GameMode = gameMode,
+            //    Scene = CurrentSceneInfo(),
+            //    SceneManager = sceneManager
+            //};
+            // CTL Team Change: Use customized Object Provider instead of fallback to default one
             var args = new StartGameArgs()
             {
+                ObjectProvider = new BakingObjectProvider(),
                 GameMode = gameMode,
                 Scene = CurrentSceneInfo(),
                 SceneManager = sceneManager
             };
+
             // Connection criteria
             if (ShouldConnectWithRoomName)
             {
@@ -279,6 +289,7 @@ namespace Fusion.Addons.ConnectionManagerAddon
             //}
         }
 
+        // CTL Networking
         public void OnInput(NetworkRunner runner, NetworkInput input) {
             var data = new NetworkInputData();
 
