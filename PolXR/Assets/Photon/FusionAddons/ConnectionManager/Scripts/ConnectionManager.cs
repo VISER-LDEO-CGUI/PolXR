@@ -202,7 +202,7 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 });
             }
         }
-
+        [Header("Unused for now")]
         public Transform Container;
         //public GameObject radarMark;
         public GameObject DEMPrefab;
