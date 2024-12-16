@@ -158,7 +158,7 @@ namespace Fusion.Addons.ConnectionManagerAddon
             //    SceneManager = sceneManager
             //};
 
-            // CLT Team Change: Use customized Object Provider instead of fallback to default one
+            // CTL Team Change: Use customized Object Provider instead of fallback to default one
             var args = new StartGameArgs()
             {
                 ObjectProvider = new BakingObjectProvider(),
@@ -226,7 +226,7 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 // Keep track of the player avatars so we can remove it when they disconnect
                 _spawnedUsers.Add(player, networkPlayerObject);
 
-                // CLT Network Team change:
+                // CTL Network Team change:
                 if (player.PlayerId == 1) {
                     NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(10, -1, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
                     });
