@@ -68,6 +68,11 @@ namespace Fusion.Addons.ConnectionManagerAddon
         [Header("Info")]
         public List<StringSessionProperty> actualSessionProperties = new List<StringSessionProperty>();
 
+        // CTL
+        [Header("Prefabs")]
+        [SerializeField] NetworkObject DEMsPrefab;
+        [SerializeField] NetworkObject RadarImageContainer;
+
         // Dictionary of spawned user prefabs, to store them on the server for host topology, and destroy them on disconnection (for shared topology, use Network Objects's "Destroy When State Authority Leaves" option)
         private Dictionary<PlayerRef, NetworkObject> _spawnedUsers = new Dictionary<PlayerRef, NetworkObject>();
 
@@ -150,13 +155,23 @@ namespace Fusion.Addons.ConnectionManagerAddon
             if (sceneManager == null) sceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>();
             if (onWillConnect != null) onWillConnect.Invoke();
 
-            // Start or join (depends on gamemode) a session with a specific name
+            // Original Code: Uses default Object Provider
+            //// Start or join (depends on gamemode) a session with a specific name
+            //var args = new StartGameArgs()
+            //{
+            //    GameMode = gameMode,
+            //    Scene = CurrentSceneInfo(),
+            //    SceneManager = sceneManager
+            //};
+            // CTL Team Change: Use customized Object Provider instead of fallback to default one
             var args = new StartGameArgs()
             {
+                ObjectProvider = new BakingObjectProvider(),
                 GameMode = gameMode,
                 Scene = CurrentSceneInfo(),
                 SceneManager = sceneManager
             };
+
             // Connection criteria
             if (ShouldConnectWithRoomName)
             {
@@ -197,6 +212,13 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 });
             }
         }
+        [Header("Unused for now")]
+        public Transform Container;
+        //public GameObject radarMark;
+        public GameObject DEMPrefab;
+        public GameObject gridLine;
+        public GameObject MarkObj3D;
+        //public DataLoader dataLoader;
 
         public void OnPlayerJoinedHostMode(NetworkRunner runner, PlayerRef player)
         {
@@ -204,6 +226,26 @@ namespace Fusion.Addons.ConnectionManagerAddon
             if (runner.IsServer && userPrefab != null)
             {
                 Debug.Log($"OnPlayerJoined. PlayerId: {player.PlayerId}");
+                // CTL
+                if (player.PlayerId == 1)
+                {
+                    //gameObject.AddComponent<DataLoader>();
+                    //dataLoader = gameObject.GetComponent<DataLoader>();
+                    NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
+                    });
+                    Debug.Log("Spawned DEMs with Player " + player.PlayerId);
+
+                    NetworkPrefabId radarID = new NetworkPrefabId();
+                    for (int i = 100000; i < 100040; i++)
+                    {
+                        radarID.RawValue = (uint)i;
+                        NetworkObject cubeNetwork = runner.Spawn(radarID);
+                    }
+
+                }
+
+                // CTL comment: After spawning the old rig prefab, the program no longer executes.
+
                 // We make sure to give the input authority to the connecting player for their user's object
                 NetworkObject networkPlayerObject = runner.Spawn(userPrefab, position: transform.position, rotation: transform.rotation, inputAuthority: player, (runner, obj) => {
                 });
@@ -244,9 +286,82 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 OnPlayerLeftHostMode(runner, player);
             }
         }
-#endregion
 
-#region INetworkRunnerCallbacks (debug log only)
+        //private bool _mouseButton0;
+        private void Update()
+        {
+            //_mouseButton0 = _mouseButton0 | Input.GetKey(KeyCode.X);
+            //if (Input.GetKey(KeyCode.X))
+            //{
+            //    // Debug.Log("shoot");
+            //}
+        }
+
+        // CTL Networking
+        public void OnInput(NetworkRunner runner, NetworkInput input) {
+            var data = new NetworkInputData();
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                data.direction += Vector3.forward;
+                Debug.Log("going forward");
+            }
+            //if (Input.GetKey(KeyCode.K))
+            //{
+            //    data.direction += Vector3.back;
+            //    Debug.Log("going backward");
+            //}
+
+            //if (Input.GetKey(KeyCode.J))
+            //{
+            //    data.direction += Vector3.left;
+            //    Debug.Log("going left");
+            //}
+
+            //if (Input.GetKey(KeyCode.L))
+            //{
+            //    data.direction += Vector3.right;
+            //    Debug.Log("going right");
+            //}
+
+            if (Input.GetKey(KeyCode.R))
+            {
+                GameObject DEM = GameObject.Find("DEMs(Clone)");
+                NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
+                DEMController.toggle("MEASURES_NSIDC-0715-002");
+            }
+
+            if (Input.GetKey(KeyCode.T))
+            {
+                GameObject DEM = GameObject.Find("DEMs(Clone)");
+                NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
+                DEMController.toggle("bottom");
+            }
+
+            if (Input.GetKey(KeyCode.Y))
+            {
+                // Toggle all radargram
+                GameObject radargrams = GameObject.Find("Our Radargram");
+                NetworkedRadargramController radargramController = radargrams.GetComponent<NetworkedRadargramController>();
+                radargramController.radargramToggle();
+            }
+
+            if (Input.GetKey(KeyCode.M))
+            {
+                // Toggle all radargram
+                GameObject radargrams = GameObject.Find("Our Radargram");
+                NetworkedRadargramController radargramController = radargrams.GetComponent<NetworkedRadargramController>();
+                radargramController.meshToggle();
+            }
+
+            //data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
+            //_mouseButton0 = false;
+
+            input.Set(data);
+        }
+        #endregion
+
+        #region INetworkRunnerCallbacks (debug log only)
         public void OnConnectedToServer(NetworkRunner runner) {
             Debug.Log("OnConnectedToServer");
 
@@ -265,7 +380,6 @@ namespace Fusion.Addons.ConnectionManagerAddon
 
 #region Unused INetworkRunnerCallbacks 
 
-        public void OnInput(NetworkRunner runner, NetworkInput input) { }
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
         public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
         public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }

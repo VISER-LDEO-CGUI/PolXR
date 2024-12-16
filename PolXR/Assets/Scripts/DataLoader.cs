@@ -6,6 +6,9 @@ using UnityEngine.Events;
 using System;
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
+using Fusion;
+
+
 
 [System.Serializable]
 public class Centroid
@@ -21,12 +24,15 @@ public class MetaData
     public Centroid centroid;
 }
 
-public class DataLoader : MonoBehaviour
+
+public class DataLoader : NetworkBehaviour
 {
     public string demDirectoryPath;
     public List<string> flightlineDirectories;
     private Shader radarShader;
     private GameObject menu;
+
+    public NetworkRunner runner;
 
     public Vector3 GetDEMCentroid()
     {
@@ -85,6 +91,14 @@ public class DataLoader : MonoBehaviour
 
     void Awake()
     {
+        //runner = GameObject.Find("ConnectionManager").GetComponent<NetworkRunner>();
+        //if (runner == null)
+        //{
+        //    Debug.LogError("Runner is null!!");
+        //} else if (runner != null)
+        //{
+        //    Debug.LogError("Runner not null!");
+        //}
         // Load the RadarShader from the specified path
         radarShader = AssetDatabase.LoadAssetAtPath<Shader>("Assets/Shaders/RadarShader.shader");
         if (radarShader == null)
@@ -123,6 +137,7 @@ public class DataLoader : MonoBehaviour
         foreach (string flightlineDirectory in flightlineDirectories)
         {
             ProcessFlightlines(flightlineDirectory, radarContainer);
+            Debug.LogError(flightlineDirectory);
         }
 
         DisableAllRadarObjects(radarContainer);
@@ -143,6 +158,7 @@ public class DataLoader : MonoBehaviour
     }
     private void ProcessDEMs(GameObject parent)
     {
+        Debug.Log("DataLoader Process DEMs called!");
         // Check if the selected DEM directory exists
         if (!Directory.Exists(demDirectoryPath))
         {
@@ -182,6 +198,8 @@ public class DataLoader : MonoBehaviour
                 ScaleAndRotate(demObj, 0.0001f, 0.0001f, 0.001f, -90f);
 
                 demObj.transform.SetParent(parent.transform);
+
+
             }
         }
     }
@@ -211,6 +229,14 @@ public class DataLoader : MonoBehaviour
                 else if (fileName.StartsWith("Data"))
                 {
                     GameObject radarObj = LoadObj(objFile);
+
+                    //GameObject radarObjLocal = LoadObj(objFile);
+                    //radarObjLocal.AddComponent<NetworkObject>();
+                    //NetworkObject radarObj = runner.Spawn(radarObjLocal);
+
+
+                    //NetworkObject radarObj = LoadObj(objFile);
+                    Debug.Log("FileName starts with data" + fileName);
                     if (radarObj != null)
                     {
                         ScaleAndRotate(radarObj, 0.0001f, 0.0001f, 0.001f, -90f);
@@ -252,7 +278,9 @@ public class DataLoader : MonoBehaviour
         }
     }
 
+    // CTL Networking
     private GameObject LoadObj(string objPath)
+    //private NetworkObject LoadObj(string objPath)
     {
         GameObject importedObj = AssetDatabase.LoadAssetAtPath<GameObject>(objPath);
         if (importedObj == null)
@@ -260,7 +288,6 @@ public class DataLoader : MonoBehaviour
             Debug.LogError($"Failed to load OBJ: {objPath}");
             return null;
         }
-
         return Instantiate(importedObj);
     }
 
@@ -411,6 +438,7 @@ public class DataLoader : MonoBehaviour
     }
 
     private void ScaleAndRotate(GameObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
+    // private void ScaleAndRotate(NetworkObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
     {
         obj.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         obj.transform.eulerAngles = new Vector3(rotationX, 0f, 0f);
