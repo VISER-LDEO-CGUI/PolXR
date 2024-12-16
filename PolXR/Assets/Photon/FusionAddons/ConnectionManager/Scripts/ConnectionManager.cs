@@ -208,6 +208,7 @@ namespace Fusion.Addons.ConnectionManagerAddon
         public GameObject DEMPrefab;
         public GameObject gridLine;
         public GameObject MarkObj3D;
+        //public DataLoader dataLoader;
 
         public void OnPlayerJoinedHostMode(NetworkRunner runner, PlayerRef player)
         {
@@ -218,6 +219,8 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 // CTL
                 if (player.PlayerId == 1)
                 {
+                    //gameObject.AddComponent<DataLoader>();
+                    //dataLoader = gameObject.GetComponent<DataLoader>();
                     NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
                     });
                     Debug.Log("Spawned DEMs with Player " + player.PlayerId);
