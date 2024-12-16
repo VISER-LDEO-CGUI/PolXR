@@ -159,48 +159,48 @@ public class DataLoader : NetworkBehaviour
     {
         Debug.Log("DataLoader Process DEMs called!");
         // Check if the selected DEM directory exists
-        //if (!Directory.Exists(demDirectoryPath))
-        //{
-        //    Debug.LogError($"DEM directory not found: {demDirectoryPath}");
-        //    return;
-        //}
+        if (!Directory.Exists(demDirectoryPath))
+        {
+            Debug.LogError($"DEM directory not found: {demDirectoryPath}");
+            return;
+        }
 
-        //// Get all .obj files in the selected DEM folder
-        //string[] objFiles = Directory.GetFiles(demDirectoryPath, "*.obj");
-        //if (objFiles.Length == 0)
-        //{
-        //    Debug.LogWarning($"No .obj files found in the selected DEM directory: {demDirectoryPath}");
-        //    return;
-        //}
+        // Get all .obj files in the selected DEM folder
+        string[] objFiles = Directory.GetFiles(demDirectoryPath, "*.obj");
+        if (objFiles.Length == 0)
+        {
+            Debug.LogWarning($"No .obj files found in the selected DEM directory: {demDirectoryPath}");
+            return;
+        }
 
-        //foreach (string objFile in objFiles)
-        //{
-        //    // Extract the file name without extension (e.g., "bedrock")
-        //    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(objFile);
+        foreach (string objFile in objFiles)
+        {
+            // Extract the file name without extension (e.g., "bedrock")
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(objFile);
 
-        //    GameObject demObj = LoadObj(objFile);
-        //    if (demObj != null)
-        //    {
-        //        // Name the GameObject after the .obj file (e.g., "bedrock")
-        //        demObj.name = fileNameWithoutExtension;
+            GameObject demObj = LoadObj(objFile);
+            if (demObj != null)
+            {
+                // Name the GameObject after the .obj file (e.g., "bedrock")
+                demObj.name = fileNameWithoutExtension;
 
-        //        if (fileNameWithoutExtension.Equals("bedrock", StringComparison.OrdinalIgnoreCase))
-        //        {
-        //            Transform childTransform = demObj.transform.GetChild(0);
-        //            Renderer renderer = childTransform.GetComponent<Renderer>();
-        //            if (renderer != null)
-        //            {
-        //                renderer.material.color = Color.Lerp(Color.black, Color.white, 0.25f);
-        //            }
-        //        }
+                if (fileNameWithoutExtension.Equals("bedrock", StringComparison.OrdinalIgnoreCase))
+                {
+                    Transform childTransform = demObj.transform.GetChild(0);
+                    Renderer renderer = childTransform.GetComponent<Renderer>();
+                    if (renderer != null)
+                    {
+                        renderer.material.color = Color.Lerp(Color.black, Color.white, 0.25f);
+                    }
+                }
 
-        //        ScaleAndRotate(demObj, 0.0001f, 0.0001f, 0.001f, -90f);
+                ScaleAndRotate(demObj, 0.0001f, 0.0001f, 0.001f, -90f);
 
-        //        demObj.transform.SetParent(parent.transform);
+                demObj.transform.SetParent(parent.transform);
 
-                
-        //    }
-        //}
+
+            }
+        }
     }
 
     private void ProcessFlightlines(string flightlineDirectory, GameObject parent)
