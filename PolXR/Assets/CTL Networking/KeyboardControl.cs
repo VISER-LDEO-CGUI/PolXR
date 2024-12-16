@@ -50,23 +50,23 @@ public class KeyboardControl : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (GetInput(out NetworkInputData data))
-        {
-            if (Object.HasInputAuthority)
-            {
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    GameObject DEM = GameObject.Find("DEMs(Clone)");
-                    NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
-                    DEMController.toggle("MEASURES_NSIDC - 0715 - 002");
-                } else if (Input.GetKeyDown(KeyCode.T))
-                {
-                    GameObject DEM = GameObject.Find("DEMs(Clone)");
-                    NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
-                    DEMController.toggle("bottom");
-                }
-            }
-        }
+        //if (GetInput(out NetworkInputData data))
+        //{
+        //    if (Object.HasInputAuthority)
+        //    {
+        //        if (Input.GetKeyDown(KeyCode.R))
+        //        {
+        //            GameObject DEM = GameObject.Find("DEMs(Clone)");
+        //            NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
+        //            DEMController.toggle("MEASURES_NSIDC - 0715 - 002");
+        //        } else if (Input.GetKeyDown(KeyCode.T))
+        //        {
+        //            GameObject DEM = GameObject.Find("DEMs(Clone)");
+        //            NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
+        //            DEMController.toggle("bottom");
+        //        }
+        //    }
+        //}
     }
 
     //public override void FixedUpdateNetwork()

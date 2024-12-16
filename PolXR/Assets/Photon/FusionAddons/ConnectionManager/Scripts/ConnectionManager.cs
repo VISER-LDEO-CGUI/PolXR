@@ -268,9 +268,65 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 OnPlayerLeftHostMode(runner, player);
             }
         }
-#endregion
 
-#region INetworkRunnerCallbacks (debug log only)
+        //private bool _mouseButton0;
+        private void Update()
+        {
+            //_mouseButton0 = _mouseButton0 | Input.GetKey(KeyCode.X);
+            //if (Input.GetKey(KeyCode.X))
+            //{
+            //    // Debug.Log("shoot");
+            //}
+        }
+
+        public void OnInput(NetworkRunner runner, NetworkInput input) {
+            var data = new NetworkInputData();
+
+            //if (Input.GetKey(KeyCode.W))
+            //{
+            //    data.direction += Vector3.forward;
+            //    Debug.Log("going forward");
+            //}
+            //if (Input.GetKey(KeyCode.K))
+            //{
+            //    data.direction += Vector3.back;
+            //    Debug.Log("going backward");
+            //}
+
+            //if (Input.GetKey(KeyCode.J))
+            //{
+            //    data.direction += Vector3.left;
+            //    Debug.Log("going left");
+            //}
+
+            //if (Input.GetKey(KeyCode.L))
+            //{
+            //    data.direction += Vector3.right;
+            //    Debug.Log("going right");
+            //}
+
+            if (Input.GetKey(KeyCode.R))
+            {
+                GameObject DEM = GameObject.Find("DEMs(Clone)");
+                NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
+                DEMController.toggle("MEASURES_NSIDC-0715-002");
+            }
+
+            if (Input.GetKey(KeyCode.T))
+            {
+                GameObject DEM = GameObject.Find("DEMs(Clone)");
+                NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
+                DEMController.toggle("bottom");
+            }
+
+            //data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
+            //_mouseButton0 = false;
+
+            input.Set(data);
+        }
+        #endregion
+
+        #region INetworkRunnerCallbacks (debug log only)
         public void OnConnectedToServer(NetworkRunner runner) {
             Debug.Log("OnConnectedToServer");
 
@@ -289,7 +345,6 @@ namespace Fusion.Addons.ConnectionManagerAddon
 
 #region Unused INetworkRunnerCallbacks 
 
-        public void OnInput(NetworkRunner runner, NetworkInput input) { }
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
         public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
         public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
