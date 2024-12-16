@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using System;
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
-using Fusion;
+//using Fusion;
 
 
 
@@ -25,14 +25,14 @@ public class MetaData
 }
 
 
-public class DataLoader : NetworkBehaviour
+public class DataLoader : MonoBehaviour
 {
     public string demDirectoryPath;
     public List<string> flightlineDirectories;
     private Shader radarShader;
     private GameObject menu;
 
-    public NetworkRunner runner;
+    // public NetworkRunner runner;
 
     public Vector3 GetDEMCentroid()
     {
@@ -91,15 +91,6 @@ public class DataLoader : NetworkBehaviour
 
     void Awake()
     {
-        //runner = GameObject.Find("ConnectionManager").GetComponent<NetworkRunner>();
-        //if (runner == null)
-        //{
-        //    Debug.LogError("Runner is null!!");
-        //} else if (runner != null)
-        //{
-        //    Debug.LogError("Runner not null!");
-        //}
-        // Load the RadarShader from the specified path
         radarShader = AssetDatabase.LoadAssetAtPath<Shader>("Assets/Shaders/RadarShader.shader");
         if (radarShader == null)
         {
@@ -230,13 +221,6 @@ public class DataLoader : NetworkBehaviour
                 {
                     GameObject radarObj = LoadObj(objFile);
 
-                    //GameObject radarObjLocal = LoadObj(objFile);
-                    //radarObjLocal.AddComponent<NetworkObject>();
-                    //NetworkObject radarObj = runner.Spawn(radarObjLocal);
-
-
-                    //NetworkObject radarObj = LoadObj(objFile);
-                    Debug.Log("FileName starts with data" + fileName);
                     if (radarObj != null)
                     {
                         ScaleAndRotate(radarObj, 0.0001f, 0.0001f, 0.001f, -90f);

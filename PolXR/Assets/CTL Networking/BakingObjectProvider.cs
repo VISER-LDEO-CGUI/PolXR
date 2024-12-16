@@ -25,7 +25,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
         // The Spawn call will need to pass this value instead of a prefab.
         if (context.PrefabId.RawValue >= CUSTOM_PREFAB_FLAG)
         {
-            var go = FlightLineAndRadargram("Assets/AppData/Flightlines\\20100324_01", (int)context.PrefabId.RawValue);
+            var go = FlightLineAndRadargram("Assets/AppData/Flightlines/20100324_01", (int)context.PrefabId.RawValue);
 
 
             // var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
