@@ -49983,6 +49983,10 @@ PrefabInstance:
       propertyPath: gameMode
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2347245623237001752, guid: 608f6d20face4da4aaeb5c8f86ffd8e5, type: 3}
+      propertyPath: DEMsPrefab
+      value: 
+      objectReference: {fileID: 8793364790576422614, guid: 6fb54022e66e10840bb08981b846b9bc, type: 3}
     - target: {fileID: 4178742738216308473, guid: 608f6d20face4da4aaeb5c8f86ffd8e5, type: 3}
       propertyPath: m_Name
       value: ConnectionManager

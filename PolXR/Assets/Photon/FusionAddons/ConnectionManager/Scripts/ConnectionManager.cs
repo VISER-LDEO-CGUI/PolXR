@@ -215,20 +215,22 @@ namespace Fusion.Addons.ConnectionManagerAddon
             if (runner.IsServer && userPrefab != null)
             {
                 Debug.Log($"OnPlayerJoined. PlayerId: {player.PlayerId}");
+                // CTL
+                if (player.PlayerId == 1)
+                {
+                    NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
+                    });
+                    Debug.Log("Spawned DEMs with Player " + player.PlayerId);
+                }
+
+                // CTL comment: After spawning the old rig prefab, the program no longer executes.
+
                 // We make sure to give the input authority to the connecting player for their user's object
                 NetworkObject networkPlayerObject = runner.Spawn(userPrefab, position: transform.position, rotation: transform.rotation, inputAuthority: player, (runner, obj) => {
                 });
 
                 // Keep track of the player avatars so we can remove it when they disconnect
                 _spawnedUsers.Add(player, networkPlayerObject);
-
-                // CTL
-                if (player.PlayerId == 1)
-                {
-                    NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
-                    });
-                    Debug.Log("Spawned DEMs with Player 1");
-                }
             }
         }
 
