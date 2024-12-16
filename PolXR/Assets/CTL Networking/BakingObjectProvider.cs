@@ -96,6 +96,10 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
 
                     // Find and texture the Radar object's mesh
                     Transform meshChild = radarObj.transform.Find("mesh");
+                    // CTL
+                    meshChild.gameObject.AddComponent<NetworkObject>();
+                    meshChild.gameObject.AddComponent<NetworkTransform>();
+                    meshChild.gameObject.AddComponent<NetworkedRadargramController>();
                     if (meshChild != null)
                     {
                         string texturePath = Path.Combine(segmentFolder, Path.GetFileNameWithoutExtension(objFile) + ".png");
