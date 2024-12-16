@@ -182,6 +182,8 @@ public class DataLoader : MonoBehaviour
                 ScaleAndRotate(demObj, 0.0001f, 0.0001f, 0.001f, -90f);
 
                 demObj.transform.SetParent(parent.transform);
+
+                Debug.Log("DataLoader Process DEMs called!");
             }
         }
     }

@@ -81,6 +81,7 @@ public class CSVReadPlot : MonoBehaviour
         DemSur.transform.GetChild(0).GetComponent<Renderer>().material = SurMat;
         DemSur.layer = LayerMask.NameToLayer("Both Camera");
         DemSur.transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("Both Camera");
+        Debug.Log("CSV Read Plot.cs loading DEM bed called");
 
         // Set the default attributes for the particle system.
         var main = PSLine.main;
