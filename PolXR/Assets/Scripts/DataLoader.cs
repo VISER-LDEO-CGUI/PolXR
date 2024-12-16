@@ -25,7 +25,7 @@ public class MetaData
 }
 
 
-public class DataLoader : MonoBehaviour
+public class DataLoader : NetworkBehaviour
 {
     public string demDirectoryPath;
     public List<string> flightlineDirectories;
@@ -91,6 +91,14 @@ public class DataLoader : MonoBehaviour
 
     void Awake()
     {
+        runner = GameObject.Find("ConnectionManager").GetComponent<NetworkRunner>();
+        if (runner == null)
+        {
+            Debug.LogError("Runner is null!!");
+        } else if (runner != null)
+        {
+            Debug.LogError("Runner not null!");
+        }
         // Load the RadarShader from the specified path
         radarShader = AssetDatabase.LoadAssetAtPath<Shader>("Assets/Shaders/RadarShader.shader");
         if (radarShader == null)
@@ -219,8 +227,14 @@ public class DataLoader : MonoBehaviour
                 }
                 else if (fileName.StartsWith("Data"))
                 {
-                    // GameObject radarObj = LoadObj(objFile);
-                    NetworkObject radarObj = LoadObj(objFile);
+                    GameObject radarObj = LoadObj(objFile);
+
+                    //GameObject radarObjLocal = LoadObj(objFile);
+                    //radarObjLocal.AddComponent<NetworkObject>();
+                    //NetworkObject radarObj = runner.Spawn(radarObjLocal);
+
+
+                    //NetworkObject radarObj = LoadObj(objFile);
                     Debug.Log("FileName starts with data" + fileName);
                     if (radarObj != null)
                     {
@@ -264,8 +278,8 @@ public class DataLoader : MonoBehaviour
     }
 
     // CTL Networking
-    // private GameObject LoadObj(string objPath)
-    private NetworkObject LoadObj(string objPath)
+    private GameObject LoadObj(string objPath)
+    //private NetworkObject LoadObj(string objPath)
     {
         GameObject importedObj = AssetDatabase.LoadAssetAtPath<GameObject>(objPath);
         if (importedObj == null)
@@ -273,9 +287,7 @@ public class DataLoader : MonoBehaviour
             Debug.LogError($"Failed to load OBJ: {objPath}");
             return null;
         }
-        NetworkObject importedObjNetworked = runner.Spawn(importedObj);
-        return importedObjNetworked;
-        // return Instantiate(importedObj);
+        return Instantiate(importedObj);
     }
 
     private Texture2D LoadTexture(string texturePath)
@@ -424,8 +436,8 @@ public class DataLoader : MonoBehaviour
         return rotatedVertices;
     }
 
-    // private void ScaleAndRotate(GameObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
-    private void ScaleAndRotate(NetworkObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
+    private void ScaleAndRotate(GameObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
+    // private void ScaleAndRotate(NetworkObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
     {
         obj.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         obj.transform.eulerAngles = new Vector3(rotationX, 0f, 0f);
