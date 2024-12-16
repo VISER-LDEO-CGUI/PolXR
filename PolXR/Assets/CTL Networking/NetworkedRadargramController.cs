@@ -99,8 +99,15 @@ public class NetworkedRadargramController : NetworkBehaviour
         //}
         //spawnedProjectile = !spawnedProjectile;
         // Debug.Log("want to change");
-    }
 
+        if (GetInput(out NetworkInputData data))
+        {
+            // Debug.Log("data came in success");
+            // data.direction.Normalize();
+            gameObject.transform.Translate(2, 0, 0);
+
+        }
+    }
 
     public void radargramToggle()
     {

@@ -301,11 +301,11 @@ namespace Fusion.Addons.ConnectionManagerAddon
         public void OnInput(NetworkRunner runner, NetworkInput input) {
             var data = new NetworkInputData();
 
-            //if (Input.GetKey(KeyCode.W))
-            //{
-            //    data.direction += Vector3.forward;
-            //    Debug.Log("going forward");
-            //}
+            if (Input.GetKey(KeyCode.W))
+            {
+                data.direction += Vector3.forward;
+                Debug.Log("going forward");
+            }
             //if (Input.GetKey(KeyCode.K))
             //{
             //    data.direction += Vector3.back;
