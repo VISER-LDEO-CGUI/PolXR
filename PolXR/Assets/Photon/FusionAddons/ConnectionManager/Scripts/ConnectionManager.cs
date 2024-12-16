@@ -346,6 +346,14 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 radargramController.radargramToggle();
             }
 
+            if (Input.GetKey(KeyCode.M))
+            {
+                // Toggle all radargram
+                GameObject radargrams = GameObject.Find("Our Radargram");
+                NetworkedRadargramController radargramController = radargrams.GetComponent<NetworkedRadargramController>();
+                radargramController.meshToggle();
+            }
+
             //data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
             //_mouseButton0 = false;
 

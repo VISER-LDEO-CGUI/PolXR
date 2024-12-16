@@ -1,28 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class NetworkedRadargramController : NetworkBehaviour
 {
 
-    [Networked]
-    public bool isVisiable { get; set; }
-    [Networked]
-    public NetworkObject surface { get; set; }
-    [Networked]
-    public NetworkObject bottom { get; set; }
+    //[Networked]
+    //public bool isVisiable { get; set; }
+    //[Networked]
+    //public NetworkObject surface { get; set; }
+    //[Networked]
+    //public NetworkObject bottom { get; set; }
 
-    [SerializeField] GameObject SurfaceDEM;
-    [SerializeField] GameObject BottomDEM;
-    MeshRenderer surfaceMeshRenderer;
-    MeshRenderer bottomMeshRenderer;
+    //[SerializeField] GameObject SurfaceDEM;
+    //[SerializeField] GameObject BottomDEM;
+    //MeshRenderer surfaceMeshRenderer;
+    //MeshRenderer bottomMeshRenderer;
+    MeshRenderer radargramMesh;
 
 
     [Networked]
     public bool spawnedProjectile { get; set; }
     [Networked]
     public bool bottomSurfaceToggle { get; set; }
+    [Networked]
+    public bool meshVisible { get; set; }
 
     private ChangeDetector _changeDetector;
     public string toggleName;
@@ -44,6 +48,8 @@ public class NetworkedRadargramController : NetworkBehaviour
     {
         //surfaceMeshRenderer = gameObject.transform.GetChild(0).GetComponent<MeshRenderer>();
         //bottomMeshRenderer = gameObject.transform.GetChild(1).GetComponent<MeshRenderer>();
+        GameObject data = gameObject.transform.GetChild(0).gameObject;
+        radargramMesh = data.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
     }
 
 
@@ -68,6 +74,10 @@ public class NetworkedRadargramController : NetworkBehaviour
                 //    break;
                 case nameof(bottomSurfaceToggle):
                     gameObject.SetActive(bottomSurfaceToggle);
+                    break;
+
+                case nameof(meshVisible):
+                    radargramMesh.enabled = !radargramMesh.enabled;
                     break;
             }
         }
@@ -106,5 +116,10 @@ public class NetworkedRadargramController : NetworkBehaviour
         //}
 
         //Debug.Log("want to change" + toggleName);
+    }
+
+    public void meshToggle()
+    {
+        meshVisible = !meshVisible;
     }
 }

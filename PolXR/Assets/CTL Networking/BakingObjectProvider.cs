@@ -99,7 +99,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
                     // CTL
                     meshChild.gameObject.AddComponent<NetworkObject>();
                     meshChild.gameObject.AddComponent<NetworkTransform>();
-                    meshChild.gameObject.AddComponent<NetworkedRadargramController>();
+                    // meshChild.gameObject.AddComponent<NetworkedRadargramController>();
                     if (meshChild != null)
                     {
                         string texturePath = Path.Combine(segmentFolder, Path.GetFileNameWithoutExtension(objFile) + ".png");
