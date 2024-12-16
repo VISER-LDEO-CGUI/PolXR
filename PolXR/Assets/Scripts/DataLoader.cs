@@ -360,7 +360,7 @@ public class DataLoader : MonoBehaviour
             return null;
         }
     }
-    static void TogglePolyline(SelectEnterEventArgs arg0)
+    void TogglePolyline(SelectEnterEventArgs arg0)
     {
         IXRSelectInteractable selectedObj = arg0.interactableObject;
         IXRSelectInteractor iXRInteractorObj = arg0.interactorObject;
