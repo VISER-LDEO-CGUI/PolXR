@@ -68,6 +68,11 @@ namespace Fusion.Addons.ConnectionManagerAddon
         [Header("Info")]
         public List<StringSessionProperty> actualSessionProperties = new List<StringSessionProperty>();
 
+        // CTL
+        [Header("Prefabs")]
+        [SerializeField] NetworkObject DEMsPrefab;
+        [SerializeField] NetworkObject RadarImageContainer;
+
         // Dictionary of spawned user prefabs, to store them on the server for host topology, and destroy them on disconnection (for shared topology, use Network Objects's "Destroy When State Authority Leaves" option)
         private Dictionary<PlayerRef, NetworkObject> _spawnedUsers = new Dictionary<PlayerRef, NetworkObject>();
 
@@ -198,6 +203,12 @@ namespace Fusion.Addons.ConnectionManagerAddon
             }
         }
 
+        public Transform Container;
+        //public GameObject radarMark;
+        public GameObject DEMPrefab;
+        public GameObject gridLine;
+        public GameObject MarkObj3D;
+
         public void OnPlayerJoinedHostMode(NetworkRunner runner, PlayerRef player)
         {
             // The user's prefab has to be spawned by the host
@@ -210,6 +221,14 @@ namespace Fusion.Addons.ConnectionManagerAddon
 
                 // Keep track of the player avatars so we can remove it when they disconnect
                 _spawnedUsers.Add(player, networkPlayerObject);
+
+                // CTL
+                if (player.PlayerId == 1)
+                {
+                    NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
+                    });
+                    Debug.Log("Spawned DEMs with Player 1");
+                }
             }
         }
 
