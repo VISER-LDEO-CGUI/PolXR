@@ -37,6 +37,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
             go.AddComponent<NetworkedRadargramController>();
             NetworkTransform goNT = go.AddComponent<NetworkTransform>();
             goNT.SyncParent = true;
+            goNT.DisableSharedModeInterpolation = true;
             go.name = $"Our Radargram";
 
             // Baking is required for the NetworkObject to be valid for spawning.
