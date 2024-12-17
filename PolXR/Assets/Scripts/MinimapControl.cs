@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.MixedReality.Toolkit;
-using Microsoft.MixedReality.Toolkit.Input;
+//using Microsoft.MixedReality.Toolkit;
+//using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
+public class MinimapControl : MonoBehaviour//, IMixedRealityPointerHandler
 {
     // The position information of the scene and user.
     public Transform Location;
@@ -54,28 +54,28 @@ public class MinimapControl : MonoBehaviour, IMixedRealityPointerHandler
     }
 
     // Translate to the target point.
-    public void OnPointerDown(MixedRealityPointerEventData eventData)
-    {
-        // Compute the real offset.
-        TransVec = eventData.Pointer.Result.Details.Point;
-        TransVec = this.transform.InverseTransformPoint(TransVec);
+    //public void OnPointerDown(MixedRealityPointerEventData eventData)
+    //{
+    //    // Compute the real offset.
+    //    TransVec = eventData.Pointer.Result.Details.Point;
+    //    TransVec = this.transform.InverseTransformPoint(TransVec);
 
-        // X and Y axis are different lengths. X is longer than Y.
-        TransVec.x *= (this.transform.localScale.x / this.transform.localScale.y) * (2 * ViewSize);
-        TransVec.z = TransVec.y * (2 * ViewSize);
+    //    // X and Y axis are different lengths. X is longer than Y.
+    //    TransVec.x *= (this.transform.localScale.x / this.transform.localScale.y) * (2 * ViewSize);
+    //    TransVec.z = TransVec.y * (2 * ViewSize);
 
-        // Offset
-        TransVec += MapCamPosition;
+    //    // Offset
+    //    TransVec += MapCamPosition;
 
-        TransVec.y = userHeight;
+    //    TransVec.y = userHeight;
 
-        // Translate.
-        Anchor.localPosition = TransVec;
-        MixedRealityPlayspace.Transform.Translate(Anchor.position - User.position);
-    }
+    //    // Translate.
+    //    Anchor.localPosition = TransVec;
+    //    MixedRealityPlayspace.Transform.Translate(Anchor.position - User.position);
+    //}
 
     // Unused functions.
-    public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
-    public void OnPointerUp(MixedRealityPointerEventData eventData) { }
-    public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
+    //public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
+    //public void OnPointerUp(MixedRealityPointerEventData eventData) { }
+    //public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
 }

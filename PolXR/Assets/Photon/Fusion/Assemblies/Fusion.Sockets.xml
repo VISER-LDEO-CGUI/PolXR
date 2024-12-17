@@ -4,228 +4,6 @@
         <name>Fusion.Sockets</name>
     </assembly>
     <members>
-        <member name="T:Fusion.Encryption.DataEncryptor">
-            <summary>
-            Responsible for encrypting and decrypting data buffers
-            </summary>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.Setup(System.Byte[])">
-            <inheritdoc cref="M:Fusion.Encryption.IDataEncryption.Setup(System.Byte[])"/>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.GenerateKey">
-            <inheritdoc cref="M:Fusion.Encryption.IDataEncryption.GenerateKey"/>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.EncryptData(System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Encrypts the data in the provided buffer.
-            </summary>
-            <param name="buffer">The buffer containing the data to be encrypted.</param>
-            <param name="bufferLength">The length of the data in the buffer.</param>
-            <param name="capacity">The total capacity of the buffer.</param>
-            <returns>Returns true if the encryption was successful, false otherwise.</returns>
-            <exception cref="T:System.InvalidOperationException">Thrown when the encryption provider is not initialized.</exception>
-            <exception cref="T:System.ArgumentException">Thrown when the original buffer cannot hold the encrypted data.</exception>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.DecryptData(System.Byte*,System.Int32@,System.Int32)">
-            <inheritdoc cref="M:Fusion.Encryption.IDataEncryption.DecryptData(System.Byte*,System.Int32@,System.Int32)"/>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.ComputeHash(System.Byte*,System.Int32@,System.Int32)">
-            <inheritdoc cref="M:Fusion.Encryption.IDataEncryption.ComputeHash(System.Byte*,System.Int32@,System.Int32)"/>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.VerifyHash(System.Byte*,System.Int32@,System.Int32)">
-            <inheritdoc cref="M:Fusion.Encryption.IDataEncryption.VerifyHash(System.Byte*,System.Int32@,System.Int32)"/>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.BuildAesProvider(System.Byte[])">
-            <summary>
-            Build a new AES Implementation
-            </summary>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.BuildHMACSHA256(System.Byte[])">
-            <summary>
-            Build a new HMACSHA256 Implementation
-            </summary>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.GetBufferEncrypt">
-            <summary>
-            Clear and return the IN Encrypt Buffer 
-            </summary>
-        </member>
-        <member name="M:Fusion.Encryption.DataEncryptor.GetBufferDecrypt">
-            <summary>
-            Clear and return the OUT Encrypt Buffer 
-            </summary>
-        </member>
-        <member name="T:Fusion.Encryption.IDataEncryption">
-            <summary>
-            Interface for classes that manage the encryption/decryption of byte arrays
-            </summary>
-        </member>
-        <member name="M:Fusion.Encryption.IDataEncryption.Setup(System.Byte[])">
-            <summary>
-            Setup the encryption implementation with the right key
-            </summary>
-        </member>
-        <member name="M:Fusion.Encryption.IDataEncryption.GenerateKey">
-            <summary>
-            Generate the key used used by the encryption implementation
-            </summary>
-            <returns>Key used to setup the encryption implementation</returns>
-        </member>
-        <member name="M:Fusion.Encryption.IDataEncryption.EncryptData(System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Encrypt data in place and update it's length.
-            </summary>
-            <param name="buffer">Data to encrypt</param>
-            <param name="bufferLength">Length of the data to encrypt</param>
-            <param name="capacity">Buffer total capacity</param>
-            <returns>True if the encryption was completed, false otherwise</returns>
-        </member>
-        <member name="M:Fusion.Encryption.IDataEncryption.DecryptData(System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Decrypt data in place and update it's length.
-            </summary>
-            <param name="buffer">Data to decrypt</param>
-            <param name="bufferLength">Length of the data to decrypt</param>
-            <param name="capacity">Buffer total capacity</param>
-            <returns>True if the decryption was completed, false otherwise</returns>
-        </member>
-        <member name="M:Fusion.Encryption.IDataEncryption.ComputeHash(System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Compute the Buffer hash and append it to the buffer itself
-            </summary>
-            <param name="buffer">Data to compute the hash</param>
-            <param name="bufferLength">Length of the data to hash</param>
-            <param name="capacity">Buffer total capacity</param>
-            <returns>True if the hash was properly computed, false otherwise</returns>
-        </member>
-        <member name="M:Fusion.Encryption.IDataEncryption.VerifyHash(System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Verify the buffer hash that was appended to the buffer
-            </summary>
-            <param name="buffer">Buffer to check the hash</param>
-            <param name="bufferLength">Length of the data to hash</param>
-            <param name="capacity">Buffer total capacity</param>
-            <returns>True if the hash was properly verified, false otherwise</returns>
-        </member>
-        <member name="T:Fusion.Encryption.EncryptionManager`2">
-            <summary>
-            The EncryptionManager class manages encryption keys for different handles.
-            </summary>
-            <typeparam name="TEncryption">A type that implements the IDataEncryption interface.</typeparam>
-            <typeparam name="THandler">A type that implements the IEquatable interface.</typeparam>
-            <remarks>
-            This class is unsafe because it uses pointers in its methods.
-            </remarks>
-        </member>
-        <member name="F:Fusion.Encryption.EncryptionManager`2._cyphers">
-            <summary>
-            A dictionary that maps handle IDs to their corresponding encryption objects.
-            </summary>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.Dispose">
-            <summary>
-            Disposes all encryption objects in the _cyphers dictionary.
-            </summary>
-            <remarks>
-            This method is called when the EncryptionManager object is being disposed.
-            </remarks>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.RegisterEncryptionKey(`0,System.Byte[])">
-            <summary>
-            Registers a new encryption key for a specific handle.
-            </summary>
-            <param name="handle">The handle ID for which the encryption key is to be registered.</param>
-            <param name="key">The encryption key to be registered.</param>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.DeleteEncryptionKey(`0)">
-            <summary>
-            Deletes the encryption key for a specific handle.
-            </summary>
-            <param name="handle">The handle ID for which the encryption key is to be deleted.</param>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.HasEncryptionForHandle(`0)">
-            <summary>
-            Check if a handle has encryption setup
-            </summary>
-            <param name="handle">Handle ID</param>
-            <returns>True if the handle has encryption setup, false otherwise</returns>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.Wrap(`0,System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Wraps the provided buffer with encryption and computes a hash for it.
-            </summary>
-            <param name="handle">The handle ID for which the packet is to be encrypted and hashed.</param>
-            <param name="buffer">The data buffer array containing the packet to be encrypted and hashed.</param>
-            <param name="length">The length of the buffer array.</param>
-            <param name="capacity">The total capacity of the buffer array.</param>
-            <returns>Returns true if both the encryption and hash computation were successful, false otherwise.</returns>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.Unwrap(`0,System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Unwraps the provided buffer by verifying its hash and decrypting it.
-            </summary>
-            <param name="handle">The handle ID for which the packet is to be verified and decrypted.</param>
-            <param name="buffer">The data buffer array containing the packet to be verified and decrypted.</param>
-            <param name="length">The length of the buffer array.</param>
-            <param name="capacity">The total capacity of the buffer array.</param>
-            <returns>Returns true if both the hash verification and decryption were successful, false otherwise.</returns>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.GenerateKey">
-            <summary>
-            Generates a new encryption key.
-            </summary>
-            <returns>A byte array representing the generated encryption key.</returns>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.ComputeHash(`0,System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Computes the hash for the data in the buffer for a specific handle.
-            </summary>
-            <param name="handle">The handle for which to compute the hash.</param>
-            <param name="buffer">The buffer containing the data to hash.</param>
-            <param name="length">The length of the data in the buffer.</param>
-            <param name="capacity">The total capacity of the buffer.</param>
-            <returns>True if the hash was computed successfully, false otherwise.</returns>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.VerifyHash(`0,System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Verifies the hash for the data in the buffer for a specific handle.
-            </summary>
-            <param name="handle">The handle for which to verify the hash.</param>
-            <param name="buffer">The buffer containing the data to verify the hash.</param>
-            <param name="length">The length of the data in the buffer.</param>
-            <param name="capacity">The total capacity of the buffer.</param>
-            <returns>True if the hash was verified successfully, false otherwise.</returns>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.Encrypt(`0,System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Encrypts a packet for a specific handle.
-            </summary>
-            <param name="handle">The handle ID for which the packet is to be encrypted.</param>
-            <param name="buffer">The data buffer array containing the packet to be encrypted.</param>
-            <param name="length">The length of the buffer array.</param>
-            <param name="capacity">The total capacity of the buffer array.</param>
-            <returns>Returns true if the encryption was successful, false otherwise.</returns>
-        </member>
-        <member name="M:Fusion.Encryption.EncryptionManager`2.Decrypt(`0,System.Byte*,System.Int32@,System.Int32)">
-            <summary>
-            Decrypts a packet from a specific handle.
-            </summary>
-            <param name="handle">The handle ID from which the packet is to be decrypted.</param>
-            <param name="buffer">The data buffer array containing the packet to be decrypted.</param>
-            <param name="length">The length of the buffer array.</param>
-            <param name="capacity">The total capacity of the buffer array.</param>
-            <returns>Returns true if the decryption was successful, false otherwise.</returns>
-        </member>
-        <member name="T:Fusion.Encryption.EncryptionToken">
-            <summary>
-            Represents an encryption token.
-            </summary>
-        </member>
-        <member name="F:Fusion.EncryptionConfig.EnableEncryption">
-            <summary>
-            Enabled the Encryption Feature
-            </summary>
-        </member>
         <member name="T:Fusion.Sockets.NetAddress">
             <summary>
             Represents a Network Address, which includes a IP and Port
@@ -247,19 +25,9 @@
             Signal if the <see cref="T:Fusion.Sockets.NetAddress"/> represents an IPv6 Address
             </summary>
         </member>
-        <member name="P:Fusion.Sockets.NetAddress.IsIPv4">
-            <summary>
-            Signal if the <see cref="T:Fusion.Sockets.NetAddress"/> represents an IPv4 Address
-            </summary>
-        </member>
         <member name="P:Fusion.Sockets.NetAddress.IsValid">
             <summary>
             Signal if this <see cref="T:Fusion.Sockets.NetAddress"/> is not default/empty
-            </summary>
-        </member>
-        <member name="P:Fusion.Sockets.NetAddress.HasAddress">
-            <summary>
-            Signal if this <see cref="T:Fusion.Sockets.NetAddress"/> has a valid IP Address
             </summary>
         </member>
         <member name="M:Fusion.Sockets.NetAddress.FromActorId(System.Int32)">
@@ -268,7 +36,7 @@
             </summary>
             <param name="actorId">ActorId used to build the NetAddress</param>
             <returns>Relay NetAddress that references the ActorId</returns>
-            <remarks>ActorId must be 0 or greater</remarks>
+            <remarks>ActorId must be 0 or greated</remarks>
         </member>
         <member name="M:Fusion.Sockets.NetAddress.Hash64(Fusion.Sockets.NetAddress)">
             <summary>
@@ -307,16 +75,7 @@
             <param name="port">Port used to build the NetAddress</param>
             <returns>New NetAddress reference</returns>
         </member>
-        <member name="M:Fusion.Sockets.NetAddress.CreateFromIpPort(System.String,System.UInt16)">
-            <summary>
-            Create a new NetAddress based on the IP and Port passed as argument
-            </summary>
-            <param name="ip">String representation of an IP, either IPv4 or IPv6</param>
-            <param name="port">Port used to build the NetAddress</param>
-            <returns>New NetAddress reference</returns>
-            <exception cref="T:System.ArgumentException">If IP is empty/null or an invalid IP, or port &lt; 0</exception>
-            <exception cref="T:Fusion.AssertException">If unable to parse IP</exception>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Fusion.Sockets.NetAddress.CreateFromIpPort(System.String,System.UInt16)" -->
         <member name="T:Fusion.Sockets.NetAddress.SubnetMask">
             <summary>
             IPv4 Subnet Mask Utilities
@@ -591,62 +350,23 @@
             MaximumTransferUnit bits. (ipv6 header: 40 bytes, udp header: 8 bytes)
             </summary>
         </member>
+        <member name="M:Fusion.Sockets.NetPeerGroup.LostEnvelope(Fusion.Sockets.NetSendEnvelope,Fusion.Sockets.INetPeerGroupCallbacks,Fusion.Sockets.NetConnection*)">
+            <summary>
+            Treat an envolpe as lost
+            </summary>
+            <param name="envelope">Lost envelope</param>
+            <param name="cb">Callback to be fired</param>
+            <param name="c">To which this envolopes relates to</param>
+        </member>
         <member name="M:Fusion.Sockets.NetSequencer.Distance(System.UInt64,System.UInt64)">
             <summary>
-            Calculates the distance between two sequence numbers, taking into account the circular nature of the sequence.
+            if from is LARGER than to, result is positive
+            if from is LESSER than to, result is negative
+            if they are the same, result is zero
             </summary>
-            <param name="from">The sequence number to start from.</param>
-            <param name="to">The sequence number to calculate the distance to.</param>
-            <returns>
-            The distance between the two sequence numbers. 
-            If 'from' is larger than 'to', the result is positive. 
-            If 'from' is lesser than 'to', the result is negative. 
-            If they are the same, the result is zero.
-            </returns>
-            <exception cref="T:System.ArgumentException">Thrown when the calculated distance is outside the range of an integer.</exception>
-        </member>
-        <member name="M:Fusion.Sockets.NetSocketNative.SetupEncryption(System.Byte[],System.Byte[])">
-            Encryption System
-            <summary>
-            Sets up the encryption system by initializing the encryption manager,
-            registering the encryption key, and creating the encryption token and buffer.
-            </summary>
-            <param name="key">The encryption key.</param>
-            <param name="encryptedKey">The encrypted key.</param>
-            <remarks>
-            If <paramref name="encryptedKey"/> is null, it indicates that the peer is a server.
-            If <paramref name="encryptedKey"/> is not null, the peer is a client.
-            </remarks>
-        </member>
-        <member name="M:Fusion.Sockets.NetSocketNative.HandleEncryptionOutgoing(Fusion.Sockets.NetAddress*,System.Byte*@,System.Int32@)">
-            <summary>
-            Handles the outgoing encryption process for the given address and buffer.
-            </summary>
-            <param name="address">The address to which the data is being sent.</param>
-            <param name="buffer">The buffer containing the data to be sent.</param>
-            <param name="bufferLength">The length of the data to be sent.</param>
-            <returns>Returns true if the encryption process is successful, false otherwise.</returns>
-        </member>
-        <member name="M:Fusion.Sockets.NetSocketNative.HandleEncryptionIngoing(Fusion.Sockets.NetAddress*,System.Byte*@,System.Int32,System.Int32@)">
-            <summary>
-            Handles the incoming encryption process for the given address and buffer.
-            </summary>
-            <param name="address">The address from which the data is received.</param>
-            <param name="buffer">The buffer containing the received data.</param>
-            <param name="bufferLength">The length of the received data.</param>
-            <param name="received">The number of bytes received.</param>
-            <returns>Returns true if the decryption process is successful, false otherwise.</returns>
-        </member>
-        <member name="M:Fusion.Sockets.NetSocketNative.ResetEncryption">
-            <summary>
-            Resets the encryption system by disposing the encryption manager and resetting the session key.
-            </summary>
-        </member>
-        <member name="M:Fusion.Sockets.NetSocketNative.DeleteEncryptionKey(Fusion.Sockets.NetAddress)">
-            <summary>
-            Deletes the encryption key associated with the given address.
-            </summary>
-            <param name="address">The address whose associated encryption key is to be deleted.</param>
+            <param name="from"></param>
+            <param name="to"></param>
+            <returns></returns>
         </member>
         <member name="F:Fusion.Sockets.NetSocketRelay._handle">
             <summary>
@@ -703,15 +423,15 @@
             <summary>
             This class implements STUN Client. Defined in RFC 8489
             
-            <see href="https://datatracker.ietf.org/doc/html/rfc8489"/> Session Traversal Utilities for NAT (STUN)
-            <see href="https://datatracker.ietf.org/doc/html/rfc8656"/> Traversal Using Relays around NAT (TURN): Relay Extensions to Session Traversal Utilities for NAT(STUN)
-            <see href="https://datatracker.ietf.org/doc/html/rfc8305"/> Happy Eyeballs Version 2: Better Connectivity Using Concurrency
-            <see href="https://datatracker.ietf.org/doc/html/rfc5128"/> State of Peer-to-Peer (P2P) Communication across Network Address Translators(NATs)
-            <see href="https://www.netmanias.com/en/post/techdocs/6067/nat-network-protocol/nat-behavior-discovery-using-stun-rfc-5780"/>
-            <see href="https://www.voip-info.org/stun/"/>
-            <see href="https://tailscale.com/blog/how-nat-traversal-works/"/>
-            <see href="https://serverfault.com/questions/782627/udp-hole-punching-still-required-in-ipv6-even-without-nat"/>
-            <see href="https://serverfault.com/questions/184524/switching-to-ipv6-implies-dropping-nat-is-that-a-good-thing"/>
+            <see cref="!:https://datatracker.ietf.org/doc/html/rfc8489"/> Session Traversal Utilities for NAT (STUN)
+            <see cref="!:https://datatracker.ietf.org/doc/html/rfc8656"/> Traversal Using Relays around NAT (TURN): Relay Extensions to Session Traversal Utilities for NAT(STUN)
+            <see cref="!:https://datatracker.ietf.org/doc/html/rfc8305"/> Happy Eyeballs Version 2: Better Connectivity Using Concurrency
+            <see cref="!:https://datatracker.ietf.org/doc/html/rfc5128"/> State of Peer-to-Peer (P2P) Communication across Network Address Translators(NATs)
+            <see cref="!:https://www.netmanias.com/en/post/techdocs/6067/nat-network-protocol/nat-behavior-discovery-using-stun-rfc-5780"/>
+            <see cref="!:https://www.voip-info.org/stun/"/>
+            <see cref="!:https://tailscale.com/blog/how-nat-traversal-works/"/>
+            <see cref="!:https://serverfault.com/questions/782627/udp-hole-punching-still-required-in-ipv6-even-without-nat"/>
+            <see cref="!:https://serverfault.com/questions/184524/switching-to-ipv6-implies-dropping-nat-is-that-a-good-thing"/>
             </summary>
         </member>
         <member name="T:Fusion.Sockets.Stun.StunClient.TestIPs">
@@ -719,56 +439,19 @@
             List of public DNS Servers
             </summary>
         </member>
-        <member name="M:Fusion.Sockets.Stun.StunClient.Reset">
-            <summary>
-            Reset the state of the StunClient
-            </summary>
-        </member>
-        <member name="M:Fusion.Sockets.Stun.StunClient.QueryReflexiveInfo(Fusion.Sockets.NetAddress,System.Func{System.Byte[],Fusion.Sockets.NetAddress,System.Boolean},System.Nullable{Fusion.Sockets.NetAddress},System.String,System.Boolean,System.Func{System.Boolean})">
-            <summary>
-            Run the STUN Service to retrieve the current Reflexive Addresses of the local peer
-            </summary>
-            <param name="boundLocalAddress">The bound local address to be used for the STUN service.</param>
-            <param name="sendDataViaSocket">A function delegate that takes a byte array and a NetAddress as parameters and returns a boolean value. This function is used to send data via a socket.</param>
-            <param name="customPublicAddress">An optional parameter that represents a custom public address. If provided, this address is used instead of discovering one.</param>
-            <param name="customStunServer">An optional parameter that represents a custom STUN server. If provided, this server is used instead of the default one.</param>
-            <param name="extendedAttempts">A boolean value indicating whether to extend the query time. If true, the query time is extended; otherwise, it is not.</param>
-            <param name="keepRunning">A function delegate that takes no parameters and returns a boolean value. This function is used to determine whether the STUN service should keep running.</param>
-            <returns>Reflexive Info data as a <see cref="T:Fusion.Sockets.Stun.StunResult"/> object.</returns>
-        </member>
-        <member name="M:Fusion.Sockets.Stun.StunClient.TryParseAndStoreStunMessage(Fusion.Sockets.NetAddress*,System.Byte*,System.Int32)">
-            <summary>
-            Tries to parse a buffer data into a <see cref="T:Fusion.Sockets.Stun.StunMessage"/>
-            </summary>
-            <param name="origin">Remove origin of the buffer data</param>
-            <param name="buffer">Buffer data to be parsed</param>
-            <param name="bufferLength">Lenght of the buffer data to be parsed</param>
-            <returns>True if the buffer contains a <see cref="T:Fusion.Sockets.Stun.StunMessage"/>, false otherwise</returns>
-        </member>
-        <member name="M:Fusion.Sockets.Stun.StunClient.QueryLocalAddress(Fusion.Sockets.NetAddress,System.Net.Sockets.AddressFamily@,Fusion.Sockets.NetAddress@)">
-            <summary>
-            Query the LAN Address
-            </summary>
-            <param name="boundLocalAddress">Bound Local Address</param>
-            <param name="addressFamily">Output the Address Family found</param>
-            <param name="localAddress">Output the LAN Address</param>
-            <returns>True if a valid LAN Address was found, false otherwise</returns>
-        </member>
-        <member name="M:Fusion.Sockets.Stun.StunClient.QueryPublicAddress(System.Func{System.Byte[],Fusion.Sockets.NetAddress,System.Boolean},System.Net.Sockets.AddressFamily,System.Guid@,System.Boolean@)">
+        <member name="M:Fusion.Sockets.Stun.StunClient.QueryPublicAddress(Fusion.Sockets.NetPeer*,Fusion.Sockets.INetSocket,System.Net.Sockets.AddressFamily,System.Guid@)">
             <summary>
             Run a STUN Binding Request against the Public STUN Server in order to discover peer reflexive addresses
             </summary>
-            <param name="sendAnyData">Custom method to send data to remote Address</param>
-            <param name="originalFamily">Original Address Family</param>
-            <param name="requestID">Request ID to be used when sending the STUN Binding Request</param>
-            <param name="skipNATDiscovery">Signal to skip the NAT Type discovery</param>
+            <param name="peer">Network Peer reference</param>
+            <param name="socket">Network Socket reference</param>
             <returns>Running Task of the STUN Query Procedure</returns>
         </member>
         <member name="M:Fusion.Sockets.Stun.StunClient.GetLocalAddress(System.Net.Sockets.AddressFamily@,System.Net.IPAddress@)">
             <summary>
             Retrieve the Local IP Endpoint currently active
             </summary>
-            <returns>True if a valid Local IP Address was found, false otherwise</returns>
+            <returns></returns>
         </member>
         <member name="T:Fusion.Sockets.Stun.StunErrorAttribute">
             <summary>
@@ -862,7 +545,6 @@
             Parses STUN message from raw data packet.
             </summary>
             <param name="data">Raw STUN message.</param>
-            <param name="length">STUN Message length</param>
         </member>
         <member name="M:Fusion.Sockets.Stun.StunMessage.Serialize">
             <summary>
@@ -926,41 +608,23 @@
         </member>
         <member name="M:Fusion.Sockets.Stun.StunResult.#ctor(Fusion.Sockets.NetAddress,Fusion.Sockets.NetAddress)">
             <summary>
-            Initializes a new instance of the <see cref="T:Fusion.Sockets.Stun.StunResult"/> class.
+            Default constructor.
             </summary>
-            <param name="publicEndPoint">The public IP endpoint. Defaults to an unspecified IPv4 address.</param>
-            <param name="privateEndPoint">The private IP endpoint. Defaults to an unspecified IPv4 address.</param>
+            <param name="netType">Specifies UDP network type.</param>
+            <param name="publicEndPoint">Public IP end point.</param>
         </member>
         <member name="T:Fusion.Sockets.Stun.StunServers">
             <summary>
             List of public STUN Servers
             </summary>
         </member>
-        <member name="T:Fusion.Sockets.Stun.StunServers.StunServer">
+        <member name="M:Fusion.Sockets.Stun.StunServers.BuildIP(System.String)">
             <summary>
-            Stores Addresses of a STUN Server
+            
+            <see cref="!:https://datatracker.ietf.org/doc/html/rfc5952#section-6"/>
             </summary>
-        </member>
-        <member name="M:Fusion.Sockets.Stun.StunServers.GetStunServer(System.Boolean)">
-            <summary>
-            Build a list of STUN Servers
-            </summary>
-            <param name="IPv6Support">Filter STUN Servers with IPv6 Support</param>
-            <returns>List of valid STUN Servers</returns>
-        </member>
-        <member name="M:Fusion.Sockets.Stun.StunServers.SetupStunServers(System.String)">
-            <summary>
-            Pre-Build the list of all STUN Servers
-            </summary>
-            <param name="customStunServer">Optional Custom STUN Server to ping</param>
-        </member>
-        <member name="M:Fusion.Sockets.Stun.StunServers.ResolveStunServerInfo(System.String)">
-            <summary>
-            Build the STUN Server Info by checking its valid IPs
-            <see href="https://datatracker.ietf.org/doc/html/rfc5952#section-6"/>
-            </summary>
-            <param name="stunServerAddress">STUN Server Address</param>
-            <returns><see cref="T:Fusion.Sockets.Stun.StunServers.StunServer"/> reference </returns>
+            <param name="stunServer"></param>
+            <returns></returns>
         </member>
         <member name="P:Fusion.Protocol.BitStream.Size">
             <summary>
@@ -1023,17 +687,6 @@
             How the conversion happens depends on the the Type of Communicator
             </summary>
         </member>
-        <member name="T:Fusion.Protocol.ChangeMasterClient">
-            <summary>
-            Change master client request Message
-            Used to signal that Fusion Simulation should start
-            </summary>
-        </member>
-        <member name="F:Fusion.Protocol.ChangeMasterClient.NewMasterClientCandidate">
-            <summary>
-            Player Unique Ref
-            </summary>
-        </member>
         <member name="T:Fusion.Protocol.Message">
             <summary>
             Base Protocol Message.
@@ -1065,6 +718,7 @@
             <summary>
             Creates a copy of this Message
             </summary>
+            <returns></returns>
         </member>
         <member name="M:Fusion.Protocol.Message.#ctor(Fusion.Protocol.ProtocolMessageVersion,System.Version)">
             <summary>
@@ -1083,7 +737,7 @@
             <summary>
             Used by the specialized versions of Message to serialize its data
             </summary>
-            <param name="stream">Buffer to read from or write into the data of the Message</param>
+            <param name="serializer">Buffer to read from or write into the data of the Message</param>
         </member>
         <member name="M:Fusion.Protocol.Message.CheckCompability(Fusion.Protocol.ProtocolMessageVersion,System.Version)">
             <summary>
@@ -1114,9 +768,7 @@
             <summary>
             Disconnect Protocol Message
             </summary>
-            <param name="reason">The reason for the disconnection.</param>
-            <param name="protocolVersion">The version of the protocol to be used. Defaults to the latest protocol version.</param>
-            <param name="serializationVersion">The version of the serialization to be used. Defaults to null.</param>
+            <param name="reason">Disconnect Reason</param>
         </member>
         <member name="T:Fusion.Protocol.DisconnectReason">
             <summary>
@@ -1260,16 +912,6 @@
         <member name="F:Fusion.Protocol.Join.PlayerRef">
             <summary>
             Player Unique Ref
-            </summary>
-        </member>
-        <member name="F:Fusion.Protocol.Join.EncryptionKey">
-            <summary>
-            Peer Encryption Key
-            </summary>
-        </member>
-        <member name="F:Fusion.Protocol.Join.EncryptionKeySecret">
-            <summary>
-            Peer Encryption Key
             </summary>
         </member>
         <member name="T:Fusion.Protocol.SyncType">
@@ -1419,6 +1061,7 @@
             <summary>
             Create a clone with this Snapshot and reset reference
             </summary>
+            <returns></returns>
         </member>
         <member name="T:Fusion.Protocol.StartRequests">
             <summary>
@@ -1499,14 +1142,14 @@
             <summary>
             Zero (0) means: if it should be the room itself (authorative event).
             
-            <see href="https://doc-api.photonengine.com/en/plugins/v4/interface_photon_1_1_hive_1_1_plugin_1_1_i_plugin_host.html#a756dbd7b16fac7b43cb153506a442a99"/>
+            <see cref="!:https://doc-api.photonengine.com/en/plugins/v4/interface_photon_1_1_hive_1_1_plugin_1_1_i_plugin_host.html#a756dbd7b16fac7b43cb153506a442a99"/>
             </summary>
         </member>
         <member name="F:Fusion.Protocol.PhotonConstants.FUSION_DATA_EVENT_PARAMETER_CODE">
             <summary>
             Default CustomData Key of Realtime Events
             
-            <see href="https://doc-api.photonengine.com/en/dotnet/current/class_exit_games_1_1_client_1_1_photon_1_1_event_data.html#a85c3ee46f89cc41d459ababb1d55d150"/>
+            <see cref="!:https://doc-api.photonengine.com/en/dotnet/current/class_exit_games_1_1_client_1_1_photon_1_1_event_data.html#a85c3ee46f89cc41d459ababb1d55d150"/>
             </summary>
         </member>
         <member name="T:Fusion.Protocol.ProtocolSerializer">
@@ -1529,21 +1172,6 @@
             <param name="stream">Stream containing a Protocol Message</param>
             <param name="msg">Deserialized Protocol Message</param>
             <returns>True if a Protocol Message was deserialized</returns>
-        </member>
-        <member name="T:Fusion.Protocol.Versioning">
-            <summary>
-            Versioning Information
-            </summary>
-        </member>
-        <member name="P:Fusion.Protocol.Versioning.GetCurrentVersion">
-            <summary>
-            Get the current version
-            </summary>
-        </member>
-        <member name="P:Fusion.Protocol.Versioning.GetProductVersion">
-            <summary>
-            Get the current product version
-            </summary>
         </member>
         <member name="F:Fusion.Protocol.ProtocolMessageVersion.Invalid">
             <summary>
@@ -1588,11 +1216,6 @@
         <member name="F:Fusion.Protocol.ProtocolMessageVersion.V1_4_0">
             <summary>
             Rework Host Migration
-            </summary>
-        </member>
-        <member name="F:Fusion.Protocol.ProtocolMessageVersion.V1_5_0">
-            <summary>
-            Added Encryption Support
             </summary>
         </member>
         <member name="F:Fusion.Protocol.ProtocolMessageVersion.LATEST">

@@ -5,13 +5,15 @@ namespace Fusion.Addons.Physics
 {
   public partial class NetworkRigidbody<RBType, PhysicsSimType> {
     
-    /// <summary>
-    /// Holds teleport information for application after physics simulation.
-    /// </summary>
-    protected (Vector3? position, Quaternion? rotation, bool moving) _deferredTeleport;
+    private (Vector3? position, Quaternion? rotation, bool moving) _deferredTeleport;
     
-
-    /// <inheritdoc/>
+    /// <summary>
+    /// Initiate a moving teleport. This method must be in FixedUpdateNetwork() called before
+    /// <see cref="RunnerSimulatePhysics3D"/> and <see cref="RunnerSimulatePhysics2D"/> have simulated physics.
+    /// This teleport is deferred until after physics has simulated, and captures position and rotation values both before and after simulation.
+    /// This allows interpolation leading up to the teleport to have a valid pre-teleport TO target.
+    /// This is an alternative to the basic Teleport(), which causes interpolation to freeze for one tick.
+    /// </summary>
     public override void Teleport(Vector3? position = null, Quaternion? rotation = null) {
       if (Object.IsInSimulation == false) {
         return;
@@ -51,16 +53,12 @@ namespace Fusion.Addons.Physics
         if (UsePreciseRotation) {
           Data.FullPrecisionRotation = _deferredTeleport.rotation.Value;
         } else {
-          Data.TRSPData.Rotation     = _deferredTeleport.rotation.Value;
+          Data.TRSPData.Rotation = _deferredTeleport.rotation.Value;
         }
       }
       IncrementTeleportKey(moving);
     }
     
-    /// <summary>
-    /// Adds one to the current teleport key. Indicating the teleport as moving sets the sign to negative,
-    /// as a flag to indicate that this teleport has a different To and From position/rotation target for the teleport tick.
-    /// </summary>
     protected virtual void IncrementTeleportKey(bool moving) {
       // Keeping the key well under 1 byte in size 
       var key = Math.Abs(Data.TRSPData.TeleportKey) + 1;

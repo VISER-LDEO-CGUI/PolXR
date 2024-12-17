@@ -1,38 +1,8 @@
 
 Photon C# Client Library - Changelog
-www.photonengine.com  -  Join our Discord Server: https://dashboard.photonengine.com/account/profile
+Exit Games GmbH - www.photonengine.com - forum.photonengine.com
 
 
-
-Version 4.1.8.5 (13. May 2024 - rev7556)
-    Changed: TPeer.SendPing() will now enqueue the message instead of sending it immmediately. This makes sure a ping is never sent as first message (which has to be an Init).
-    Changed: To re-using a ParameterDictionary for pinging in WS / WSS.
-
-Version 4.1.8.4 (26. April 2024 - rev7530)
-    Changed: SendAcksOnly and SendOutgoingCommands logging (they only log successful re-sends).
-    Changed: In QueueSentCommand the reliableCommandsSent is increased only for commands that are sent the first time (not counting repeats anymore).
-
-Version 4.1.8.3 (24. April 2024 - rev7519)
-    Changed: Sending of reliable commands. There is now a "Send Window" which limits how many reliable commands are being sent, based off the lowest sent sequence number, only the next XY sequence numbers can be sent. This moves with incoming acknowledgements. This avoids spamming the server, which caused resends.
-    Note: Per channel, the Send Window indirectly affects unreliable and even unsequenced commands by ending the sending for a channel early. Use a separate channel (higher number) for larger chunks of data to avoid related lag.
-    Renamed: PhotonPeer.SequenceDeltaLimitSends to SendWindowSize.
-    Removed: PhotonPeer.SequenceDeltaLimitResends. If a reliable command needs re-sending, it is something the server is waiting for, so we just send.
-    Changed: Resending of commands (UDP). SendOutgoingCommands now makes sure to return true if any of the resends does not fit in the current datagram. Internally, the next check for resends is scheduled "immediately".
-
-Version 4.1.8.2 (25. March 2024 - rev7471)
-    Added: PhotonLibs\WebSocket\PhotonWebSocket.asmdef, which wraps up the code and dlls for WebGL exports. This is auto referenced.
-
-Version 4.1.8.1 (12. March 2024 - rev7444)
-    Fixed: SocketTcp which was reading the wrong TCP Header byte as "reliable" indicator. This meant, the TrafficStatsIncoming were wrong.
-
-Version 4.1.8.0 (31. January 2024 - rev7364)
-    No notable changes. The Realtime API has some breaking changes. Check that changelog.
-
-Version 4.1.7.4 (13. December 2023 - rev7284)
-    Fixed: PhotonPeer.BytesOut internal counting.
-
-Version 4.1.7.3 (07. December 2023 - rev7252)
-    No notable changes.
 
 Version 4.1.7.2 (20. September 2023 - rev7218)
     Fixed: DisconnectTimeout is no longer capped. You can set any value client side. Server side timeouts can only be set for Self Hosted or Enterprise Server.

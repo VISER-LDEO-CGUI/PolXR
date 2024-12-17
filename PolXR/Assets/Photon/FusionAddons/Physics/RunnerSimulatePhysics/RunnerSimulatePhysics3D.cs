@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using Fusion.Analyzer;
 
@@ -15,10 +14,8 @@ namespace Fusion.Addons.Physics {
     // This changed from a basic Physics.AutoSimulate to Simulations options for FixedUpdate, Update or Script(the equivalent of auto-simulate disabled).
 #if !UNITY_2022_3_OR_NEWER
     
-    /// <inheritdoc/>
-    protected override PhysicsTimings UnityPhysicsMode => Physics.autoSimulation ? PhysicsTimings.FixedUpdate : PhysicsTimings.Script;
+    protected override PhysicsTimings UnityPhysicsPhysicsMode => Physics.autoSimulation ? PhysicsTimings.FixedUpdate : PhysicsTimings.Script;
     
-    /// <inheritdoc/>
     protected override void OverrideAutoSimulate(bool set) {
       
       if (set && _physicsTiming == PhysicsTimings.Update) {
@@ -30,15 +27,13 @@ namespace Fusion.Addons.Physics {
       Physics.autoSimulation = set;
     }
     
-    /// <inheritdoc/>
     protected override void RestoreAutoSimulate() {
       Physics.autoSimulation = _physicsAutoSimRestore == PhysicsTimings.FixedUpdate ? true : false;
     }
 #else
-    /// <inheritdoc/>
-    protected override PhysicsTimings UnityPhysicsMode => (PhysicsTimings)Physics.simulationMode;
     
-    /// <inheritdoc/>
+    protected override PhysicsTimings UnityPhysicsPhysicsMode => (PhysicsTimings)Physics.simulationMode;
+
     protected override void OverrideAutoSimulate(bool set) {
       _physicsAutoSimRestore = (PhysicsTimings)Physics.simulationMode;
       if (set) {
@@ -48,7 +43,6 @@ namespace Fusion.Addons.Physics {
       }
     }
     
-    /// <inheritdoc/>
     protected override void RestoreAutoSimulate() {
       Physics.simulationMode = (SimulationMode)_physicsAutoSimRestore;
     }
@@ -57,13 +51,11 @@ namespace Fusion.Addons.Physics {
     [StaticField(StaticFieldResetMode.None)]
     static bool? _physicsAutoSyncRestore;
 
-    /// <inheritdoc/>
     protected override bool AutoSyncTransforms {
       get => Physics.autoSyncTransforms;
       set => Physics.autoSyncTransforms = value;
     }
     
-    /// <inheritdoc/>
     protected override void SimulatePrimaryScene(float deltaTime) {
       if (Runner.SceneManager.TryGetPhysicsScene3D(out var physicsScene)) {
         if (physicsScene.IsValid()) {
@@ -74,7 +66,6 @@ namespace Fusion.Addons.Physics {
       }
     }
 
-    /// <inheritdoc/>
     protected override void SimulateAdditionalScenes(float deltaTime, bool isForward) {
       if (_additionalScenes == null || _additionalScenes.Count == 0) {
         return;

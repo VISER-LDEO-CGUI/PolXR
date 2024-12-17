@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using System;
 using System.Linq;
-using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using Microsoft.MixedReality.Toolkit.Input;
+using UnityEngine.XR.Interaction.Toolkit;
+//using Fusion;
+
+
 
 [System.Serializable]
 public class Centroid
@@ -22,12 +24,15 @@ public class MetaData
     public Centroid centroid;
 }
 
+
 public class DataLoader : MonoBehaviour
 {
     public string demDirectoryPath;
     public List<string> flightlineDirectories;
     private Shader radarShader;
     private GameObject menu;
+
+    // public NetworkRunner runner;
 
     public Vector3 GetDEMCentroid()
     {
@@ -86,7 +91,6 @@ public class DataLoader : MonoBehaviour
 
     void Awake()
     {
-        // Load the RadarShader from the specified path
         radarShader = AssetDatabase.LoadAssetAtPath<Shader>("Assets/Shaders/RadarShader.shader");
         if (radarShader == null)
         {
@@ -124,6 +128,7 @@ public class DataLoader : MonoBehaviour
         foreach (string flightlineDirectory in flightlineDirectories)
         {
             ProcessFlightlines(flightlineDirectory, radarContainer);
+            // Debug.LogError(flightlineDirectory);
         }
 
         DisableAllRadarObjects(radarContainer);
@@ -144,6 +149,7 @@ public class DataLoader : MonoBehaviour
     }
     private void ProcessDEMs(GameObject parent)
     {
+        Debug.Log("DataLoader Process DEMs called!");
         // Check if the selected DEM directory exists
         if (!Directory.Exists(demDirectoryPath))
         {
@@ -183,6 +189,8 @@ public class DataLoader : MonoBehaviour
                 ScaleAndRotate(demObj, 0.0001f, 0.0001f, 0.001f, -90f);
 
                 demObj.transform.SetParent(parent.transform);
+
+
             }
         }
     }
@@ -212,6 +220,7 @@ public class DataLoader : MonoBehaviour
                 else if (fileName.StartsWith("Data"))
                 {
                     GameObject radarObj = LoadObj(objFile);
+
                     if (radarObj != null)
                     {
                         ScaleAndRotate(radarObj, 0.0001f, 0.0001f, 0.001f, -90f);
@@ -237,15 +246,15 @@ public class DataLoader : MonoBehaviour
                         radarObj.transform.SetParent(segmentContainer.transform);
 
                         // Add necessary components to the Radar object
-                        radarObj.AddComponent<ConstraintManager>();
-                        radarObj.AddComponent<BoundsControl>();
-                        radarObj.AddComponent<NearInteractionGrabbable>();
-                        radarObj.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-                        radarObj.AddComponent<RotationAxisConstraint>();
+                        //radarObj.AddComponent<ConstraintManager>();
+                        //radarObj.AddComponent<BoundsControl>();
+                        //radarObj.AddComponent<NearInteractionGrabbable>();
+                        //radarObj.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+                        //radarObj.AddComponent<RotationAxisConstraint>();
 
                         // Add necessary components to the parent segment container
                         segmentContainer.AddComponent<BoxCollider>();
-                        segmentContainer.AddComponent<ConstraintManager>();
+                        //segmentContainer.AddComponent<ConstraintManager>();
                         segmentContainer.AddComponent<MyRadarEvents>();
                     }
                 }
@@ -253,7 +262,9 @@ public class DataLoader : MonoBehaviour
         }
     }
 
+    // CTL Networking
     private GameObject LoadObj(string objPath)
+    //private NetworkObject LoadObj(string objPath)
     {
         GameObject importedObj = AssetDatabase.LoadAssetAtPath<GameObject>(objPath);
         if (importedObj == null)
@@ -261,7 +272,6 @@ public class DataLoader : MonoBehaviour
             Debug.LogError($"Failed to load OBJ: {objPath}");
             return null;
         }
-
         return Instantiate(importedObj);
     }
 
@@ -337,18 +347,21 @@ public class DataLoader : MonoBehaviour
             lineRenderer.startWidth = 0.1f;
             lineRenderer.endWidth = 0.1f;
 
-            // Add a MeshCollider to the LineRenderer
-            AttachBoxColliders(lineObj, rotatedVertices.ToArray());
-
             // Add a click handler
             foreach (Transform child in parentContainer.transform)
             {
-                if (child.name.StartsWith("Data"))
+                if (child.name.StartsWith("Flightline"))
                 {
-                    lineObj.AddComponent<Interactable>();
+                    lineObj.AddComponent<XRSimpleInteractable>();
                     break;
                 }
             }
+
+            // Add a MeshCollider to the LineRenderer
+            AttachBoxColliders(lineObj, rotatedVertices.ToArray());
+
+            lineObj.GetComponent<XRSimpleInteractable>().selectEntered.AddListener(TogglePolyline);
+            Debug.Log(lineObj.GetComponent<XRSimpleInteractable>().selectEntered.ToString());
 
             return lineObj;
         }
@@ -357,6 +370,13 @@ public class DataLoader : MonoBehaviour
             Debug.LogWarning($"No vertices found in flightline .obj file: {objPath}");
             return null;
         }
+    }
+    void TogglePolyline(SelectEnterEventArgs arg0)
+    {
+        IXRSelectInteractable selectedObj = arg0.interactableObject;
+        IXRSelectInteractor iXRInteractorObj = arg0.interactorObject;
+
+        Debug.Log("selected");
     }
 
     private void AttachBoxColliders(GameObject lineObj, Vector3[] vertices)
@@ -378,6 +398,8 @@ public class DataLoader : MonoBehaviour
                 Math.Max(Mathf.Abs(a.y - b.y), 0.2f),
                 Math.Max(Mathf.Abs(a.z - b.z), 0.2f)
             );
+
+            lineObj.GetComponent<XRSimpleInteractable>().colliders.Add(collider);
         }
     }
 
@@ -400,6 +422,7 @@ public class DataLoader : MonoBehaviour
     }
 
     private void ScaleAndRotate(GameObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
+    // private void ScaleAndRotate(NetworkObject obj, float scaleX, float scaleY, float scaleZ, float rotationX)
     {
         obj.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
         obj.transform.eulerAngles = new Vector3(rotationX, 0f, 0f);

@@ -1,7 +1,7 @@
-using Microsoft.MixedReality.Toolkit.Input;
-using Microsoft.MixedReality.Toolkit;
-using Microsoft.MixedReality.Toolkit.UI;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+//using Microsoft.MixedReality.Toolkit.Input;
+//using Microsoft.MixedReality.Toolkit;
+//using Microsoft.MixedReality.Toolkit.UI;
+//using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
+public class RadarEvents3D : RadarEvents//, IMixedRealityPointerHandler
 {
 
     // The scientific objects
@@ -84,7 +84,7 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
     public new void ToggleRadar(bool toggle)
     {
         this.transform.GetComponent<BoxCollider>().enabled = !loaded;
-        this.transform.GetComponent<BoundsControl>().enabled = toggle;
+        // this.transform.GetComponent<BoundsControl>().enabled = toggle;
         radargrams.SetActive(toggle);
         loaded = toggle;
         MarkObj3D.SetActive(false);
@@ -108,65 +108,65 @@ public class RadarEvents3D : RadarEvents, IMixedRealityPointerHandler
         }
         TogglePolyline(true, true);
     }
-    private void Select(ManipulationEventData eventData)
-    {
-        Select();
-    }
 
-    // Show the menu and mark and update the variables
-    public void OnPointerDown(MixedRealityPointerEventData eventData)
-    {
-        // Only load the images when selected
-        ToggleRadar(true);
+    //private void Select(ManipulationEventData eventData)
+    //{
+    //    Select();
+    //}
 
-        // Show that the object has been selected
-        Select();
+    //// Show the menu and mark and update the variables
+    //public void OnPointerDown(MixedRealityPointerEventData eventData)
+    //{
+    //    // Only load the images when selected
+    //    ToggleRadar(true);
 
-        if (Menu.transform.GetComponent<MenuEvents>().isLinePickingMode)
-        {
-            doLinePicking(eventData);
-        }
+    //    // Show that the object has been selected
+    //    Select();
 
-        Debug.Log("on pointer down is firing");
+    //    if (Menu.transform.GetComponent<MenuEvents>().isLinePickingMode)
+    //    {
+    //        doLinePicking(eventData);
+    //    }
 
-    }
-    private void doLinePicking(MixedRealityPointerEventData eventData)
-    {
-        //create ray, do raycasting
-        Ray ray = new Ray(eventData.Pointer.Result.Details.Point, -eventData.Pointer.Result.Details.Normal);
-        RaycastHit[] hits;
-        hits = Physics.RaycastAll(ray);
+    //    Debug.Log("on pointer down is firing");
 
-        if (hits.Length > 0)
-        {
-            //sort hits list by distance closest to furthest
-            Array.Sort(hits, (RaycastHit x, RaycastHit y) => x.distance.CompareTo(y.distance));
+    //}
+    //private void doLinePicking(MixedRealityPointerEventData eventData)
+    //{
+    //    //create ray, do raycasting
+    //    Ray ray = new Ray(eventData.Pointer.Result.Details.Point, -eventData.Pointer.Result.Details.Normal);
+    //    RaycastHit[] hits;
+    //    hits = Physics.RaycastAll(ray);
 
-            foreach (RaycastHit obj in hits)
-            {
-                // find the first radargram mesh that was hit
-                if (obj.transform.name.StartsWith("Data") || obj.transform.name.StartsWith("_Data"))
-                { 
-                    //draw mark at point of intersection
-                    //DrawMarkObj(obj);
-                    Vector2 uvCoordinates = obj.textureCoord;
+    //    if (hits.Length > 0)
+    //    {
+    //        //sort hits list by distance closest to furthest
+    //        Array.Sort(hits, (RaycastHit x, RaycastHit y) => x.distance.CompareTo(y.distance));
 
-                    //get the world coordinates of the picked points
-                    Vector3[] worldcoords = GetLinePickingPoints(uvCoordinates, meshForward, obj.transform.name);
+    //        foreach (RaycastHit obj in hits)
+    //        {
+    //            // find the first radargram mesh that was hit
+    //            if (obj.transform.name.StartsWith("Data") || obj.transform.name.StartsWith("_Data"))
+    //            { 
+    //                //draw mark at point of intersection
+    //                //DrawMarkObj(obj);
+    //                Vector2 uvCoordinates = obj.textureCoord;
+
+    //                //get the world coordinates of the picked points
+    //                Vector3[] worldcoords = GetLinePickingPoints(uvCoordinates, meshForward, obj.transform.name);
                     
-                    //draw line using the picked points
-                    DrawPickedPointsAsLine(worldcoords);
-                    break;
-                }
-            }
-        }
-    }
+    //                //draw line using the picked points
+    //                DrawPickedPointsAsLine(worldcoords);
+    //                break;
+    //            }
+    //        }
+    //    }
+    //}
 
     // Unused functions
-    public void OnPointerUp(MixedRealityPointerEventData eventData) { }
-    public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
-    public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
-    private void LateUpdate() { }
+    //public void OnPointerUp(MixedRealityPointerEventData eventData) { }
+    //public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
+    //public void OnPointerClicked(MixedRealityPointerEventData eventData) { }
 
     // Gets the scale of the radargram
     public new Vector3 GetScale()

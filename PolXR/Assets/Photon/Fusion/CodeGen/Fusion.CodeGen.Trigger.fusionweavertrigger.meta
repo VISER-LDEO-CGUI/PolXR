@@ -7,5 +7,4 @@ ScriptedImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-  script: {fileID: 11500000, guid: ad51894a651725c42acc54ccd6a81282, type: 3}
-  RunWeaverOnConfigChanges: 1
+  script: {instanceID: 0}

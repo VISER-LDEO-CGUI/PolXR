@@ -11,17 +11,11 @@ namespace Fusion.Addons.Physics {
   /// <typeparam name="TPhysicsScene"></typeparam>
   public abstract class RunnerSimulatePhysicsBase<TPhysicsScene> : RunnerSimulatePhysicsBase where TPhysicsScene : struct, IEquatable <TPhysicsScene> {
     
-    /// <summary>
-    /// Wrapper for physics scene reference.
-    /// </summary>
     protected struct AdditionalScene {
       public TPhysicsScene PhysicsScene;
       public bool ForwardOnly;
     }
     
-    /// <summary>
-    /// List of additional physics scenes that should be simulated by Fusion.
-    /// </summary>
     protected List<AdditionalScene> _additionalScenes;
     
     /// <summary>

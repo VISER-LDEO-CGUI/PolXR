@@ -1,6 +1,8 @@
+// #define NRB_DEBUGGING
 
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using System.Diagnostics;
 
 namespace Fusion.Addons.Physics
 {
@@ -8,19 +10,13 @@ namespace Fusion.Addons.Physics
 
     // PhysX/Box2D abstractions
 
-    /// <summary>
-    /// Returns true if the passed Rigidbody/Rigidbody2D velocity energies are below the sleep threshold.
-    /// </summary>
     protected abstract bool IsRigidbodyBelowSleepingThresholds(RBType rb);
-    /// <summary>
-    /// Returns true if the passed NetworkRBData velocity energies are below the sleep threshold.
-    /// </summary>
     protected abstract bool IsStateBelowSleepingThresholds(NetworkRBData data);
       
     // NRB Render Logic
  
-    /// <inheritdoc/>
     public override void Render() {
+      
       // Specifically flagged to not interpolate for cached reasons (ie for Server (non-Host))
       if (_doNotInterpolate) {
         return;
@@ -37,8 +33,8 @@ namespace Fusion.Addons.Physics
       var it = _interpolationTarget;
       var hasInterpolationTarget = (object)it != null;
 
-      // Correct Interpolation is currently only valid for simulation in the FixedUpdateNetwork() timing,
-      // as correct Interpolation for the FixedUpdate() timing would require a before FixedUpdate() reset similar to IBeforeAllTicks.
+      // Correct Interpolation is currently only valid for the FixedUpdateNetwork() timing, as correct Interpolation for the FixedUpdate() timing
+      // would require a before FixedUpdate() reset similar to IBeforeAllTicks.
       // The primary use case for the FixedUpdate() timing is for Shared Mode in Single Peer mode, in which case
       // Unity should be the RunnerSimulatePhysics Physics Authority - and the Rigidbody Interpolation can just be enabled.
       // We are supporting interpolation here however so that Multi-Peer interpolation is still possible with the FixedUpdate timing.
@@ -217,10 +213,13 @@ namespace Fusion.Addons.Physics
               (thresholds.Position == 0 || (pos - tr.position).sqrMagnitude                 < thresholds.Position * thresholds.Position) && 
               (thresholds.Rotation == 0 || Quaternion.Angle(rot, tr.rotation)               < thresholds.Rotation)                       && 
               (thresholds.Scale    == 0 || !syncScale || (scl - tr.localScale).sqrMagnitude < thresholds.Scale * thresholds.Scale)) {
+
+              SetDebugSleepColor(true);
               return;
             }
           }
 
+          SetDebugSleepColor(false);
           if (useWorldSpace) {
             tr.SetPositionAndRotation(pos, rot);
           } else {
@@ -238,5 +237,15 @@ namespace Fusion.Addons.Physics
       }
     }
 
+    
+    // TODO: Remove these before release
+    [Conditional("NRB_DEBUGGING")]
+    private void SetDebugSleepColor(bool isSleeping) {
+      if (isSleeping) {
+        GetComponentInChildren<Renderer>().material.color = Color.magenta;
+      } else {
+        GetComponentInChildren<Renderer>().material.color = Color.white;
+      }
+    }
   }
 }

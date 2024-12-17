@@ -4,59 +4,27 @@ using UnityEngine;
 
 namespace Fusion.Addons.Physics {
   
-  /// <summary>
-  /// Extended <see cref="NetworkTRSPData"/> struct, with additional fields specific to Rigidbody synchronization.
-  /// The first field is a <see cref="NetworkTRSPData"/>, which ensures that Position/Rotation/Scale/Parent data
-  /// all are in the location within the struct expected by the  <see cref="NetworkTRSP"/> base class.
-  /// </summary>
   [StructLayout(LayoutKind.Explicit)]
   public struct NetworkRBData : INetworkStruct {
     
-    /// <summary>
-    /// The number of words used by this struct.
-    /// </summary>
     public const int WORDS = NetworkTRSPData.WORDS + 24;
-    /// <summary>
-    /// The number of bytes used by this struct
-    /// </summary>
     public const int SIZE  = WORDS * Allocator.REPLICATE_WORD_SIZE;
     
-    /// <summary>
-    /// The required Translate/Rotation/Scale/Parent struct used by the NetworkTRSP base class.
-    /// This places transform data in the first memory positions of NetworkRigidbody struct.
-    /// Of specific importance here is the first word for Translate (Position), as position is used by
-    /// Area Of Interest for interest determinations.
-    /// </summary>
     [FieldOffset(0)]
     public NetworkTRSPData TRSPData;
 
-    /// <summary>
-    /// Word used to store rigidbody drag value.
-    /// </summary>
     [FieldOffset((NetworkTRSPData.WORDS + 0) * Allocator.REPLICATE_WORD_SIZE)]
     public FloatCompressed Drag;
     
-    /// <summary>
-    /// Word used to store rigidbody angular drag value.
-    /// </summary>
     [FieldOffset((NetworkTRSPData.WORDS + 1) * Allocator.REPLICATE_WORD_SIZE)]
     public FloatCompressed AngularDrag;
     
-    /// <summary>
-    /// Word used to store rigidbody mass value.
-    /// </summary>
     [FieldOffset((NetworkTRSPData.WORDS + 2) * Allocator.REPLICATE_WORD_SIZE)]
     public FloatCompressed Mass;
     
-    /// <summary>
-    /// Backing field used to store additional rigidbody bool and enum values, encoded into a single word.
-    /// </summary>
     [FieldOffset((NetworkTRSPData.WORDS + 3) * Allocator.REPLICATE_WORD_SIZE)]
     int _flags;
 
-    /// <summary>
-    /// Property for getting and setting additional rigidbody data in this struct.
-    /// </summary>
     public (NetworkRigidbodyFlags flags, int constraints) Flags {
       get {
         var f = (NetworkRigidbodyFlags)((_flags) & 0xFF);
@@ -71,43 +39,24 @@ namespace Fusion.Addons.Physics {
     }
     
     // 3D
-    
-    /// <summary>
-    /// Words used to store rigidbody velocity value.
-    /// </summary>
     [FieldOffset((NetworkTRSPData.WORDS + 4) * Allocator.REPLICATE_WORD_SIZE)]
     public Vector3Compressed LinearVelocity;
     
-    /// <summary>
-    /// Words used to store rigidbody angular velocity value.
-    /// </summary>
     [FieldOffset((NetworkTRSPData.WORDS + 7) * Allocator.REPLICATE_WORD_SIZE)]
     public Vector3Compressed AngularVelocity;
 
-    /// <summary>
-    /// Property used to store rigidbody2D velocity value.
-    /// Uses the <see cref="LinearVelocity"/> field, and just casts to and from Vector2.
-    /// </summary>
     public Vector2 LinearVelocity2D {
       get => LinearVelocity;
       set => LinearVelocity = value;
     }
     
-    /// <summary>
-    /// Property used to store rigidbody2D angular velocity value.
-    /// Uses the <see cref="AngularVelocity"/> field, and just casts to and from Vector2.
-    /// </summary>
     public float AngularVelocity2D {
       get => AngularVelocity.Z;
       set => AngularVelocity.Z = value;
     }
     
     // 2D
-    
-    /// <summary>
-    /// Property used to store rigidbody2D gravity scale value.
-    /// Uses the z axis of the <see cref="LinearVelocity"/> field, to store the Rigidbody2D gravity scale.
-    /// </summary>
+    // Use the Z axis of Velocity to store 2D gravity Scale
     public float GravityScale2D {
       get => LinearVelocity.Z;
       set => LinearVelocity.Z = value;
@@ -115,32 +64,16 @@ namespace Fusion.Addons.Physics {
     
     // Sleep states
     
-    /// <summary>
-    /// Word used to store uncompressed position value. This is typically only changed and used when the object
-    /// goes to sleep, to ensure that the final resting state is complete agreement with the state authority simulation
-    /// result.
-    /// </summary>
     [FieldOffset((NetworkTRSPData.WORDS + 10) * Allocator.REPLICATE_WORD_SIZE)]
     public Vector3 FullPrecisionPosition;
     
-    /// <summary>
-    /// Word used to store uncompressed rotation value. This is typically only changed and used when the object
-    /// goes to sleep, to ensure that the final resting state is complete agreement with the state authority simulation
-    /// result.
-    /// </summary>
     [FieldOffset((NetworkTRSPData.WORDS + 13) * Allocator.REPLICATE_WORD_SIZE)]
     public Quaternion FullPrecisionRotation;
     
-    /// <summary>
-    /// Word used to store teleport position "To" value. This is used for moving teleports, and is the value used for
-    /// interpolating into a teleport.
-    /// </summary>
+    // Smooth teleport handling - these values are used as the interpolation To value leading up to a teleport.
     [FieldOffset((NetworkTRSPData.WORDS + 17) * Allocator.REPLICATE_WORD_SIZE)]
     public Vector3Compressed TeleportPosition;
-    /// <summary>
-    /// Word used to store teleport rotation "To" value. This is used for moving teleports, and is the value used for
-    /// interpolating into a teleport.
-    /// </summary>
+    
     [FieldOffset((NetworkTRSPData.WORDS + 20) * Allocator.REPLICATE_WORD_SIZE)]
     public QuaternionCompressed TeleportRotation;
     
@@ -205,9 +138,6 @@ namespace Fusion.Addons.Physics {
     [Unit(Units.NormalizedPercentage)]
     public float Scale;
     
-    /// <summary>
-    /// The default values for interpolation threshold tests.
-    /// </summary>
     public static TRSThresholds Default =>new TRSThresholds() {
       UseEnergy = true,
       Position = 0.01f,

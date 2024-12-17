@@ -60,48 +60,29 @@ namespace Fusion.Addons.Physics {
     protected bool _showSleepOptions => !_interpolationTarget && UseRenderSleepThresholds;
 
     // Cached
-    
-    /// <summary>
-    /// Cached transform reference.
-    /// </summary>
     protected Transform _transform;
-    
-    /// <summary>
-    /// Cached value indicating whether interpolation should occur.
-    /// </summary>
-    protected bool _doNotInterpolate;
-    /// <summary>
-    /// Cached value indicating if client prediction applies to this NetworkObject on this client.
-    /// </summary>
-    protected bool _clientPrediction;
-    /// <summary>
-    /// Dirty flag for the root Transform.
-    /// True when interpolation has altered the root transform's position, rotation, or scale in Render().
-    /// Is reset to false when the transform when the transform is restored to its networked state during the simulation loop.
-    /// </summary>
-    protected bool _rootIsDirtyFromInterpolation;
-    /// <summary>
-    /// Dirty flag for the Interpolation Target.
-    /// True when interpolation has altered the position, rotation, or scale in Render().
-    /// Is reset to false when the transform when the transform is restored to defaults during the simulation loop.
-    /// </summary>
-    protected bool _targIsDirtyFromInterpolation;
-    /// <summary>
-    /// Cached Runner.Config.Simulation.AreaOfInterestEnabled value.
-    /// </summary>
-    protected bool _aoiEnabled;
-    /// <summary>
-    /// Cached Physics.autoSimulation (or Physics.simulationMode != SimulationMode.Script in 2022.3 or higher) value.
-    /// </summary>
-    protected bool AutoSimulateIsEnabled { get; set; }
+    protected bool      _doNotInterpolate;
+    protected bool      _clientPrediction;
+    protected bool      _rootIsDirtyFromInterpolation;
+    protected bool      _targIsDirtyFromInterpolation;
+    protected bool      _aoiEnabled;
+    protected bool      AutoSimulateIsEnabled { get; set; }
 
-    /// <summary>
-    /// Get/Set the Transform (typically a child of the Rigidbody root transform) which will be moved in interpolation.
-    /// When set to null, the Rigidbody Transform will be used.
-    /// </summary>
     public Transform InterpolationTarget {
       get => _interpolationTarget;
-      set => SetInterpolationTarget(value);
+      set {
+        if (value == null || value == transform) {
+          _interpolationTarget    = null;
+        } else {
+#if UNITY_EDITOR
+          var c = value.GetComponentInChildren<Collider>();
+          if (c && c.enabled) {
+            Debug.LogWarning($"Assigned Interpolation Target '{value.name}' on GameObject '{name}' contains a non-trigger collider, this may not be intended as interpolation may break physics caching, and prevent the Rigidbody from sleeping");
+          }
+#endif
+          _interpolationTarget    = value;
+        }
+      }
     }
     
     /// <summary>
@@ -110,8 +91,7 @@ namespace Fusion.Addons.Physics {
     /// </summary>
     public void SetInterpolationTarget(Transform target) {
       if (target == null || target == transform) {
-        _interpolationTarget          = null;
-        _targIsDirtyFromInterpolation = false;
+        _interpolationTarget    = null;
       } else {
 #if UNITY_EDITOR
         var c = target.GetComponentInChildren<Collider>();
@@ -123,13 +103,10 @@ namespace Fusion.Addons.Physics {
       }
     }
 
-    /// <summary>
-    /// Unity's OnValidate call.
-    /// </summary>
     protected virtual void OnValidate() {
       SetInterpolationTarget(_interpolationTarget);
     }
-    /// <inheritdoc/>
+    
     public override void Spawned() {
       _aoiEnabled = Runner.Config.Simulation.AreaOfInterestEnabled;
 
@@ -143,12 +120,6 @@ namespace Fusion.Addons.Physics {
       RBRotation = transform.rotation;
     }
     
-    /// <summary>
-    /// Initiate a moving teleport. This method must be in FixedUpdateNetwork() called before
-    /// <see cref="RunnerSimulatePhysics3D"/> and <see cref="RunnerSimulatePhysics2D"/> have simulated physics.
-    /// This teleport is deferred until after physics has simulated, and captures position and rotation values both before and after simulation.
-    /// This allows interpolation leading up to the teleport to have a valid pre-teleport TO target.
-    /// </summary>
     public abstract void Teleport(Vector3? position = null, Quaternion? rotation = null);
   }
 

@@ -17,6 +17,38 @@ namespace Fusion {
   [AddComponentMenu("Fusion/Enable On Single Runner")]
   public class EnableOnSingleRunner : Fusion.Behaviour {
 
+    
+    
+    // -------------------------------  Delete this in the future ----------------------
+    // TODO: Only here for transition from RunnerVisibilityNodes:
+#pragma warning disable CS0618
+    private static bool Upgrade(RunnerVisibilityNodes old, GameObject go) {
+      Debug.LogWarning($"Upgrading {go.name} {old._guid}");
+#if UNITY_EDITOR
+      var existingNew = go.GetComponents<EnableOnSingleRunner>();
+      foreach (var c in existingNew) {
+        if (c._guid == old._guid) {
+          // already upgraded
+          return false;
+        }
+      }
+      var upgraded = Undo.AddComponent<EnableOnSingleRunner>(go);
+      upgraded._guid           = old._guid;
+      upgraded.Components      = old.Components;
+      upgraded.PreferredRunner = (RunnerVisibilityLink.PreferredRunners)old.PreferredRunner;
+
+      EditorUtility.SetDirty(upgraded);
+
+      return true;
+#else
+      return false;
+#endif
+    }
+#pragma warning restore CS0618
+    // -------------------------------  Delete this in the future ----------------------
+    
+    
+    
     /// <summary>
     /// If more than one runner instance is visible, this indicates which peer's clone of this entity should be visible.
     /// </summary>
@@ -42,22 +74,12 @@ namespace Fusion {
     /// <summary>
     /// At runtime startup, this adds a <see cref="RunnerVisibilityLink"/> for each component reference to this GameObject.
     /// </summary>
-    internal void AddNodes(List<RunnerVisibilityLink> existingNodes) {
-      for(int i = 0; i < Components.Length; ++i) {
-        var found = false;
-        foreach (var existingNode in existingNodes) {
-          if (existingNode.Component == Components[i]) {
-            found = true;
-            break;
-          }
-        }
-        
-        if (found) continue;
-        var node = Components[i].gameObject.AddComponent<RunnerVisibilityLink>();
+    internal void AddNodes() {
+      for(int i = 0, cnt = Components.Length; i <  cnt; ++i) {
+        var node = gameObject.AddComponent<RunnerVisibilityLink>();
         node.Guid = _guid + i;
         node.Component = Components[i];
         node.PreferredRunner = PreferredRunner;
-        existingNodes.Add(node);
       }
     }
 

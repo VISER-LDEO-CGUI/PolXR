@@ -40,7 +40,7 @@
             <summary>
             Set the Async Operation as faulted using the Exception
             </summary>
-            <param name="e">Exception to be set on the Operation</param>
+            <param name="e"></param>
         </member>
         <member name="M:Fusion.Async.AsyncOperationHandler`1.Expire">
             <summary>
@@ -159,8 +159,8 @@
             <summary>
             Register a callback for a specific Message Type
             </summary>
-            <typeparam name="T">Message Type</typeparam>
-            <param name="callback">Callback to be invoked when a Message of type T is received</param>
+            <typeparam name="K"></typeparam>
+            <param name="callback"></param>
         </member>
         <member name="M:Fusion.Protocol.ICommunicator.SendMessage(System.Int32,Fusion.Protocol.IMessage)">
             <summary>
@@ -469,6 +469,11 @@
             </summary>
             <param name="buffer">The ulong that represents the compressed quaternion.</param>
             <returns>The restored Quaternion.</returns>
+        </member>
+        <member name="T:Fusion.StatsMetaAttribute">
+            <summary>
+            This stat goes on field elements of classes/structs and is used by FieldsMask.
+            </summary>
         </member>
         <member name="F:Fusion.RuntimeUnityFlagsSetup.flagsBuildFlags">
             <summary>

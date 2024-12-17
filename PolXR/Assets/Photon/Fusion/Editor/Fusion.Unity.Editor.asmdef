@@ -56,11 +56,6 @@
             "name": "com.unity.ide.rider",
             "expression": "1.0",
             "define": "FUSION_HAS_JETBRAINS_ATTRIBUTES"
-        },
-        {
-            "name": "com.unity.multiplayer.playmode",
-            "expression": "0.6",
-            "define": "FUSION_HAS_MPPM"
         }
     ],
     "noEngineReferences": false

@@ -240,12 +240,6 @@
         <member name="F:ExitGames.Client.Photon.EnetChannel.highestReceivedAck">
             <summary>To store the highest acknowledged sequence number (and get some impression what the server already received and stored).</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.EnetChannel.reliableCommandsInFlight">
-            <summary>Count of reliable commands sent and not yet acknowledged.</summary>
-        </member>
-        <member name="F:ExitGames.Client.Photon.EnetChannel.lowestUnacknowledgedSequenceNumber">
-            <summary>The lowest sequence number sent but not acknowledged yet. This defines the sequence delta "window" for sending subsequent reliable commands.</summary>
-        </member>
         <member name="M:ExitGames.Client.Photon.EnetChannel.QueueIncomingReliableUnsequenced(ExitGames.Client.Photon.NCommand)">
             <summary>Checks and queues incoming reliable unsequenced commands ("send" or "fragment"), if they haven't been received yet.</summary>
             <param name="command">The command to check and queue.</param>
@@ -256,9 +250,6 @@
         </member>
         <member name="F:ExitGames.Client.Photon.EnetPeer.sentReliableCommands">
             <summary>One list for all channels keeps sent commands (for re-sending).</summary>
-        </member>
-        <member name="P:ExitGames.Client.Photon.EnetPeer.sendWindowUpdateRequired">
-            <summary>Thread safe.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.EnetPeer.outgoingAcknowledgementsPool">
             <summary>One pool of ACK byte arrays ( 20 bytes each)  for all channels to keep acknowledgements.</summary>
@@ -298,9 +289,6 @@
             <summary>
             gathers commands from all (out)queues until udp-packet is full and sends it!
             </summary>
-        </member>
-        <member name="F:ExitGames.Client.Photon.EnetPeer.channelsToUpdateLowestSent">
-            <summary>Used to store temporary values in UpdateSendWindow().</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.EnetPeer.EnqueuePhotonMessage(ExitGames.Client.Photon.StreamBuffer,ExitGames.Client.Photon.SendOptions)">
             <summary>
@@ -1286,15 +1274,21 @@
             This debug setting enables a new send-ordering for commands. Defaults to true and commands are sent in the order they are created. Set to false to use Enet ordering.
             </summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.PhotonPeer.SendWindowSize">
-             <summary>Defines how far ahead the client can go sending commands (on UDP connections), compared to the acknowledged sequence number.</summary>
-             <remarks>
-             This avoids spamming the receiver and puts focus on resending commands that are older and are needed on the receiver side to dispatch commands.
-            
-             When acks arrive, the SendWindow will move forward and newer commands get sent.
-             This indirectly affects unreliable commands as they are by default sent in creation order.
-             It queues more on the client side than on the server.
-             </remarks>
+        <member name="F:ExitGames.Client.Photon.PhotonPeer.SequenceDeltaLimitResends">
+            <summary>Skips resending (individual) commands if their reliable sequence number is this amount larger than the highest acknowledged sequence number.</summary>
+            <remarks>
+            This puts focus on resending commands that are older and are needed on the receiver side to dispatch commands.
+            It queues more on the client side than on the server.
+            Affects only reliable UDP (based on enet).
+            </remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.PhotonPeer.SequenceDeltaLimitSends">
+            <summary>Skips sending reliable and unreliable commands if their reliable sequence number is this amount larger than the highest acknowledged sequence number.</summary>
+            <remarks>
+            This puts focus on resending commands that are older and are needed on the receiver side to dispatch commands.
+            It queues more on the client side than on the server.
+            Affects only reliable UDP (based on enet).
+            </remarks>
         </member>
         <member name="P:ExitGames.Client.Photon.PhotonPeer.BytesIn">
             <summary>
@@ -2655,15 +2649,6 @@
         <member name="F:ExitGames.Client.Photon.TPeer.ALL_HEADER_BYTES">
             <summary>TCP header combined: 9 bytes</summary>
         </member>
-        <member name="F:ExitGames.Client.Photon.TPeer.lastPingActivity">
-            <summary>Timestamp of last ping activity (updated when sending to avoid sending again immediately).</summary>
-        </member>
-        <member name="F:ExitGames.Client.Photon.TPeer.pingRequest">
-            <summary>Re-used binary message used in the TCP protocol (WSS uses a Ping Operation due to lack of framing).</summary>
-        </member>
-        <member name="F:ExitGames.Client.Photon.TPeer.pingParamDict">
-            <summary>Re-used ping-Operation parameter-dict used in the WS/WSS protocol (TCP uses pingRequest).</summary>
-        </member>
         <member name="F:ExitGames.Client.Photon.TPeer.DoFraming">
             <summary>Defines if the (TCP) socket implementation needs to do "framing".</summary>
             <remarks>The WebSocket protocol (e.g.) includes framing, so when that is used, we set DoFraming to false.</remarks>
@@ -2687,7 +2672,7 @@
             <summary>enqueues serialized operations to be sent as tcp stream / package</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.TPeer.SendPing">
-            <summary>Queues a ping (operation or "message") and updates this.lastPingActivity to avoid another ping for a while.</summary>
+            <summary>Sends a ping and modifies this.lastPingResult to avoid another ping for a while.</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.TPeer.ReceiveIncomingCommands(System.Byte[],System.Int32)">
             <summary>reads incoming tcp-packages to create and queue incoming commands*</summary>
