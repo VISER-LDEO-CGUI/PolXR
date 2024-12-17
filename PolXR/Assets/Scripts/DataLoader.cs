@@ -128,7 +128,7 @@ public class DataLoader : MonoBehaviour
         foreach (string flightlineDirectory in flightlineDirectories)
         {
             ProcessFlightlines(flightlineDirectory, radarContainer);
-            Debug.LogError(flightlineDirectory);
+            // Debug.LogError(flightlineDirectory);
         }
 
         DisableAllRadarObjects(radarContainer);
