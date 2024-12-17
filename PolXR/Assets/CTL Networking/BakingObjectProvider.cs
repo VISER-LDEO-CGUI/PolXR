@@ -100,6 +100,20 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
                     meshChild.gameObject.AddComponent<NetworkObject>();
                     meshChild.gameObject.AddComponent<NetworkTransform>();
                     // meshChild.gameObject.AddComponent<NetworkedRadargramController>();
+
+                    // CTL: XR interaction change
+
+                    XRGrabInteractable meshChildXRGrab = meshChild.gameObject.AddComponent<XRGrabInteractable>();
+                    meshChildXRGrab.useDynamicAttach = true;
+                    meshChildXRGrab.retainTransformParent = false;
+
+                    Rigidbody meshChildRigidBody = meshChild.GetComponent<Rigidbody>();
+                    meshChildRigidBody.useGravity = false;
+                    meshChildRigidBody.isKinematic = true;
+                    MeshCollider meshChildCollider = meshChild.gameObject.AddComponent<MeshCollider>();
+                    meshChildCollider.convex = true;
+
+
                     if (meshChild != null)
                     {
                         string texturePath = Path.Combine(segmentFolder, Path.GetFileNameWithoutExtension(objFile) + ".png");
