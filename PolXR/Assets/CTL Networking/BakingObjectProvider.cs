@@ -35,7 +35,8 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
             // var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var no = go.AddComponent<NetworkObject>();
             go.AddComponent<NetworkedRadargramController>();
-            go.AddComponent<NetworkTransform>();
+            NetworkTransform goNT = go.AddComponent<NetworkTransform>();
+            goNT.SyncParent = true;
             go.name = $"Our Radargram";
 
             // Baking is required for the NetworkObject to be valid for spawning.
@@ -85,7 +86,8 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
             {
                 GameObject radarObj = LoadObj(objFile);
                 radarObj.AddComponent<NetworkObject>();
-                radarObj.AddComponent<NetworkTransform>();
+                NetworkTransform radarObjNT = radarObj.AddComponent<NetworkTransform>();
+                radarObjNT.SyncParent = true;
 
                 //GameObject radarObjLocal = LoadObj(objFile);
                 //radarObjLocal.AddComponent<NetworkObject>();
@@ -102,7 +104,8 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
                     Transform meshChild = radarObj.transform.Find("mesh");
                     // CTL
                     meshChild.gameObject.AddComponent<NetworkObject>();
-                    meshChild.gameObject.AddComponent<NetworkTransform>();
+                    NetworkTransform meshChildNT = meshChild.gameObject.AddComponent<NetworkTransform>();
+                    meshChildNT.SyncParent = true;
                     // meshChild.gameObject.AddComponent<NetworkedRadargramController>();
 
                     // CTL: XR interaction change
