@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Fusion.Addons.ConnectionManagerAddon
 {
@@ -222,6 +223,32 @@ namespace Fusion.Addons.ConnectionManagerAddon
                     {
                         radarID.RawValue = (uint)i;
                         NetworkObject cubeNetwork = runner.Spawn(radarID);
+
+                        GameObject cube = cubeNetwork.gameObject;
+                        GameObject data = cube.transform.GetChild(0).gameObject;
+                        GameObject mesh = data.transform.GetChild(0).gameObject;
+                        //Debug.LogError(data);
+                        //Debug.LogError(mesh);
+                        BoxCollider meshColliderBox = mesh.AddComponent<BoxCollider>();
+                        XRGrabInteractable meshXR = mesh.AddComponent<XRGrabInteractable>();
+                        meshXR.useDynamicAttach = true;
+                        meshXR.retainTransformParent = false;
+                        Rigidbody cubeRigidBody = mesh.GetComponent<Rigidbody>();
+                        cubeRigidBody.useGravity = false;
+                        cubeRigidBody.isKinematic = true;
+                        meshXR.colliders.Add(mesh.GetComponent<BoxCollider>());
+
+                        //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        //Debug.Log("generate cube");
+                        //cube.transform.position = cubeNetwork.transform.position;
+                        //cubeNetwork.transform.parent = cube.transform;
+                        //XRGrabInteractable cubeXR = cube.AddComponent<XRGrabInteractable>();
+                        //cubeXR.useDynamicAttach = true;
+                        //cubeXR.retainTransformParent = false;
+                        //Rigidbody cubeRigidBody = cube.GetComponent<Rigidbody>();
+                        //cubeRigidBody.useGravity = false;
+                        //cubeRigidBody.isKinematic = true;
+                        //cubeXR.colliders.Add(cube.GetComponent<BoxCollider>());
                     }
 
                 }

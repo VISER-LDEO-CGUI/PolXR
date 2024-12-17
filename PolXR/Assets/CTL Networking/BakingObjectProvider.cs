@@ -106,7 +106,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
                     // meshChild.gameObject.AddComponent<NetworkedRadargramController>();
 
                     // CTL: XR interaction change
-
+                    /*
                     XRGrabInteractable meshChildXRGrab = meshChild.gameObject.AddComponent<XRGrabInteractable>();
                     meshChildXRGrab.useDynamicAttach = true;
                     meshChildXRGrab.retainTransformParent = false;
@@ -119,6 +119,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
 
                     //Mesh currMesh = meshChild.GetComponent<Mesh>();
                     //Physics.BakeMesh(currMesh.GetInstanceID(), true, cookingOptions);
+
                     // Bake the collider
                     MeshCollider meshChildCollider = meshChild.gameObject.AddComponent<MeshCollider>();
                     meshChildCollider.convex = true;
@@ -126,9 +127,10 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
 
                     BoxCollider meshChildBoxCollider = meshChild.gameObject.AddComponent<BoxCollider>();
                     meshChildXRGrab.colliders.Add(meshChildBoxCollider);
+
                     //meshChildCollider.cookingOptions = cookingOptions;
                     //meshChildCollider.sharedMesh = currMesh;
-
+                    */
 
 
 
