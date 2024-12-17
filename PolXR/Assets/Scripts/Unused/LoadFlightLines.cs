@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
-using GLTFast;
+//using GLTFast;
 //using Oculus.Platform;
 
 public class LoadFlightLines : MonoBehaviour
@@ -23,226 +23,226 @@ public class LoadFlightLines : MonoBehaviour
     public GameObject gridLine;
 
     public GameObject MarkObj3D;
-    public void Awake()
-    {
-        BetterStreamingAssets.Initialize();
-        LoadFlightLine("20100324_01"); // TODO: replace with menu option
-        Debug.Log("Loaded flight line");
-    }
+    //public void Awake()
+    //{
+    //    BetterStreamingAssets.Initialize();
+    //    LoadFlightLine("20100324_01"); // TODO: replace with menu option
+    //    Debug.Log("Loaded flight line");
+    //}
     // public class YourCustomInstantiator : GLTFast.IInstantiator {
     // // Your code here
     // }
-    public async void LoadFlightLine(string line_id)
-    {
-        // // Load the data // old workflow loading from resources
-        //UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
-        Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
-        //GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
+    //public async void LoadFlightLine(string line_id)
+    //{
+    //    // // Load the data // old workflow loading from resources
+    //    //UnityEngine.Object[] meshes = Resources.LoadAll(Path.Combine("Radar3D", "Radar", line_id));
+    //    Dictionary<string, GameObject> polylines = createPolylineObjects(line_id);
+    //    //GameObject prefab = Instantiate(Resources.Load(Path.Combine("Radar3D", "Radar", "RadarContainer")) as GameObject);
 
-        // Load the glTF asset from streaming assets folder
-        byte[] data = BetterStreamingAssets.ReadAllBytes("radar.glb");
+    //    // Load the glTF asset from streaming assets folder
+    //    byte[] data = BetterStreamingAssets.ReadAllBytes("radar.glb");
 
-        var gltf = new GltfImport();
-        var success = await gltf.Load(data);
-        UnityEngine.Object[] meshes;
+    //    var gltf = new GltfImport();
+    //    var success = await gltf.Load(data);
+    //    UnityEngine.Object[] meshes;
 
-        if (success)
-        {
-            // Extract meshes and textures
-            meshes = ExtractMeshes(gltf);
-        }
-        else
-        {
-            Debug.LogError("Failed to load glTF asset");
-            return;
-        }
+    //    if (success)
+    //    {
+    //        // Extract meshes and textures
+    //        meshes = ExtractMeshes(gltf);
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Failed to load glTF asset");
+    //        return;
+    //    }
 
-        for (int i = 0; i < meshes.Length; i++)
-        {
-            // Create radargram objects
-            GameObject[] meshBoth = createRadargramObjects(meshes[i]);
-            GameObject meshForward = meshBoth[0];
-            GameObject meshBackward = meshBoth[1];
-            Bounds meshBounds = meshForward.GetComponent<Renderer>().bounds; // cuz we need bounds in world coords
+    //    for (int i = 0; i < meshes.Length; i++)
+    //    {
+    //        // Create radargram objects
+    //        GameObject[] meshBoth = createRadargramObjects(meshes[i]);
+    //        GameObject meshForward = meshBoth[0];
+    //        GameObject meshBackward = meshBoth[1];
+    //        Bounds meshBounds = meshForward.GetComponent<Renderer>().bounds; // cuz we need bounds in world coords
 
-            // Select and name line
-            string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
-            GameObject line;
-            try
-            {
-                line = polylines[key];
-            }
-            catch (Exception e)
-            {
-                Debug.Log("Polyline not found: '" + key + "'");
-                Destroy(meshForward);
-                Destroy(meshBackward);
-                continue;
-            }
-            line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
+    //        // Select and name line
+    //        string key = meshForward.name.Substring(meshForward.name.IndexOf('_', meshForward.name.Length - 5));
+    //        GameObject line;
+    //        try
+    //        {
+    //            line = polylines[key];
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            Debug.Log("Polyline not found: '" + key + "'");
+    //            Destroy(meshForward);
+    //            Destroy(meshBackward);
+    //            continue;
+    //        }
+    //        line.name = $"FL_{meshForward.name.Trim().Substring(5)}";
 
-            // Create a parent for all the new objects to associate with RadarEvents3D
-            string parentName = "#" + key; //"GRP_" + meshForward.name;
-            GameObject parent = new GameObject(parentName);
-            parent.transform.SetParent(Container);
-            RadarEvents3D script = parent.AddComponent<RadarEvents3D>();
-            parent.transform.localScale = new Vector3(1, 1, 1);
-            parent.transform.localPosition = new Vector3(0, 0, 0);
-            parent.transform.rotation = Quaternion.identity;
-            // BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
+    //        // Create a parent for all the new objects to associate with RadarEvents3D
+    //        string parentName = "#" + key; //"GRP_" + meshForward.name;
+    //        GameObject parent = new GameObject(parentName);
+    //        parent.transform.SetParent(Container);
+    //        RadarEvents3D script = parent.AddComponent<RadarEvents3D>();
+    //        parent.transform.localScale = new Vector3(1, 1, 1);
+    //        parent.transform.localPosition = new Vector3(0, 0, 0);
+    //        parent.transform.rotation = Quaternion.identity;
+    //        // BoundsControl parentBoundsControl = parent.AddComponent<BoundsControl>();
 
-            //turns off gizmos and bounding boxes
-            //parentBoundsControl.LinksConfig.ShowWireFrame = false;
-            //parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            //parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            //parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-            //parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+    //        //turns off gizmos and bounding boxes
+    //        //parentBoundsControl.LinksConfig.ShowWireFrame = false;
+    //        //parentBoundsControl.RotationHandlesConfig.ShowHandleForX = false;
+    //        //parentBoundsControl.RotationHandlesConfig.ShowHandleForY = false;
+    //        //parentBoundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+    //        //parentBoundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
 
-            // Create a parent to group both radargram objects
-            GameObject radargram = new GameObject("OBJ_" + meshForward.name);
-            radargram.transform.localPosition = meshBounds.center;
-            // MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
-            // radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
+    //        // Create a parent to group both radargram objects
+    //        GameObject radargram = new GameObject("OBJ_" + meshForward.name);
+    //        radargram.transform.localPosition = meshBounds.center;
+    //        // MeshCollider radarCollider = radargram.AddComponent<MeshCollider>();
+    //        // radarCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
 
-            // add mesh colliders to each of the mesh forward and backward
-            MeshCollider meshForwardCollider = meshForward.AddComponent<MeshCollider>();
-            meshForwardCollider.sharedMesh = meshForward.GetComponent<MeshFilter>().mesh;
+    //        // add mesh colliders to each of the mesh forward and backward
+    //        MeshCollider meshForwardCollider = meshForward.AddComponent<MeshCollider>();
+    //        meshForwardCollider.sharedMesh = meshForward.GetComponent<MeshFilter>().mesh;
 
-            MeshCollider meshBackwardCollider = meshBackward.AddComponent<MeshCollider>();
-            meshBackwardCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
-
-
-            // Organize the children
-            line.transform.parent = parent.transform;
-            radargram.transform.parent = parent.transform;
-            meshForward.transform.parent = radargram.transform;
-            meshBackward.transform.parent = radargram.transform;
-
-            // Place polyline properly in relation to the DEM
-            line.transform.rotation = Quaternion.Euler(-90f, 0f, 180f);
-
-            // Add the correct Bounds Control so that MRTK knows where the objects are
-            //BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
-            //boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
-
-            //turns off gizmos and bounding boxes
-            //boundsControl.LinksConfig.ShowWireFrame = false;
-            //boundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            //boundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            //boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-            //boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
-
-            BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
-            boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
-            boxCollider.size = meshBounds.size;
-            // boundsControl.BoundsOverride = boxCollider;
-
-            // Constrain the rotation axes
-            //RotationAxisConstraint rotationConstraint = radargram.AddComponent<RotationAxisConstraint>();
-            //rotationConstraint.ConstraintOnRotation = AxisFlags.XAxis | AxisFlags.ZAxis;
-
-            // Set the parent's BoxCollider to have the same bounds
-            BoxCollider parentCollider = parent.GetComponent<BoxCollider>();
-
-            // Add the correct Object Manipulator so users can grab the radargrams
-            //radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-            //radargram.AddComponent<NearInteractionGrabbable>();
-            //Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
-            //objectManipulator.enabled = true;
-
-            // Link the parent to the menu
-            script.Menu = GameObject.Find("Menu");
-
-            // Create and place the radar mark for the minimap
-            Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
-            //GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
-
-            //GameObject markObj3D = Instantiate(MarkObj3D, position, Quaternion.identity, radargram.transform);
-            GameObject markObj3D = Instantiate(MarkObj3D, radargram.transform);
-            markObj3D.transform.localPosition = Vector3.zero;
-        }
-
-        //Drop everything onto the DEM -- this should correlate with the DEM position
-        Container.transform.localPosition = new Vector3(-10f, 0f, 10f);
-        foreach (var obj in meshes)
-        {
-            Destroy(obj);
-        }
-
-    }
-
-    UnityEngine.Object[] ExtractMeshes(GltfImport gltfImport)
-    {
-        // Implement the IInstantiator interface methods to extract meshes
-        // You can use gltfImport.Meshes and gltfImport.MeshResults to access mesh data
-
-        // Loop through mesh results
-        Mesh[] myMeshes = gltfImport.GetMeshes();
-        List<UnityEngine.Object> meshes = new List<UnityEngine.Object>();
-
-        for (int i = 0; i < myMeshes.Length; i++)
-        {
-            // Example: Instantiate a Unity GameObject for each mesh
-            Mesh mesh = myMeshes[i];
-            int dotIndex = mesh.name.IndexOf('.');
-            if (dotIndex != -1)
-            {
-                mesh.name = mesh.name.Substring(0, dotIndex);
-            }
-            if (mesh.name.StartsWith("Data_20100324"))
-            {
-                GameObject go = new GameObject(mesh.name);
-                MeshFilter meshFilter = go.AddComponent<MeshFilter>();
-                meshFilter.sharedMesh = mesh;
-                MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
-                meshRenderer.material = gltfImport.GetMaterial(i);
+    //        MeshCollider meshBackwardCollider = meshBackward.AddComponent<MeshCollider>();
+    //        meshBackwardCollider.sharedMesh = meshBackward.GetComponent<MeshFilter>().mesh;
 
 
-                // Rotate the texture 90 degrees to the left
-                // this is basically swapping out the original .glb texture and using new png images instead
-                string imgName = mesh.name + ".png";
-                string path = Path.Combine("HorizontalRadar", imgName);
-                byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
-                Texture2D radarimg = new Texture2D(meshRenderer.material.mainTexture.width, meshRenderer.material.mainTexture.height, TextureFormat.RGBA32, 1, false);
-                radarimg.LoadImage(fileData);
-                meshRenderer.material.mainTexture = rotateTexture(radarimg, false);
-                radarimg.Apply();
+    //        // Organize the children
+    //        line.transform.parent = parent.transform;
+    //        radargram.transform.parent = parent.transform;
+    //        meshForward.transform.parent = radargram.transform;
+    //        meshBackward.transform.parent = radargram.transform;
 
-                meshRenderer.material.mainTexture.filterMode = FilterMode.Bilinear;
+    //        // Place polyline properly in relation to the DEM
+    //        line.transform.rotation = Quaternion.Euler(-90f, 0f, 180f);
 
-                // Rotate texture 90 degrees to the right by adjusting UV coordinates
-                // this is easy and quick but BAD because then line picking doesn't work since the uvs are wrong
-                // Vector2[] uvs = mesh.uv;
-                // for (int j = 0; j < uvs.Length; j++)
-                // {
-                //     uvs[j] = new Vector2(uvs[j].y, 1 - uvs[j].x);
-                // }
-                // mesh.uv = uvs;
+    //        // Add the correct Bounds Control so that MRTK knows where the objects are
+    //        //BoundsControl boundsControl = radargram.AddComponent<BoundsControl>();
+    //        //boundsControl.CalculationMethod = BoundsCalculationMethod.ColliderOverRenderer;
 
-                // Set the rendering mode to "Opaque" if the material doesn't contain transparency
-                // This is necessary for the radar to render correctly, otherwise materials in the back
-                // will appear in the front probably becuase of some transparency problem
-                if (!meshRenderer.material.shader.name.Contains("Transparent"))
-                {
-                    meshRenderer.material.SetFloat("_Mode", 0);
-                    meshRenderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    meshRenderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                    meshRenderer.material.SetInt("_ZWrite", 1);
-                    meshRenderer.material.DisableKeyword("_ALPHATEST_ON");
-                    meshRenderer.material.DisableKeyword("_ALPHABLEND_ON");
-                    meshRenderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                    meshRenderer.material.renderQueue = -1;
-                }
+    //        //turns off gizmos and bounding boxes
+    //        //boundsControl.LinksConfig.ShowWireFrame = false;
+    //        //boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+    //        //boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+    //        //boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+    //        //boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
 
-                meshRenderer.receiveShadows = true;
-                meshFilter.sharedMesh.RecalculateNormals();
-                // Add more customization as needed
-                meshes.Add(go);
-            }
-        }
+    //        BoxCollider boxCollider = radargram.GetComponent<BoxCollider>();
+    //        boxCollider.center = new Vector3(0, 0, 0);//meshBounds.center;
+    //        boxCollider.size = meshBounds.size;
+    //        // boundsControl.BoundsOverride = boxCollider;
 
-        return meshes.ToArray();
-    }
+    //        // Constrain the rotation axes
+    //        //RotationAxisConstraint rotationConstraint = radargram.AddComponent<RotationAxisConstraint>();
+    //        //rotationConstraint.ConstraintOnRotation = AxisFlags.XAxis | AxisFlags.ZAxis;
+
+    //        // Set the parent's BoxCollider to have the same bounds
+    //        BoxCollider parentCollider = parent.GetComponent<BoxCollider>();
+
+    //        // Add the correct Object Manipulator so users can grab the radargrams
+    //        //radargram.AddComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+    //        //radargram.AddComponent<NearInteractionGrabbable>();
+    //        //Microsoft.MixedReality.Toolkit.UI.ObjectManipulator objectManipulator = radargram.GetComponent<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+    //        //objectManipulator.enabled = true;
+
+    //        // Link the parent to the menu
+    //        script.Menu = GameObject.Find("Menu");
+
+    //        // Create and place the radar mark for the minimap
+    //        Vector3 position = meshForward.transform.position + meshForward.transform.localPosition; // TODO: this
+    //        //GameObject mark = Instantiate(radarMark, position, Quaternion.identity, parent.transform);
+
+    //        //GameObject markObj3D = Instantiate(MarkObj3D, position, Quaternion.identity, radargram.transform);
+    //        GameObject markObj3D = Instantiate(MarkObj3D, radargram.transform);
+    //        markObj3D.transform.localPosition = Vector3.zero;
+    //    }
+
+    //    //Drop everything onto the DEM -- this should correlate with the DEM position
+    //    Container.transform.localPosition = new Vector3(-10f, 0f, 10f);
+    //    foreach (var obj in meshes)
+    //    {
+    //        Destroy(obj);
+    //    }
+
+    //}
+
+    //UnityEngine.Object[] ExtractMeshes(GltfImport gltfImport)
+    //{
+    //    // Implement the IInstantiator interface methods to extract meshes
+    //    // You can use gltfImport.Meshes and gltfImport.MeshResults to access mesh data
+
+    //    // Loop through mesh results
+    //    Mesh[] myMeshes = gltfImport.GetMeshes();
+    //    List<UnityEngine.Object> meshes = new List<UnityEngine.Object>();
+
+    //    for (int i = 0; i < myMeshes.Length; i++)
+    //    {
+    //        // Example: Instantiate a Unity GameObject for each mesh
+    //        Mesh mesh = myMeshes[i];
+    //        int dotIndex = mesh.name.IndexOf('.');
+    //        if (dotIndex != -1)
+    //        {
+    //            mesh.name = mesh.name.Substring(0, dotIndex);
+    //        }
+    //        if (mesh.name.StartsWith("Data_20100324"))
+    //        {
+    //            GameObject go = new GameObject(mesh.name);
+    //            MeshFilter meshFilter = go.AddComponent<MeshFilter>();
+    //            meshFilter.sharedMesh = mesh;
+    //            MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
+    //            meshRenderer.material = gltfImport.GetMaterial(i);
+
+
+    //            // Rotate the texture 90 degrees to the left
+    //            // this is basically swapping out the original .glb texture and using new png images instead
+    //            string imgName = mesh.name + ".png";
+    //            string path = Path.Combine("HorizontalRadar", imgName);
+    //            byte[] fileData = BetterStreamingAssets.ReadAllBytes(path);
+    //            Texture2D radarimg = new Texture2D(meshRenderer.material.mainTexture.width, meshRenderer.material.mainTexture.height, TextureFormat.RGBA32, 1, false);
+    //            radarimg.LoadImage(fileData);
+    //            meshRenderer.material.mainTexture = rotateTexture(radarimg, false);
+    //            radarimg.Apply();
+
+    //            meshRenderer.material.mainTexture.filterMode = FilterMode.Bilinear;
+
+    //            // Rotate texture 90 degrees to the right by adjusting UV coordinates
+    //            // this is easy and quick but BAD because then line picking doesn't work since the uvs are wrong
+    //            // Vector2[] uvs = mesh.uv;
+    //            // for (int j = 0; j < uvs.Length; j++)
+    //            // {
+    //            //     uvs[j] = new Vector2(uvs[j].y, 1 - uvs[j].x);
+    //            // }
+    //            // mesh.uv = uvs;
+
+    //            // Set the rendering mode to "Opaque" if the material doesn't contain transparency
+    //            // This is necessary for the radar to render correctly, otherwise materials in the back
+    //            // will appear in the front probably becuase of some transparency problem
+    //            if (!meshRenderer.material.shader.name.Contains("Transparent"))
+    //            {
+    //                meshRenderer.material.SetFloat("_Mode", 0);
+    //                meshRenderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+    //                meshRenderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+    //                meshRenderer.material.SetInt("_ZWrite", 1);
+    //                meshRenderer.material.DisableKeyword("_ALPHATEST_ON");
+    //                meshRenderer.material.DisableKeyword("_ALPHABLEND_ON");
+    //                meshRenderer.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+    //                meshRenderer.material.renderQueue = -1;
+    //            }
+
+    //            meshRenderer.receiveShadows = true;
+    //            meshFilter.sharedMesh.RecalculateNormals();
+    //            // Add more customization as needed
+    //            meshes.Add(go);
+    //        }
+    //    }
+
+    //    return meshes.ToArray();
+    //}
     Texture2D rotateTexture(Texture2D originalTexture, bool clockwise)
     {
         Color32[] original = originalTexture.GetPixels32();

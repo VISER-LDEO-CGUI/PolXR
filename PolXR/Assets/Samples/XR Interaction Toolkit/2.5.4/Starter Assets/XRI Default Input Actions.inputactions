@@ -1581,7 +1581,7 @@
                 {
                     "name": "Toggle",
                     "type": "Button",
-                    "id": "63e66fe0-34c1-4172-9277-bc4b0b95da59",
+                    "id": "92d22f1d-1367-406f-866b-a9b2a5e1d995",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1756,8 +1756,19 @@
                 },
                 {
                     "name": "",
-                    "id": "26bba930-e13a-47fa-9f75-3dd93b1c5db3",
+                    "id": "d5f83847-663c-4220-a89a-4a9880f002cf",
                     "path": "<XRController>{RightHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "Toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6e243337-bf1e-402d-94cc-7c34f2f754dc",
+                    "path": "<MetaAimHand>{RightHand}/indexPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "Generic XR Controller",

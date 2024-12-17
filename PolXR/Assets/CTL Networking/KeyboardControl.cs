@@ -1,5 +1,5 @@
 using Fusion;
-using GLTFast.Schema;
+//using GLTFast.Schema;
 using TMPro;
 using UnityEngine;
 
