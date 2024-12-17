@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using System.IO;
+using UniGLTF;
 
 public class BakingObjectProvider : NetworkObjectProviderDefault
 {
@@ -17,6 +18,9 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
     private static NetworkObjectBaker _baker;
     private static NetworkObjectBaker Baker => _baker ??= new NetworkObjectBaker();
     private Shader radarShader;
+
+    private MeshColliderCookingOptions cookingOptions =
+    MeshColliderCookingOptions.UseFastMidphase & MeshColliderCookingOptions.CookForFasterSimulation;
 
     public override NetworkObjectAcquireResult AcquirePrefabInstance(NetworkRunner runner, in NetworkPrefabAcquireContext context, out NetworkObject result)
     {
@@ -107,11 +111,25 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
                     meshChildXRGrab.useDynamicAttach = true;
                     meshChildXRGrab.retainTransformParent = false;
 
+
                     Rigidbody meshChildRigidBody = meshChild.GetComponent<Rigidbody>();
                     meshChildRigidBody.useGravity = false;
                     meshChildRigidBody.isKinematic = true;
+
+
+                    //Mesh currMesh = meshChild.GetComponent<Mesh>();
+                    //Physics.BakeMesh(currMesh.GetInstanceID(), true, cookingOptions);
+                    // Bake the collider
                     MeshCollider meshChildCollider = meshChild.gameObject.AddComponent<MeshCollider>();
                     meshChildCollider.convex = true;
+                    meshChildXRGrab.colliders.Add(meshChildCollider);
+
+                    BoxCollider meshChildBoxCollider = meshChild.gameObject.AddComponent<BoxCollider>();
+                    meshChildXRGrab.colliders.Add(meshChildBoxCollider);
+                    //meshChildCollider.cookingOptions = cookingOptions;
+                    //meshChildCollider.sharedMesh = currMesh;
+
+
 
 
                     if (meshChild != null)
