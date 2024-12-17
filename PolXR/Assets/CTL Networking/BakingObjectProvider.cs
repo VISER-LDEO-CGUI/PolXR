@@ -106,7 +106,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
                     // CTL
                     meshChild.gameObject.AddComponent<NetworkObject>();
                     NetworkTransform meshChildNT = meshChild.gameObject.AddComponent<NetworkTransform>();
-                    meshChildNT.SyncParent = true;
+                    // meshChildNT.SyncParent = true;
                     // meshChild.gameObject.AddComponent<NetworkedRadargramController>();
 
                     // CTL: XR interaction change
