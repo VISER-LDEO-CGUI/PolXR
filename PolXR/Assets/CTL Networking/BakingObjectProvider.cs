@@ -88,7 +88,7 @@ public class BakingObjectProvider : NetworkObjectProviderDefault
                 GameObject radarObj = LoadObj(objFile);
                 radarObj.AddComponent<NetworkObject>();
                 NetworkTransform radarObjNT = radarObj.AddComponent<NetworkTransform>();
-                radarObjNT.SyncParent = true;
+                // radarObjNT.SyncParent = true;
 
                 //GameObject radarObjLocal = LoadObj(objFile);
                 //radarObjLocal.AddComponent<NetworkObject>();
