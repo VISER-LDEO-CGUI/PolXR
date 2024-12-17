@@ -207,6 +207,25 @@ namespace Fusion.Addons.ConnectionManagerAddon
         {
             if (player == runner.LocalPlayer && userPrefab != null)
             {
+                Debug.Log($"OnPlayerJoined. PlayerId: {player.PlayerId}");
+                // CTL
+                if (player.PlayerId == 1)
+                {
+                    //gameObject.AddComponent<DataLoader>();
+                    //dataLoader = gameObject.GetComponent<DataLoader>();
+                    NetworkObject DEMsNetwork = runner.Spawn(DEMsPrefab, position: new Vector3(0, 0, 0), rotation: new Quaternion(0, 0, 0, 0), inputAuthority: player, (runner, obj) => {
+                    });
+                    Debug.Log("Spawned DEMs with Player " + player.PlayerId);
+
+                    NetworkPrefabId radarID = new NetworkPrefabId();
+                    for (int i = 100000; i < 100040; i++)
+                    {
+                        radarID.RawValue = (uint)i;
+                        NetworkObject cubeNetwork = runner.Spawn(radarID);
+                    }
+
+                }
+
                 // Spawn the user prefab for the local user
                 NetworkObject networkPlayerObject = runner.Spawn(userPrefab, position: transform.position, rotation: transform.rotation, player, (runner, obj) => {
                 });
@@ -304,7 +323,7 @@ namespace Fusion.Addons.ConnectionManagerAddon
             if (Input.GetKey(KeyCode.W))
             {
                 data.direction += Vector3.forward;
-                Debug.Log("going forward");
+                // Debug.Log("going forward");
             }
             //if (Input.GetKey(KeyCode.K))
             //{
