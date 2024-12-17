@@ -227,7 +227,8 @@ namespace Fusion.Addons.ConnectionManagerAddon
                 }
 
                 // Spawn the user prefab for the local user
-                NetworkObject networkPlayerObject = runner.Spawn(userPrefab, position: transform.position, rotation: transform.rotation, player, (runner, obj) => {
+                NetworkObject networkPlayerObject = runner.Spawn(userPrefab, position: transform.position, rotation: transform.rotation, player, (runner, obj) =>
+                {
                 });
             }
         }
