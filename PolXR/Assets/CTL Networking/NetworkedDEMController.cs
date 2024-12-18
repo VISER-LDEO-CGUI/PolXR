@@ -22,6 +22,15 @@ public class NetworkedDEMController : NetworkBehaviour
     [Networked]
     public bool bottomSurfaceToggle { get; set; }
 
+    [Networked]
+    public bool moveLeft { get; set; }
+    [Networked]
+    public bool moveRight { get; set; }
+    [Networked]
+    public bool moveForward { get; set; }
+    [Networked]
+    public bool moveBackward { get; set; }
+
     private ChangeDetector _changeDetector;
     public string toggleName;
 
@@ -67,6 +76,22 @@ public class NetworkedDEMController : NetworkBehaviour
                 case nameof(bottomSurfaceToggle):
                     bottomMeshRenderer.enabled = !bottomMeshRenderer.enabled;
                     break;
+                case nameof(moveLeft):
+                    gameObject.transform.Translate(-1, 0, 0);
+                    Debug.Log("move left");
+                    break;
+                case nameof(moveRight):
+                    gameObject.transform.Translate(1, 0, 0);
+                    Debug.Log("move right");
+                    break;
+                case nameof(moveForward):
+                    gameObject.transform.Translate(0, 0, 1);
+                    Debug.Log("move forward");
+                    break;
+                case nameof(moveBackward):
+                    gameObject.transform.Translate(0, 0, -1);
+                    Debug.Log("move backward");
+                    break;
             }
         }
         //_material.color = Color.Lerp(_material.color, Color.blue, Time.deltaTime);
@@ -102,6 +127,26 @@ public class NetworkedDEMController : NetworkBehaviour
         }
 
         Debug.Log("want to change" + toggleName);
+    }
+
+    public void toggleLeft()
+    {
+        moveLeft = !moveLeft;
+    }
+
+    public void toggleRight()
+    {
+        moveRight = !moveRight;
+    }
+
+    public void toggleForward()
+    {
+        moveForward = !moveForward;
+    }
+
+    public void toggleBackward()
+    {
+        moveBackward = !moveBackward;
     }
 
     //    // Updates the visibility of the DEM

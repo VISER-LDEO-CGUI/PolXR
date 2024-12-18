@@ -80,6 +80,8 @@ namespace Fusion.Addons.ConnectionManagerAddon
         bool ShouldConnectWithRoomName => (connectionCriterias & ConnectionManager.ConnectionCriterias.RoomName) != 0;
         bool ShouldConnectWithSessionProperties => (connectionCriterias & ConnectionManager.ConnectionCriterias.SessionProperties) != 0;
 
+        public NetworkObject DEMsToControl;
+        public NetworkedDEMController DEMController;
         private void Awake()
         {
             // Check if a runner exist on the same game object
@@ -218,6 +220,9 @@ namespace Fusion.Addons.ConnectionManagerAddon
                     });
                     Debug.Log("Spawned DEMs with Player " + player.PlayerId);
 
+                    DEMsToControl = DEMsNetwork;
+                    DEMController = DEMsToControl.GetBehaviour<NetworkedDEMController>();
+
                     NetworkPrefabId radarID = new NetworkPrefabId();
                     for (int i = 100000; i < 100040; i++)
                     {
@@ -350,28 +355,33 @@ namespace Fusion.Addons.ConnectionManagerAddon
         public void OnInput(NetworkRunner runner, NetworkInput input) {
             var data = new NetworkInputData();
 
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.I))
             {
-                data.direction += Vector3.forward;
+                DEMController.toggleForward();
+                //data.direction += Vector3.forward;
+
                 // Debug.Log("going forward");
             }
-            //if (Input.GetKey(KeyCode.K))
-            //{
-            //    data.direction += Vector3.back;
-            //    Debug.Log("going backward");
-            //}
+            if (Input.GetKey(KeyCode.K))
+            {
+                DEMController.toggleBackward();
+                //data.direction += Vector3.back;
+                //Debug.Log("going backward");
+            }
 
-            //if (Input.GetKey(KeyCode.J))
-            //{
-            //    data.direction += Vector3.left;
-            //    Debug.Log("going left");
-            //}
+            if (Input.GetKey(KeyCode.J))
+            {
+                DEMController.toggleLeft();
+                //data.direction += Vector3.left;
+                //Debug.Log("going left");
+            }
 
-            //if (Input.GetKey(KeyCode.L))
-            //{
-            //    data.direction += Vector3.right;
-            //    Debug.Log("going right");
-            //}
+            if (Input.GetKey(KeyCode.L))
+            {
+                DEMController.toggleRight();
+                //data.direction += Vector3.right;
+                //Debug.Log("going right");
+            }
 
             if (Input.GetKey(KeyCode.R))
             {
