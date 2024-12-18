@@ -9,22 +9,24 @@ public class TestActionMap : MonoBehaviour
 
     public InputActionAsset inputActionSetting;
 
-    public InputAction primaryButton;
-    public InputAction secondaryButton;
+    public InputAction rightPrimaryButton;
+    public InputAction rightSecondaryButton;
+    public InputAction leftPrimaryButton;
 
     void Start()
     {
         Debug.Log(inputActionSetting);
-        primaryButton = inputActionSetting.FindActionMap("XRI RightHand Interaction").FindAction("ToggleSurface");
-        Debug.Log(primaryButton);
+        rightPrimaryButton = inputActionSetting.FindActionMap("XRI RightHand Interaction").FindAction("ToggleSurface");
+        Debug.Log(rightPrimaryButton);
 
-        secondaryButton = inputActionSetting.FindActionMap("XRI RightHand Interaction").FindAction("ToggleBottom");
+        rightSecondaryButton = inputActionSetting.FindActionMap("XRI RightHand Interaction").FindAction("ToggleBottom");
+        leftPrimaryButton = inputActionSetting.FindActionMap("XRI LeftHand Interaction").FindAction("Radargram Toggle");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (primaryButton.triggered)
+        if (rightPrimaryButton.triggered)
         {
             Debug.Log("pressed button");
             GameObject DEM = GameObject.Find("DEMs(Clone)");
@@ -32,11 +34,21 @@ public class TestActionMap : MonoBehaviour
             DEMController.toggle("MEASURES_NSIDC-0715-002");
 
         }
-        else if (secondaryButton.triggered)
+        else if (rightSecondaryButton.triggered)
         {
             GameObject DEM = GameObject.Find("DEMs(Clone)");
             NetworkedDEMController DEMController = DEM.GetComponent<NetworkedDEMController>();
             DEMController.toggle("bottom");
+        }
+        else if (leftPrimaryButton.triggered)
+        {
+            GameObject[] radargrams = GameObject.FindGameObjectsWithTag("Radargram");
+            foreach (GameObject radargram in radargrams)
+            {
+                NetworkedRadargramController radargramController = radargram.GetComponent<NetworkedRadargramController>();
+                radargramController.meshToggle();
+            }
+            Debug.Log("try to turn off radargram");
         }
     }
 }

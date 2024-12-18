@@ -128,6 +128,6 @@ public class NetworkedRadargramController : NetworkBehaviour
     public void meshToggle()
     {
         meshVisible = !meshVisible;
-        gameObject.transform.Translate(2, 0, 0);
+        // gameObject.transform.Translate(2, 0, 0);
     }
 }
