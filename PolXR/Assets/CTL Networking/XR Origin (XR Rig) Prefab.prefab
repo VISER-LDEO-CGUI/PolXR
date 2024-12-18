@@ -11446,10 +11446,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_System: {fileID: 3355439669353974018}
-  m_MoveSpeed: 1
+  m_MoveSpeed: 20
   m_EnableStrafe: 1
-  m_EnableFly: 0
-  m_UseGravity: 1
+  m_EnableFly: 1
+  m_UseGravity: 0
   m_GravityApplicationMode: 0
   m_ForwardSource: {fileID: 2533576229940607278}
   m_LeftHandMoveAction:
@@ -11904,7 +11904,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7659581988594925443}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 378411a89480da345945c2f888327a2d, type: 3}
   m_Name: 
