@@ -11737,7 +11737,7 @@ GameObject:
   - component: {fileID: 4941599540413110935}
   - component: {fileID: 1639769336469745727}
   - component: {fileID: 7574931166774291029}
-  - component: {fileID: 3083752371328087967}
+  - component: {fileID: 5712916928800543512}
   m_Layer: 2
   m_Name: XR Origin (XR Rig) Prefab
   m_TagString: Untagged
@@ -11902,25 +11902,23 @@ MonoBehaviour:
   - {fileID: 1459082110157582951}
   - {fileID: 6807172737862801278}
   NetworkedBehaviours:
-  - {fileID: 3083752371328087967}
---- !u!114 &3083752371328087967
+  - {fileID: 5712916928800543512}
+--- !u!114 &5712916928800543512
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7659581988594925443}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 378411a89480da345945c2f888327a2d, type: 3}
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: -20
-  jumpImpulse: 8
-  acceleration: 10
-  braking: 10
-  maxSpeed: 2
-  rotationSpeed: 15
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &7673739938304199316
 GameObject:
   m_ObjectHideFlags: 0
