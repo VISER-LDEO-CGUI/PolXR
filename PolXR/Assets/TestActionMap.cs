@@ -47,6 +47,7 @@ public class TestActionMap : MonoBehaviour
             {
                 NetworkedRadargramController radargramController = radargram.GetComponent<NetworkedRadargramController>();
                 radargramController.meshToggle();
+                radargram.transform.Translate(0f, 0f, 0.001f);
             }
             Debug.Log("try to turn off radargram");
         }
