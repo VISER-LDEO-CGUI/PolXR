@@ -223,6 +223,8 @@ namespace Fusion.Addons.ConnectionManagerAddon
                     {
                         radarID.RawValue = (uint)i;
                         NetworkObject cubeNetwork = runner.Spawn(radarID);
+                        cubeNetwork.gameObject.tag = "Radargram";
+                        //cubeNetwork.transform.parent = GameObject.Find("Radar").transform;
 
                         GameObject cube = cubeNetwork.gameObject;
                         GameObject data = cube.transform.GetChild(0).gameObject;
@@ -396,9 +398,16 @@ namespace Fusion.Addons.ConnectionManagerAddon
             if (Input.GetKey(KeyCode.M))
             {
                 // Toggle all radargram
-                GameObject radargrams = GameObject.Find("Our Radargram");
-                NetworkedRadargramController radargramController = radargrams.GetComponent<NetworkedRadargramController>();
-                radargramController.meshToggle();
+                // GameObject radargram = GameObject.Find("Our Radargram");
+                GameObject[] radargrams = GameObject.FindGameObjectsWithTag("Radargram");
+                foreach (GameObject radargram in radargrams)
+                {
+                    NetworkedRadargramController radargramController = radargram.GetComponent<NetworkedRadargramController>();
+                    radargramController.meshToggle();
+                }
+                Debug.Log("try to turn off radargram");
+                //NetworkedRadargramController radargramController = radargram.GetComponent<NetworkedRadargramController>();
+                //radargramController.meshToggle();
             }
 
             //data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
