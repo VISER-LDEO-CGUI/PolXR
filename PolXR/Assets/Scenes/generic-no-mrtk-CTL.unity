@@ -702,12 +702,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13eed70397d8a5e4c8abdb9caa6da22a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  a: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  inputActionSetting: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   primaryButton:
     m_Name: Primary Button
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 6e13544e-478c-4092-b258-baabc9796f94
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  secondaryButton:
+    m_Name: Secondary Button
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: c962be7d-d052-41a9-8448-4da93a4a6f8f
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -1328,76 +1337,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5211915117969852903, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 972775837400199400, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4532390402525454559, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3744767420893859961, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 577461593550976691, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1165962531772005167, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7673739938304199316, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1573083913805156231, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6978241945554277775, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 2689454946659857820, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4728836399062418377, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1645736742470012408, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 9201155153804509550, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6120589794717636294, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8219630966232647711, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6843317696933402236, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4618280228425356231, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8102290907525842053, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3534444803400386801, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 749123248084316889, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8972979361765431897, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 5523823040268350280, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8599821557053248432, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e86e913536fdb5489773df5231e442f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

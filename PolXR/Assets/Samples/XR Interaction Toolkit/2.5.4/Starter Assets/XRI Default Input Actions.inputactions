@@ -1579,9 +1579,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Toggle",
+                    "name": "ToggleSurface",
                     "type": "Button",
                     "id": "92d22f1d-1367-406f-866b-a9b2a5e1d995",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleBottom",
+                    "type": "Button",
+                    "id": "4862cece-d7b2-4dcf-b926-50a4db4758ed",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1761,7 +1770,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Generic XR Controller",
-                    "action": "Toggle",
+                    "action": "ToggleSurface",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1772,7 +1781,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Generic XR Controller",
-                    "action": "Toggle",
+                    "action": "ToggleSurface",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ceb5c1ee-98a7-4441-a3a7-cf906e1dfc38",
+                    "path": "<XRController>{RightHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "ToggleBottom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0c606f4f-d68a-44c2-b7a2-54f2e606d8a7",
+                    "path": "<MetaAimHand>{RightHand}/indexPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "ToggleBottom",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
