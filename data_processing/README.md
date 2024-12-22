@@ -70,7 +70,7 @@ python run.py radar https://data.cresis.ku.edu/data/rds/2008_Greenland_TO/kml_go
 
 ### Pre-processing DEM Data
 
-The following command detects the `dem_dir_name` (i.e. Petermann) to convert the .xyz files within that directory into .obj files and automatically load them into the correct Unity directory. Note that the .xyz files are generated through QGIS. Refer to the build instructions [here](https://docs.google.com/document/d/1vaTSFGdMRg9INGP5Ipzsgx5K-AoO1MsLKbJEeksdyGM/edit?tab=t.0#heading=h.ixnj4rkskt8r) to see how to use QGIS. Make sure that when you "Clip Raster By Extent", you can the `surface.xyz` and `bedrock.xyz` files to a new directory within pipeline/dems. The name for this new directory is what the package detects as dem_dir_name.
+The following command detects the `dem_dir_name` (i.e. Petermann) to convert the .xyz files within that directory into .obj files and automatically load them into the correct Unity directory. Note that the .xyz files are generated through QGIS. Refer to the build instructions [here](https://docs.google.com/document/d/1vaTSFGdMRg9INGP5Ipzsgx5K-AoO1MsLKbJEeksdyGM/edit?tab=t.0#heading=h.ixnj4rkskt8r) to see how to use QGIS. Make sure that when you "Clip Raster By Extent", you save the `surface.xyz` and `bedrock.xyz` files to a new directory within pipeline/dems. The name for this new directory is what the package detects as dem_dir_name.
 
 
 ```bash
